@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL5Dialect
+          format_sql: true
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/smfinance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: Thedoctor1@3$5
+    
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8000
