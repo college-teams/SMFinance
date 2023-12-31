@@ -48,8 +48,6 @@ const sideBarItems = [
 const Sidebar = () => {
   const pathname = usePathname();
 
-  console.log(pathname);
-
   return (
     <div className="relative">
       <div className="relative flex gap-5 items-center my-5 pl-2">
@@ -74,7 +72,7 @@ const Sidebar = () => {
             <Link
               href={item.path}
               key={item.title}
-              className={`flex gap-x-4 items-center mb-6 hover:bg-[#2e374a] py-3 px-4 rounded-md text-lightWhite hover:text-white transition-all ${
+              className={`flex gap-x-4 items-center mb-4 hover:bg-[#2e374a] py-4 px-4 rounded-md text-lightWhite hover:text-white transition-all ${
                 pathname === item.path && "text-white bg-[#2e374a]"
               } `}
             >
