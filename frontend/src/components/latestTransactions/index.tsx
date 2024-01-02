@@ -18,7 +18,6 @@ export interface UserDetails {
 export type ROLE = "USER" | "ADMIN";
 
 const LatestTransactions = () => {
-
   const { push } = useRouter();
 
   const columns = useMemo<Column<UserDetails>[]>(
@@ -76,22 +75,6 @@ const LatestTransactions = () => {
       phoneNumber: "555-123-4567",
       role: "USER",
     },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
   ];
 
   return (
@@ -101,7 +84,11 @@ const LatestTransactions = () => {
           latest transactions
         </p>
         <span>
-          <FiExternalLink onClick={()=>push('/dashboard/transactions')} size={23} className={'relative cursor-pointer'} />
+          <FiExternalLink
+            onClick={() => push("/dashboard/transactions")}
+            size={23}
+            className={"relative cursor-pointer"}
+          />
         </span>
       </span>
 

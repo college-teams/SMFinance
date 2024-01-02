@@ -1,5 +1,194 @@
+"use client";
+
+import Table from "@/components/Table";
+import { UserDetails } from "@/components/latestTransactions";
+import { useMemo } from "react";
+import { Column } from "react-table";
+
 const Transactions = () => {
-  return <div>Transactions</div>;
+  const columns = useMemo<Column<UserDetails>[]>(
+    () => [
+      {
+        Header: "Firstname",
+        accessor: "firstName",
+      },
+      { Header: "Lastname", accessor: "lastName" },
+      { Header: "Email", accessor: "email" },
+      { Header: "PhoneNumber", accessor: "phoneNumber" },
+      { Header: "Role", accessor: "role" },
+    ],
+    []
+  );
+
+  const dummyUserDetails: UserDetails[] = [
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "123-456-7890",
+      role: "USER",
+    },
+    {
+      id: 2,
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      phoneNumber: "987-654-3210",
+      role: "ADMIN",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "123-456-7890",
+      role: "USER",
+    },
+    {
+      id: 2,
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      phoneNumber: "987-654-3210",
+      role: "ADMIN",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "123-456-7890",
+      role: "USER",
+    },
+    {
+      id: 2,
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      phoneNumber: "987-654-3210",
+      role: "ADMIN",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 1,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "123-456-7890",
+      role: "USER",
+    },
+    {
+      id: 2,
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      phoneNumber: "987-654-3210",
+      role: "ADMIN",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+    {
+      id: 7,
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "555-123-4567",
+      role: "USER",
+    },
+  ];
+  return (
+    <div>
+      <div className="relative mt-7 max-w-full overflow-x-auto">
+        <Table data={dummyUserDetails} columns={columns} loading={false} showPagination={true} />
+      </div>
+    </div>
+  );
 };
 
 export default Transactions;
