@@ -1,5 +1,5 @@
 import Card from "@/components/card";
-import { LineChart } from "@/components/charts";
+import { LineChartComponent } from "@/components/charts";
 import LatestTransactions from "@/components/latestTransactions";
 
 const Dashboard = () => {
@@ -22,7 +22,7 @@ const Dashboard = () => {
         </p>
 
         <div className="relative h-full">
-          <LineChart />
+          <LineChartComponent />
         </div>
       </div>
     </div>
