@@ -94,8 +94,8 @@ export const LineChartComponent = () => {
             bottom: 5,
           }}
         >
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="name" stroke="#b6b6b6" />
+          <YAxis stroke="#b6b6b6"  />
           <Tooltip />
           <Legend />
           {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeDasharray="5 5" />  */}

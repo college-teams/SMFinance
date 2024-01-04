@@ -70,6 +70,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -154,5 +155,17 @@ thead {
 }
 
 .table_btn {
-  @apply relative text-white px-4 py-2 rounded-md capitalize bg-orange-500 text-[1rem] cursor-pointer hover:bg-orange-600 disabled:bg-gray-400 disabled:text-black  disabled:cursor-not-allowed;
+  @apply relative text-white px-4 py-2 rounded-md capitalize bg-orange-500 text-[1rem] cursor-pointer hover:bg-orange-600 disabled:bg-gray-400 disabled:text-black disabled:cursor-not-allowed;
+}
+
+.form_container {
+  @apply relative flex flex-col gap-y-2 my-4 w-full;
+}
+
+.form_label {
+  @apply relative text-gray-300 font-medium text-lg;
+}
+
+.form_input {
+  @apply relative bg-transparent border py-3 rounded-md px-3 text-lightWhite active:text-white focus:text-white outline-none border-lightWhite focus:border-white active:border-white;
 }

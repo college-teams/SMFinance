@@ -221,8 +221,12 @@ const Customer = () => {
 
   return (
     <div>
-      <div className="relative my-7">
+      <div className="relative my-7 flex justify-between items-center  flex-wrap">
         <Combobox placeholder="Search by name" items={frameworks} />
+
+        <div>
+          <button onClick={()=>push("/dashboard/customer/create")}  className="relative bg-orange-500 hover:bg-orange-600 transition px-4 py-2 rounded">Add Customer</button>
+        </div>
       </div>
 
       <div className="relative  max-w-full overflow-x-auto">
