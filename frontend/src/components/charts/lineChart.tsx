@@ -11,30 +11,31 @@ import {
   AreaChart,
   Area,
   ResponsiveContainer,
+  LineChart,
 } from "recharts";
 
 const data = [
   {
     name: "Page A",
-    uv: 4000,
+    uv: 1000,
     pv: 2400,
     amt: 2400,
   },
   {
     name: "Page B",
-    uv: 3000,
+    uv: 500,
     pv: 1398,
     amt: 2210,
   },
   {
     name: "Page C",
-    uv: 2000,
+    uv: 3200,
     pv: 9800,
     amt: 2290,
   },
   {
     name: "Page D",
-    uv: 2780,
+    uv: 278,
     pv: 3908,
     amt: 2000,
   },
@@ -46,22 +47,22 @@ const data = [
   },
   {
     name: "Page F",
-    uv: 2390,
+    uv: 1090,
     pv: 3800,
     amt: 2500,
   },
   {
     name: "Page G",
-    uv: 3490,
+    uv: 2490,
     pv: 4300,
     amt: 2100,
   },
 ];
 
-export const LineChart = () => {
+export const LineChartComponent = () => {
   return (
     <div>
-      <ResponsiveContainer width="100%" height={300}>
+      {/* <ResponsiveContainer width="100%" height={300}>
         <AreaChart
           width={500}
           height={400}
@@ -79,7 +80,28 @@ export const LineChart = () => {
           <Tooltip />
           <Area type="monotone" dataKey="pv" stroke="#82ca9d" fill="#82ca9d" />
         </AreaChart>
-      </ResponsiveContainer>
+      </ResponsiveContainer> */}
+
+      <ResponsiveContainer  width="100%" height={300}>
+        <LineChart
+          width={500}
+          height={300}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <XAxis dataKey="name" stroke="#b6b6b6" />
+          <YAxis stroke="#b6b6b6"  />
+          <Tooltip />
+          <Legend />
+          {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeDasharray="5 5" />  */}
+           <Line type="monotone" dataKey="uv" stroke="#82ca9d" strokeDasharray="3 4 5 2" />
+        </LineChart>
+       </ResponsiveContainer> 
     </div>
   );
 };

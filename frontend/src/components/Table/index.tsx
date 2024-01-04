@@ -45,6 +45,7 @@ const Table = <T extends object>({
     {
       columns,
       data: tableData,
+      initialState: { pageIndex: 0, pageSize: 5 },
     },
 
     useSortBy,
@@ -150,14 +151,6 @@ const Table = <T extends object>({
                 previous
               </button>
 
-              <button
-                className="table_btn"
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
-                Next
-              </button>
-
               <span className="relative text-[2rem]">{"|"}</span>
             </>
           )}
@@ -176,9 +169,9 @@ const Table = <T extends object>({
               type={"number"}
               min={1}
               max={pageOptions.length}
-              defaultValue={pageIndex + 1}
               onBlur={onPageBlur}
               onChange={onPageChange}
+              value={pageIndex + 1}
               className="relative px-4 py-1 text-black border"
             />
           </div>
@@ -186,7 +179,7 @@ const Table = <T extends object>({
 
           <div>
             <select
-              className="relative px-4 py-1 font-medium border-2 text-black"
+              className="relative px-4 py-[2px] font-medium border-2 text-black"
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
             >
@@ -197,6 +190,16 @@ const Table = <T extends object>({
               ))}
             </select>
           </div>
+
+          <span className="relative text-[2rem]">{"|"}</span>
+
+          <button
+            className="table_btn"
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+          >
+            Next
+          </button>
         </div>
       )}
     </div>

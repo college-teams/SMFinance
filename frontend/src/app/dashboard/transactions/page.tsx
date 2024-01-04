@@ -1,9 +1,11 @@
 "use client";
 
-import Table from "@/components/Table";
-import { UserDetails } from "@/components/latestTransactions";
 import { useMemo } from "react";
 import { Column } from "react-table";
+
+import Combobox from "@/components/Combobox";
+import Table from "@/components/Table";
+import { UserDetails } from "@/components/latestTransactions";
 
 const Transactions = () => {
   const columns = useMemo<Column<UserDetails>[]>(
@@ -182,10 +184,39 @@ const Transactions = () => {
       role: "USER",
     },
   ];
+
+  const frameworks = [
+    {
+      value: "next.js",
+      label: "Next.js",
+    },
+    {
+      value: "sveltekit",
+      label: "SvelteKit",
+    },
+    {
+      value: "nuxt.js",
+      label: "Nuxt.js",
+    },
+    {
+      value: "remix",
+      label: "Remix",
+    },
+  ];
+
   return (
     <div>
-      <div className="relative mt-7 max-w-full overflow-x-auto">
-        <Table data={dummyUserDetails} columns={columns} loading={false} showPagination={true} />
+      <div className="relative my-7">
+        <Combobox placeholder="Search by Customer" items={frameworks} />
+      </div>
+
+      <div className="relative  max-w-full overflow-x-auto">
+        <Table
+          data={dummyUserDetails}
+          columns={columns}
+          loading={false}
+          showPagination={true}
+        />
       </div>
     </div>
   );
