@@ -6,10 +6,10 @@ const Dashboard = () => {
   return (
     <div>
       <div className="relative flex mt-4 gap-4 justify-center xl:justify-between w-full flex-wrap items-center mb-6">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <Card title="Total users" />
+        <Card title="Total loans" />
+        <Card title="Today Due pending" />
+        <Card title="Today collections" />
       </div>
 
       <div className="relative mb-6">
