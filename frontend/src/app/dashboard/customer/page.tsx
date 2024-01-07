@@ -34,7 +34,7 @@ const Customer = () => {
       { Header: "PhoneNumber", accessor: "phoneNumber" },
       { Header: "Role", accessor: "role" },
     ],
-    []
+    [push]
   );
 
   const dummyUserDetails: UserDetails[] = [
