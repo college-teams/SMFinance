@@ -21,12 +21,12 @@ const sideBarItems = [
   },
   {
     title: "Customers",
-    path: "/dashboard/customer",
+    path: "/dashboard/customers",
     icon: <MdPeople />,
   },
   {
     title: "Loans",
-    path: "/dashboard/loan",
+    path: "/dashboard/loans",
     icon: <MdShoppingBag />,
   },
   {

@@ -1,12 +1,22 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { LuUsers } from "react-icons/lu";
 
-type CardProps = {
-  title: string
-}
+import { CardProps } from "@/types/dashboard";
 
-const Card = ({title}:CardProps) => {
+const Card = ({ title, redirect_link }: CardProps) => {
+  const router = useRouter();
+
+  const handleClickhandler = () => {
+    router.push(redirect_link);
+  };
+
   return (
-    <div className="relative flex bg-secondaryBg gap-6 py-5 px-6 rounded-lg cursor-pointer transition hover:bg-hoverSecondaryBg">
+    <div
+      onClick={handleClickhandler}
+      className="relative flex bg-secondaryBg gap-6 py-5 px-6 rounded-lg cursor-pointer transition hover:bg-hoverSecondaryBg"
+    >
       <div>
         <LuUsers size={25} />
       </div>
