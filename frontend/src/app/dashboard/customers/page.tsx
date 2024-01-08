@@ -226,7 +226,7 @@ const Customers = () => {
 
         <div>
           <button
-            onClick={() => push("/dashboard/customer/create")}
+            onClick={() => push("/dashboard/customers/create")}
             className="relative bg-orange-500 hover:bg-orange-600 transition px-4 py-2 rounded"
           >
             Add Customer

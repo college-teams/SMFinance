@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import CustomerInfoForm from "../CustomerInfo";
-import DocumentUploadForm from "../DocumentUpload";
+import CustomerInfoForm from "./CustomerInfo";
+import DocumentUploadForm from "./DocumentUpload";
 import { StepConnector, styled } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -15,7 +15,7 @@ import { useState } from "react";
 
 const steps = ["Customer Information", "Document Upload"];
 
-export default function HorizontalLinearStepper() {
+export default function CustomerForm() {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
 
@@ -166,7 +166,9 @@ export default function HorizontalLinearStepper() {
                 </Box>
               </div>
             ) : (
-              <div>{getStepContent(activeStep)}</div>
+              <div className="relative max-w-[90%] mx-auto">
+                {getStepContent(activeStep)}
+                </div>
             )}
           </div>
         )}
@@ -176,91 +178,3 @@ export default function HorizontalLinearStepper() {
     // </Box>
   );
 }
-
-// import Box from "@mui/material/Box";
-// import Stepper from "@mui/material/Stepper";
-// import Step from "@mui/material/Step";
-// import StepLabel from "@mui/material/StepLabel";
-// import Button from "@mui/material/Button";
-// import Typography from "@mui/material/Typography";
-// import { useState } from "react";
-// import CustomerInfoForm from "../CustomerInfo";
-// import DocumentUploadForm from "../DocumentUpload";
-
-// const steps = ["Customer Information", "Document Upload"];
-
-// export default function HorizontalLinearStepper() {
-//   const [activeStep, setActiveStep] = useState(0);
-//   const [skipped, setSkipped] = useState(new Set<number>());
-
-//   const isStepOptional = (step: number) => {
-//     return false; // No optional steps for simplicity
-//   };
-
-//   const isStepSkipped = (step: number) => {
-//     return skipped.has(step);
-//   };
-
-//   const handleNext = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-//   };
-
-//   const handleBack = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-//   };
-
-//   const handleReset = () => {
-//     setActiveStep(0);
-//     setSkipped(new Set<number>());
-//   };
-
-//   const getStepContent = (step: number) => {
-//     switch (step) {
-//       case 0:
-//         return <CustomerInfoForm onNext={handleNext} />;
-//       case 1:
-//         return <DocumentUploadForm onBack={handleBack} onNext={handleNext} />;
-//       default:
-//         return "Unknown step";
-//     }
-//   };
-
-//   return (
-//     <Box sx={{ width: "100%" }}>
-//       <Stepper activeStep={activeStep} alternativeLabel>
-//         {steps.map((label, index) => {
-//           const stepProps: { completed?: boolean } = {};
-//           const labelProps: { optional?: React.ReactNode } = {};
-//           if (isStepOptional(index)) {
-//             labelProps.optional = (
-//               <Typography variant="caption">Optional</Typography>
-//             );
-//           }
-//           if (isStepSkipped(index)) {
-//             stepProps.completed = false;
-//           }
-//           return (
-//             <Step key={label} {...stepProps}>
-//               <StepLabel {...labelProps}>{label}</StepLabel>
-//             </Step>
-//           );
-//         })}
-//       </Stepper>
-//       <div>
-//         {activeStep === steps.length ? (
-//           <div>
-//             <Typography sx={{ mt: 2, mb: 1 }}>
-//               {"All steps completed - you're finished"}
-//             </Typography>
-//             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-//               <Box sx={{ flex: "1 1 auto" }} />
-//               <Button onClick={handleReset}>Reset</Button>
-//             </Box>
-//           </div>
-//         ) : (
-//           <div>{getStepContent(activeStep)}</div>
-//         )}
-//       </div>
-//     </Box>
-//   );
-// }

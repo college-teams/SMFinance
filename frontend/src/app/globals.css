@@ -169,3 +169,15 @@ thead {
 .form_input {
   @apply relative bg-transparent border py-3 rounded-md px-3 text-lightWhite active:text-white focus:text-white outline-none border-lightWhite focus:border-white active:border-white;
 }
+
+
+#drag-file-element {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}

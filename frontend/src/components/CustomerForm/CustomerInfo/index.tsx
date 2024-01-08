@@ -16,6 +16,12 @@ const CustomerInfoForm = ({ onNext }: CustomerInfoFormProps) => {
           <input className="form_input" type="text" id="name" />
         </div>
         <div className="form_container">
+          <label className="form_label" htmlFor="email">
+            Email
+          </label>
+          <input className="form_input" type="email" id="email" />
+        </div>
+        <div className="form_container">
           <label className="form_label" htmlFor="phone">
             Phone number
           </label>
@@ -27,12 +33,7 @@ const CustomerInfoForm = ({ onNext }: CustomerInfoFormProps) => {
           </label>
           <input className="form_input" type="text" id="alternate_phone" />
         </div>
-        <div className="form_container">
-          <label className="form_label" htmlFor="email">
-            Email
-          </label>
-          <input className="form_input" type="email" id="email" />
-        </div>
+
         <div className="form_container">
           <label className="form_label" htmlFor="occupation">
             Occupation
