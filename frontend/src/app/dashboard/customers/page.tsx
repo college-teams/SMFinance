@@ -2,13 +2,13 @@
 
 import { useMemo } from "react";
 import { Column } from "react-table";
-
-import Combobox from "@/components/Combobox";
-import Table from "@/components/Table";
-import { UserDetails } from "@/components/latestTransactions";
 import { useRouter } from "next/navigation";
 
-const Customer = () => {
+import Table from "@/components/Table";
+import { UserDetails } from "@/components/latestTransactions";
+import TextSearch from "@/components/textSearch";
+
+const Customers = () => {
   const { push } = useRouter();
 
   const columns = useMemo<Column<UserDetails>[]>(
@@ -16,12 +16,12 @@ const Customer = () => {
       {
         Header: "Firstname",
         accessor: "firstName",
-        Cell: ({ cell:{value} }): JSX.Element => {
+        Cell: ({ cell: { value } }): JSX.Element => {
           return (
             <div
               className="relative cursor-pointer font-medium text-blue-500"
               onClick={() => {
-                push("/dashboard/customer/id")
+                push("/dashboard/customers/id");
               }}
             >
               {value}
@@ -200,32 +200,18 @@ const Customer = () => {
     },
   ];
 
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-  ];
-
   return (
     <div>
       <div className="relative my-7 flex justify-between items-center  flex-wrap">
-        <Combobox placeholder="Search by name" items={frameworks} />
+        <TextSearch />
 
         <div>
-          <button onClick={()=>push("/dashboard/customer/create")}  className="relative bg-orange-500 hover:bg-orange-600 transition px-4 py-2 rounded">Add Customer</button>
+          <button
+            onClick={() => push("/dashboard/customers/create")}
+            className="relative bg-orange-500 hover:bg-orange-600 transition px-4 py-2 rounded"
+          >
+            Add Customer
+          </button>
         </div>
       </div>
 
@@ -241,4 +227,4 @@ const Customer = () => {
   );
 };
 
-export default Customer;
+export default Customers;

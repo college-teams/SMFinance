@@ -21,12 +21,12 @@ const sideBarItems = [
   },
   {
     title: "Customers",
-    path: "/dashboard/customer",
+    path: "/dashboard/customers",
     icon: <MdPeople />,
   },
   {
     title: "Loans",
-    path: "/dashboard/loan",
+    path: "/dashboard/loans",
     icon: <MdShoppingBag />,
   },
   {
@@ -47,7 +47,7 @@ const sideBarItems = [
 ];
 
 const Sidebar = () => {
-  const pathname = usePathname();
+  const pathname = usePathname(); 
 
   return (
     <div className="overflow-x-hidden">

@@ -1,11 +1,12 @@
 "use client";
 
-import HorizontalLinearStepper from "@/components/stepper";
+import CustomerForm from "@/components/CustomerForm";
+
 
 const CustomerCreate = () => {
   return (
     <div className="mt-10">
-      <HorizontalLinearStepper />
+      <CustomerForm />
     </div>
   );
 };
