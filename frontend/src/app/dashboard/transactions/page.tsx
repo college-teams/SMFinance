@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 import { Column } from "react-table";
 
-import Combobox from "@/components/Combobox";
 import Table from "@/components/Table";
 import { UserDetails } from "@/components/latestTransactions";
+import TextSearch from "@/components/textSearch";
 
 const Transactions = () => {
   const columns = useMemo<Column<UserDetails>[]>(
@@ -185,29 +185,10 @@ const Transactions = () => {
     },
   ];
 
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-  ];
-
   return (
     <div>
       <div className="relative my-7">
-        <Combobox placeholder="Search by Customer" items={frameworks} />
+        <TextSearch />
       </div>
 
       <div className="relative  max-w-full overflow-x-auto">

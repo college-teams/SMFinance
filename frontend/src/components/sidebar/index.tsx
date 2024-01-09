@@ -47,7 +47,7 @@ const sideBarItems = [
 ];
 
 const Sidebar = () => {
-  const pathname = usePathname();
+  const pathname = usePathname(); 
 
   return (
     <div className="overflow-x-hidden">

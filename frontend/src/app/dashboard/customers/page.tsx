@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import { Column } from "react-table";
+import { useRouter } from "next/navigation";
 
-import Combobox from "@/components/Combobox";
 import Table from "@/components/Table";
 import { UserDetails } from "@/components/latestTransactions";
-import { useRouter } from "next/navigation";
+import TextSearch from "@/components/textSearch";
 
 const Customers = () => {
   const { push } = useRouter();
@@ -200,29 +200,10 @@ const Customers = () => {
     },
   ];
 
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-  ];
-
   return (
     <div>
       <div className="relative my-7 flex justify-between items-center  flex-wrap">
-        <Combobox placeholder="Search by name" items={frameworks} />
+        <TextSearch />
 
         <div>
           <button

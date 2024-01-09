@@ -1,9 +1,8 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+"use client";
+
 import CustomerInfoForm from "./CustomerInfo";
 import DocumentUploadForm from "./DocumentUpload";
-import { StepConnector, styled } from "@mui/material";
+import { Box, Button, StepConnector, Typography, styled } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -12,32 +11,25 @@ import { IoDocumentAttachSharp } from "react-icons/io5";
 import { stepConnectorClasses } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const steps = ["Customer Information", "Document Upload"];
 
-export default function CustomerForm() {
+const CustomerForm = () => {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set<number>());
-
-  const isStepOptional = (step: number) => {
-    return false; // No optional steps for simplicity
-  };
-
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleSubmit = () => {
+    console.log("Customer form submitted");
+    router.push("/dashboard/customers")
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-    setSkipped(new Set<number>());
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -112,15 +104,16 @@ export default function CustomerForm() {
       case 0:
         return <CustomerInfoForm onNext={handleNext} />;
       case 1:
-        return <DocumentUploadForm onBack={handleBack} onNext={handleNext} />;
+        return (
+          <DocumentUploadForm onBack={handleBack} onSubmit={handleSubmit} />
+        );
       default:
-        return "Unknown step";
+        console.log("Unknown step");
+        return <CustomerInfoForm onNext={handleNext} />; // Error handling
     }
   };
 
   return (
-    // <Box width={"100%"}>
-
     <>
       <div className="w-full">
         <Stepper
@@ -142,39 +135,11 @@ export default function CustomerForm() {
         </Stepper>
       </div>
 
-      <div>
-        {activeStep === steps.length ? (
-          <div>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              {"All steps completed - you're finished"}
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </div>
-        ) : (
-          <div>
-            {activeStep === steps.length ? (
-              <div>
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  {"All steps completed - you're finished"}
-                </Typography>
-                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                  <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleReset}>Reset</Button>
-                </Box>
-              </div>
-            ) : (
-              <div className="relative max-w-[90%] mx-auto">
-                {getStepContent(activeStep)}
-                </div>
-            )}
-          </div>
-        )}
+      <div className="relative max-w-[90%] mx-auto">
+        {getStepContent(activeStep)}
       </div>
     </>
-
-    // </Box>
   );
-}
+};
+
+export default CustomerForm;
