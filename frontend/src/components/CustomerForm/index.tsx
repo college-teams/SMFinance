@@ -135,7 +135,7 @@ const CustomerForm = () => {
         </Stepper>
       </div>
 
-      <div className="relative max-w-[90%] mx-auto">
+      <div className="relative max-w-full md:max-w-[90%] mx-auto">
         {getStepContent(activeStep)}
       </div>
     </>

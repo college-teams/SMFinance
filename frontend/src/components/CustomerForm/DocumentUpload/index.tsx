@@ -14,7 +14,7 @@ const DocumentUploadForm = ({ onBack, onSubmit }: DocumentUploadFormProps) => {
         Document Upload
       </p>
 
-      <div className="flex flex-col gap-y-8 w-[80%] mx-auto">
+      <div className="flex flex-col gap-y-8 w-full md:w-[80%] mx-auto">
         <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 h-full flex flex-col gap-y-5">
           <label className="relative text-[1.2rem]">Aadhar</label>
           <DragDropFile />
