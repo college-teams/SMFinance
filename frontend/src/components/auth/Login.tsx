@@ -1,4 +1,11 @@
+"use client"
+
+import { useRouter } from "next/navigation";
+
 const Login = () => {
+
+    const router = useRouter();
+
   return (
     <div className="absolute bg-secondaryBg top-1/2 left-1/2  -translate-x-1/2 -translate-y-1/2 py-12 px-10 rounded w-full md:w-[30%] " >
       <form>
@@ -11,7 +18,7 @@ const Login = () => {
           <input type="password" id="password" className="relative py-2" />
         </div>
         <div className="relative w-full">
-          <button className="relative text-center w-full py-3 px-3 rounded bg-addBtnBg">Login</button>
+          <button onClick={()=>router.push('/dashboard')} className="relative text-center w-full py-3 px-3 rounded bg-addBtnBg">Login</button>
         </div>
       </form>
     </div>
