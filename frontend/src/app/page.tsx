@@ -8,7 +8,7 @@ export default function Home() {
           className="relative h-screen bg-no-repeat bg-center opacity-40"
           style={{
             backgroundImage: "url('/images/bg1.jpg')",
-            backgroundPosition: "center",
+            backgroundPosition: "center center",
             backgroundSize: "cover",
           }}
         />
