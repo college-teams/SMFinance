@@ -47,12 +47,12 @@ const sideBarItems = [
 ];
 
 const Sidebar = () => {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
   return (
     <div className="overflow-x-hidden">
       <div className="relative">
-        <div className="relative flex gap-5 items-center my-5 pl-2">
+        <div className="relative  gap-5 items-center my-5 pl-2 mb-10 hidden sm:flex">
           <div className="relative h-[60] w-[60]">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.pngs" alt="profile" />
@@ -71,7 +71,7 @@ const Sidebar = () => {
             </span>
           </div>
         </div>
-        <ul className="relative mt-10">
+        <ul className="relative">
           {sideBarItems.map((item) => {
             return (
               <Link
