@@ -162,9 +162,9 @@ const Table = <T extends object>({
             </strong>
           </div>
 
-          <span className="relative text-[2rem]">{"|"}</span>
+          {/* <span className="relative text-[2rem]">{"|"}</span> */}
 
-          <div>
+          {/* <div>
             <input
               type={"number"}
               min={1}
@@ -174,7 +174,8 @@ const Table = <T extends object>({
               value={pageIndex + 1}
               className="relative px-4 py-1 text-black border"
             />
-          </div>
+          </div> */}
+
           <span className="relative text-[2rem]">{"|"}</span>
 
           <div>

@@ -8,32 +8,32 @@ const Dashboard = () => {
     {
       title: "Total Customers",
       redirect_link: "/dashboard/customers",
-      showStats:true
-
+      showStats: false,
     },
     {
       title: "Total loans",
       redirect_link: "/dashboard/loans",
-      showStats:true
-
+      showStats: true,
     },
     {
       title: "Today Due pending",
       redirect_link: "/dashboard/transactions",
-      
-      showStats:true
+
+      showStats: true,
     },
     {
       title: "Today collections",
       redirect_link: "/dashboard/transactions",
-      showStats:true
-
+      showStats: true,
     },
   ];
 
   return (
     <div>
-      <div className="relative flex mt-4 gap-5 justify-center xl:justify-evenly w-full flex-wrap items-center mb-6">
+      <div
+        className="relative grid mt-4 gap-5  w-full flex-wrap items-center mb-6"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}
+      >
         {cardList.map((cardItem, i) => (
           <Card {...cardItem} key={i} />
         ))}
