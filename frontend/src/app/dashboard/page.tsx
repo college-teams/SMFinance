@@ -43,7 +43,7 @@ const Dashboard = () => {
         <LatestTransactions />
       </div>
 
-      <div className="relative bg-secondaryBg p-5 rounded-md">
+      <div className="relative bg-secondaryBg p-3 md:p-5 rounded-md">
         <p className="relative capitalize font-light mb-10 text-lightWhite text-[1.5rem]">
           weekly recap
         </p>
