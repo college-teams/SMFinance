@@ -7,15 +7,16 @@ import { useRouter } from "next/navigation";
 import Table from "@/components/Table";
 import { UserDetails } from "@/components/latestTransactions";
 import TextSearch from "@/components/textSearch";
+import { Customer } from "@/types/customer";
 
 const Customers = () => {
   const { push } = useRouter();
 
-  const columns = useMemo<Column<UserDetails>[]>(
+  const columns = useMemo<Column<Customer>[]>(
     () => [
       {
-        Header: "Firstname",
-        accessor: "firstName",
+        Header: "Name",
+        accessor: "name",
         Cell: ({ cell: { value } }): JSX.Element => {
           return (
             <div
@@ -29,180 +30,83 @@ const Customers = () => {
           );
         },
       },
-      { Header: "Lastname", accessor: "lastName" },
       { Header: "Email", accessor: "email" },
       { Header: "PhoneNumber", accessor: "phoneNumber" },
-      { Header: "Role", accessor: "role" },
+      { Header: "AltPhoneNumber", accessor: "altPhoneNumber" },
     ],
     [push]
   );
 
-  const dummyUserDetails: UserDetails[] = [
+  const dummyCustomers: Customer[] = [
     {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
+      name: "John Doe",
       email: "john.doe@example.com",
       phoneNumber: "123-456-7890",
-      role: "USER",
+      altPhoneNumber: "987-654-3210",
+      occupation: "Software Engineer",
+      address: "123 Main Street, Cityville, USA",
     },
     {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
+      name: "Jane Smith",
       email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
+      phoneNumber: "555-555-5555",
+      altPhoneNumber: "666-666-6666",
+      occupation: "Marketing Specialist",
+      address: "456 Oak Avenue, Townsville, USA",
     },
     {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
+      name: "Alice Johnson",
       email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
+      phoneNumber: "111-222-3333",
+      altPhoneNumber: "444-555-6666",
+      occupation: "Accountant",
+      address: "789 Pine Street, Villagetown, USA",
     },
     {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
+      name: "Bob Anderson",
+      email: "bob.anderson@example.com",
+      phoneNumber: "777-888-9999",
+      altPhoneNumber: "111-222-3333",
+      occupation: "Graphic Designer",
+      address: "321 Cedar Lane, Hamletville, USA",
     },
     {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
+      name: "Eva Miller",
+      email: "eva.miller@example.com",
+      phoneNumber: "222-333-4444",
+      altPhoneNumber: "555-666-7777",
+      occupation: "Teacher",
+      address: "987 Elm Street, Suburbia, USA",
     },
     {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
+      name: "Frank Davis",
+      email: "frank.davis@example.com",
+      phoneNumber: "888-999-0000",
+      altPhoneNumber: "333-444-5555",
+      occupation: "Doctor",
+      address: "567 Maple Drive, Countryside, USA",
     },
     {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
+      name: "Grace Wilson",
+      email: "grace.wilson@example.com",
+      phoneNumber: "444-555-6666",
+      altPhoneNumber: "777-888-9999",
+      occupation: "Architect",
+      address: "234 Birch Lane, Riverside, USA",
     },
     {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
+      name: "Henry Turner",
+      email: "henry.turner@example.com",
+      phoneNumber: "666-777-8888",
+      altPhoneNumber: "111-222-3333",
+      occupation: "Sales Manager",
+      address: "876 Pine Avenue, Lakeside, USA",
     },
   ];
 
   return (
     <div>
-      <div className="relative my-7 flex justify-between items-center  flex-wrap">
+      <div className="relative my-7 flex justify-center sm:justify-between items-center gap-4 flex-wrap">
         <TextSearch />
 
         <div>
@@ -217,7 +121,7 @@ const Customers = () => {
 
       <div className="relative  max-w-full overflow-x-auto">
         <Table
-          data={dummyUserDetails}
+          data={dummyCustomers}
           columns={columns}
           loading={false}
           showPagination={true}

@@ -127,7 +127,7 @@ thead {
   td {
     /* display: block; */
     display: grid;
-    grid-template-columns: 14ch auto;
+    grid-template-columns: 19ch auto;
   }
 
   td::before {
@@ -155,7 +155,7 @@ thead {
 }
 
 .table_btn {
-  @apply relative text-white px-4 py-2 rounded-md capitalize bg-orange-500 text-[1rem] cursor-pointer hover:bg-orange-600 disabled:bg-gray-400 disabled:text-black disabled:cursor-not-allowed;
+  @apply relative text-white px-8 py-[6px] rounded-md capitalize bg-orange-500 text-[1rem] cursor-pointer hover:bg-orange-600 disabled:bg-gray-400 disabled:text-black disabled:cursor-not-allowed;
 }
 
 .form_container {
@@ -169,7 +169,6 @@ thead {
 .form_input {
   @apply relative bg-transparent border py-3 rounded-md px-3 text-lightWhite active:text-white focus:text-white outline-none border-lightWhite focus:border-white active:border-white;
 }
-
 
 #drag-file-element {
   position: absolute;

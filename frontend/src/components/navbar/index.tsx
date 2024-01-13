@@ -4,6 +4,16 @@ import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { IoMenuOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
+import { FaRegUser } from "react-icons/fa6";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { FaRegCircleUser } from "react-icons/fa6";
 
 import Sidebar from "../sidebar";
 
@@ -48,7 +58,14 @@ const Navbar = () => {
             />
           )}
         </span>
-        <div>{/* Add dropdown functionality */}</div>
+        <div className="relative pr-5">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex justify-center"><FaRegCircleUser size={25} /></DropdownMenuTrigger>
+            <DropdownMenuContent className="relative bg-secondaryBg text-white mt-2 hover:bg-primaryBg">
+              <DropdownMenuItem className="relative cursor-pointer">Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {openMenuItems && (
