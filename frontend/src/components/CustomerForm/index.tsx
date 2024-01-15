@@ -117,7 +117,7 @@ const CustomerForm = () => {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full hidden md:block">
         <Stepper
           className="relative text-white w-full"
           alternativeLabel

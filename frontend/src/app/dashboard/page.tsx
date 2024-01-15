@@ -31,8 +31,8 @@ const Dashboard = () => {
   return (
     <div>
       <div
-        className="relative grid mt-4 gap-5  w-full flex-wrap items-center mb-6"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}
+        className="relative flex mt-4 gap-5 w-full flex-wrap items-center mb-6 justify-around"
+        // style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}
       >
         {cardList.map((cardItem, i) => (
           <Card {...cardItem} key={i} />
