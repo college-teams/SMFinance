@@ -12,9 +12,8 @@ import { stepConnectorClasses } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaLocationDot } from "react-icons/fa6";
 
-const steps = ["Customer Information", "Document Upload","location"];
+const steps = ["Customer Information", "Document Upload"];
 
 const CustomerForm = () => {
   const router = useRouter();
@@ -88,7 +87,6 @@ const CustomerForm = () => {
     const icons: { [index: string]: React.ReactElement } = {
       1: <IoMdSettings />,
       2: <IoDocumentAttachSharp />,
-      3: <FaLocationDot />,
     };
 
     return (
