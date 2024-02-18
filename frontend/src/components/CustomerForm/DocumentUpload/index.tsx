@@ -1,5 +1,4 @@
 import * as React from "react";
-import { SelectScrollable } from "../../select";
 import DragDropFile from "@/components/DragDropFile";
 
 type DocumentUploadFormProps = {
