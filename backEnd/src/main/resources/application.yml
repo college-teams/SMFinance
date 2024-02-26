@@ -10,9 +10,12 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/smfinance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: Thedoctor1@3$5
+    password: password
     
 server:
   servlet:
     context-path: /api/v1
   port: 8000
+
+jwt:
+  secret-key: 400857d99aa816063fb87d0a35166b7a79b69abe046e7ea4537cf78d5d16d219
