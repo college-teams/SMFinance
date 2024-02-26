@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 import "./globals.css";
+import { cn } from "@/lib/utils";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,9 +30,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
-        {children}
-        </body>
+      <body className={cn(poppins.className)}>
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          {children}
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }

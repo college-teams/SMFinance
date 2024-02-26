@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,6 +11,8 @@ import {
   MdPeople,
 } from "react-icons/md";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 const sideBarItems = [
   {
     title: "Dashboard",
@@ -20,12 +21,12 @@ const sideBarItems = [
   },
   {
     title: "Customers",
-    path: "/dashboard/customer",
+    path: "/dashboard/customers",
     icon: <MdPeople />,
   },
   {
     title: "Loans",
-    path: "/dashboard/loan",
+    path: "/dashboard/loans",
     icon: <MdShoppingBag />,
   },
   {
@@ -49,39 +50,44 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="relative">
-      <div className="relative flex gap-5 items-center my-5 pl-2">
-        <div>
-          <Image
-            src={"/images/noavatar.png"}
-            alt="avatar"
-            width={60}
-            height={60}
-            className="relative rounded-full"
-          />
-        </div>
+    <div className="overflow-x-hidden">
+      <div className="relative">
+        <div className="relative  gap-5 items-center my-5 pl-2 mb-10 hidden sm:flex">
+          <div className="relative h-[60] w-[60]">
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.pngs" alt="profile" />
+              <AvatarFallback className="text-black" color="#000">
+                N
+              </AvatarFallback>
+            </Avatar>
+          </div>
 
-        <div className="relative flex flex-col gap-y-1">
-          <span className="relative text-[1.1rem] font-medium">Nanthagopal</span>
-          <span className="relative text-xs text-lightWhite">Adminstrator</span>
+          <div className="relative flex-col gap-y-1 flex">
+            <span className="relative text-[1.1rem] font-medium">
+              Nanthagopal
+            </span>
+            <span className="relative text-xs text-lightWhite">
+              Adminstrator
+            </span>
+          </div>
         </div>
+        <ul className="relative">
+          {sideBarItems.map((item) => {
+            return (
+              <Link
+                href={item.path}
+                key={item.title}
+                className={`flex gap-x-6 md:gap-x-5  items-center mb-4 hover:bg-hoverSecondaryBg py-4 px-4 rounded-md text-lightWhite hover:text-white transition-all ${
+                  pathname === item.path && "text-white bg-hoverSecondaryBg"
+                } `}
+              >
+                <span>{item.icon}</span>
+                <span className="relative ">{item.title}</span>
+              </Link>
+            );
+          })}
+        </ul>
       </div>
-      <ul>
-        {sideBarItems.map((item) => {
-          return (
-            <Link
-              href={item.path}
-              key={item.title}
-              className={`flex gap-x-4 items-center mb-4 hover:bg-[#2e374a] py-4 px-4 rounded-md text-lightWhite hover:text-white transition-all ${
-                pathname === item.path && "text-white bg-[#2e374a]"
-              } `}
-            >
-              <span>{item.icon}</span>
-              <span className="relative">{item.title}</span>
-            </Link>
-          );
-        })}
-      </ul>
     </div>
   );
 };
