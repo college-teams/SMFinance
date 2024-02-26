@@ -1,0 +1,61 @@
+package com.project.smfinance.controller;
+
+import com.project.smfinance.exception.BaseException;
+import com.project.smfinance.models.customer.CreateCustomerRequest;
+import com.project.smfinance.models.customer.CustomerResponse;
+import com.project.smfinance.models.customer.UpdateCustomerRequest;
+import com.project.smfinance.models.response.ApiResponse;
+import com.project.smfinance.service.CustomerService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+
+@RestController
+@RequestMapping("/customer")
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+public class CustomerController {
+
+    private final CustomerService customerService;
+
+    @PostMapping("/")
+    @PreAuthorize("@accessControlService.isAdmin()")
+    public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(
+            @Valid @RequestBody CreateCustomerRequest createCustomerRequest) {
+        return new ResponseEntity<>(
+                customerService.addCustomer(createCustomerRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse<List<CustomerResponse>>> getCustomerList() {
+        return new ResponseEntity<>(customerService.getCustomerList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CustomerResponse>> getCustomer(@PathVariable Long id)
+            throws BaseException {
+        return new ResponseEntity<>(customerService.getCustomer(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("@accessControlService.isAdmin()")
+    public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(
+            @PathVariable Long id, @Valid @RequestBody UpdateCustomerRequest updateCustomerRequest)
+            throws BaseException {
+        return new ResponseEntity<>(
+                customerService.updateCustomer(id, updateCustomerRequest), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("@accessControlService.isAdmin()")
+    public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long id) throws BaseException {
+        return new ResponseEntity<>(customerService.deleteCustomer(id), HttpStatus.OK);
+    }
+
+}
