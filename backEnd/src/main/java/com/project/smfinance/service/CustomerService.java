@@ -1,91 +1,93 @@
 package com.project.smfinance.service;
 
+import static com.project.smfinance.codes.ErrorCodes.CUSTOMER_NOT_FOUND;
+import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_CREATED;
+import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_DATA_FETCHED;
+import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_DELETE_SUCCESS;
+import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_LIST_FETCHED;
+import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_UPDATED;
+
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.exception.BaseException;
 import com.project.smfinance.models.customer.CreateCustomerRequest;
 import com.project.smfinance.models.customer.CustomerResponse;
 import com.project.smfinance.models.customer.UpdateCustomerRequest;
-import com.project.smfinance.models.response.StatusCodes;
+import com.project.smfinance.models.response.AbstractResponse.StatusType;
 import com.project.smfinance.models.response.ApiResponse;
 import com.project.smfinance.repository.CustomerRepository;
-import com.project.smfinance.models.response.AbstractResponse.StatusType;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.project.smfinance.codes.ErrorCodes.CUSTOMER_NOT_FOUND;
-import static com.project.smfinance.codes.SuccessCodes.*;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
+  private final CustomerRepository customerRepository;
 
-    public ApiResponse<CustomerResponse> addCustomer(CreateCustomerRequest createCustomerRequest) {
+  public ApiResponse<CustomerResponse> addCustomer(CreateCustomerRequest createCustomerRequest) {
 
-        Customer customer = CreateCustomerRequest.from(createCustomerRequest);
-        customerRepository.save(customer);
+    Customer customer = CreateCustomerRequest.from(createCustomerRequest);
+    customerRepository.save(customer);
 
-        CustomerResponse customerResponse = CustomerResponse.from(customer);
-        return new ApiResponse<>(CUSTOMER_CREATED, StatusType.SUCCESS, customerResponse);
-    }
-    public ApiResponse<List<CustomerResponse>> getCustomerList() {
-        List<Customer> customers = customerRepository.findAll();
-        List<CustomerResponse> customerList = CustomerResponse.from(customers);
-        return new ApiResponse<>(CUSTOMER_LIST_FETCHED, StatusType.SUCCESS, customerList);
-    }
+    CustomerResponse customerResponse = CustomerResponse.from(customer);
+    return new ApiResponse<>(CUSTOMER_CREATED, StatusType.SUCCESS, customerResponse);
+  }
 
-    public ApiResponse<CustomerResponse> getCustomer(Long customerId) throws BaseException {
-        Customer customerData = getCustomerById(customerId);
+  public ApiResponse<List<CustomerResponse>> getCustomerList() {
+    List<Customer> customers = customerRepository.findAll();
+    List<CustomerResponse> customerList = CustomerResponse.from(customers);
+    return new ApiResponse<>(CUSTOMER_LIST_FETCHED, StatusType.SUCCESS, customerList);
+  }
 
-        CustomerResponse customer = CustomerResponse.from(customerData);
-        return new ApiResponse<>(CUSTOMER_DATA_FETCHED, StatusType.SUCCESS, customer);
-    }
+  public ApiResponse<CustomerResponse> getCustomer(Long customerId) throws BaseException {
+    Customer customerData = getCustomerById(customerId);
 
-    public ApiResponse<CustomerResponse> updateCustomer(
-            Long customerId, UpdateCustomerRequest updateCustomerRequest) throws BaseException {
+    CustomerResponse customer = CustomerResponse.from(customerData);
+    return new ApiResponse<>(CUSTOMER_DATA_FETCHED, StatusType.SUCCESS, customer);
+  }
 
-        Customer existingCustomer = getCustomerById(customerId);
-        updateCustomerFields(existingCustomer, updateCustomerRequest);
-        Customer updatedCustomer = customerRepository.save(existingCustomer);
+  public ApiResponse<CustomerResponse> updateCustomer(
+      Long customerId, UpdateCustomerRequest updateCustomerRequest) throws BaseException {
 
-        CustomerResponse customerResponse = CustomerResponse.from(updatedCustomer);
-        return new ApiResponse<>(CUSTOMER_UPDATED, StatusType.SUCCESS, customerResponse);
-    }
+    Customer existingCustomer = getCustomerById(customerId);
+    updateCustomerFields(existingCustomer, updateCustomerRequest);
+    Customer updatedCustomer = customerRepository.save(existingCustomer);
 
-    public ApiResponse deleteCustomer(Long customerId) throws BaseException {
-        Customer customerData= getCustomerById(customerId);
-        customerRepository.delete(customerData);
-        return new ApiResponse<>(CUSTOMER_DELETE_SUCCESS, StatusType.SUCCESS);
-    }
+    CustomerResponse customerResponse = CustomerResponse.from(updatedCustomer);
+    return new ApiResponse<>(CUSTOMER_UPDATED, StatusType.SUCCESS, customerResponse);
+  }
 
-    public Customer getCustomerById(Long id) throws BaseException {
-        Optional<Customer> category = customerRepository.findById(id);
+  public ApiResponse deleteCustomer(Long customerId) throws BaseException {
+    Customer customerData = getCustomerById(customerId);
+    customerRepository.delete(customerData);
+    return new ApiResponse<>(CUSTOMER_DELETE_SUCCESS, StatusType.SUCCESS);
+  }
 
-        if (category.isEmpty()) {
-            throw new BaseException(CUSTOMER_NOT_FOUND);
-        }
+  public Customer getCustomerById(Long id) throws BaseException {
+    Optional<Customer> category = customerRepository.findById(id);
 
-        return category.get();
-    }
-    private void updateCustomerFields(
-            Customer existingCustomer, UpdateCustomerRequest updateCustomerRequest) {
-        existingCustomer.setCustomerName(updateCustomerRequest.getCustomerName());
-        existingCustomer.setCustomerPhoneNumber(updateCustomerRequest.getCustomerPhoneNumber());
-        existingCustomer.setCustomerAddress(updateCustomerRequest.getCustomerAddress());
-        existingCustomer.setCustomerOccupation(updateCustomerRequest.getCustomerOccupation());
-        existingCustomer.setCustomerEmail(updateCustomerRequest.getCustomerEmail());
-        existingCustomer.setCustomerAltNumber(updateCustomerRequest.getCustomerAltNumber());
-        existingCustomer.setAadhaarNumber(updateCustomerRequest.getAadhaarNumber());
-        existingCustomer.setPanNumber(updateCustomerRequest.getPanNumber());
-        existingCustomer.setRationNumber(updateCustomerRequest.getRationNumber());
+    if (category.isEmpty()) {
+      throw new BaseException(CUSTOMER_NOT_FOUND);
     }
 
+    return category.get();
+  }
+
+  private void updateCustomerFields(
+      Customer existingCustomer, UpdateCustomerRequest updateCustomerRequest) {
+    existingCustomer.setCustomerName(updateCustomerRequest.getCustomerName());
+    existingCustomer.setCustomerPhoneNumber(updateCustomerRequest.getCustomerPhoneNumber());
+    existingCustomer.setCustomerAddress(updateCustomerRequest.getCustomerAddress());
+    existingCustomer.setCustomerOccupation(updateCustomerRequest.getCustomerOccupation());
+    existingCustomer.setCustomerEmail(updateCustomerRequest.getCustomerEmail());
+    existingCustomer.setCustomerAltNumber(updateCustomerRequest.getCustomerAltNumber());
+    existingCustomer.setAadhaarNumber(updateCustomerRequest.getAadhaarNumber());
+    existingCustomer.setPanNumber(updateCustomerRequest.getPanNumber());
+    existingCustomer.setRationNumber(updateCustomerRequest.getRationNumber());
+  }
 }

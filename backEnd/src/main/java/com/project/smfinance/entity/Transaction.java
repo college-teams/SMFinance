@@ -1,5 +1,3 @@
 package com.project.smfinance.entity;
 
-public class Transaction {
-
-}
+public class Transaction {}

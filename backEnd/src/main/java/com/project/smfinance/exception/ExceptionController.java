@@ -1,10 +1,16 @@
 package com.project.smfinance.exception;
 
+import static com.project.smfinance.codes.ErrorCodes.*;
+import static com.project.smfinance.codes.ErrorCodes.CONSTRAINT_VIOLATIONS;
+import static com.project.smfinance.codes.ErrorCodes.FORBIDDEN;
+import static com.project.smfinance.codes.ErrorCodes.UNAUTHORIZED;
+
 import com.project.smfinance.codes.ErrorCodes;
-import com.project.smfinance.models.response.ApiResponse;
 import com.project.smfinance.models.response.AbstractResponse.StatusType;
-import com.project.smfinance.models.response.StatusCodes;
+import com.project.smfinance.models.response.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -14,14 +20,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import static com.project.smfinance.codes.ErrorCodes.CONSTRAINT_VIOLATIONS;
-import static com.project.smfinance.codes.ErrorCodes.FORBIDDEN;
-import static com.project.smfinance.codes.ErrorCodes.UNAUTHORIZED;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.project.smfinance.codes.ErrorCodes.*;
 
 @RestControllerAdvice
 public class ExceptionController {

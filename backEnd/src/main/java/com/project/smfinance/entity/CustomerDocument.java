@@ -1,6 +1,3 @@
 package com.project.smfinance.entity;
 
-
-public class CustomerDocument {
-
-}
+public class CustomerDocument {}

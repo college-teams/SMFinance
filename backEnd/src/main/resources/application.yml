@@ -1,28 +1,17 @@
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: create
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MySQL5Dialect
-          format_sql: true
-    show-sql: true
+  application:
+    name: smfinance-backend
+  profiles:
+    active: ${ENVIRONMENT:local}
   datasource:
-    url: jdbc:mysql://localhost:3306/smfinance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: root
-    password: password
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: abicoirr.noreply@gmail.com
-    password: cqyanmyhxxywohrl
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  servlet:
+    multipart:
+      max-file-size: 15MB # Maximum file size allowed
+      max-request-size: 50MB  # Maximum request size allowed
+
 server:
   servlet:
     context-path: /api/v1
@@ -30,8 +19,3 @@ server:
 
 jwt:
   secret-key: 400857d99aa816063fb87d0a35166b7a79b69abe046e7ea4537cf78d5d16d219
-
-#TODO: Recheck this...
-application:
-  backend-url: http://localhost:8000
-  frontend-url: http://localhost:4000
