@@ -1,0 +1,16 @@
+[Unit]
+Description=Backend Abicoirr Application
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ec2-user
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/java -Dlogging.config=/etc/abicoirr-api/logback.xml -jar /etc/abicoirr-api/abicoirr-0.0.1-SNAPSHOT.jar
+EnvironmentFile=/etc/abicoirr-api/environment.properties
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

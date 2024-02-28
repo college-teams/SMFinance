@@ -1,0 +1,83 @@
+{
+  "variables": {
+    "aws_region": "us-east-1",
+    "user": "ec2-user",
+    "instance_type": "t2.micro",
+    "install_dir": "/tmp/deployment",
+    "abicoirr_be_dir": "/etc/abicoirr-api"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "instance_type": "{{user `instance_type`}}",
+      "ami_name": "my-custom-ami-{{timestamp}}",
+      "ssh_username": "{{user `user`}}",
+      "profile": "default",
+      "source_ami": "{{user `source_ami`}}",
+      "source_ami_filter": {
+        "most_recent": true,
+        "owners": ["amazon"],
+        "filters": {
+          "name": "al2023-ami-2023.*-x86_64",
+          "root-device-type": "ebs",
+          "virtualization-type": "hvm",
+          "architecture": "x86_64",
+          "platform-details": "Linux/UNIX"
+        }
+      },
+      "run_tags": {
+        "Name": "test-app",
+        "env": "test"
+      },
+      "run_volume_tags": {
+        "Name": "test-app",
+        "env": "test"
+      },
+      "tags": {
+        "Name": "test-app",
+        "env": "test"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "{{template_dir}}",
+      "destination": "{{user `install_dir`}}"
+    },
+    {
+      "type": "shell",
+      "script": "general.sh",
+      "environment_vars": [
+        "INSTALL_DIR={{user `install_dir`}}",
+        "ABICOIRR_BE_DIR={{user `abicoirr_be_dir`}}"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "log.sh",
+      "environment_vars": [
+        "ABICOIRR_BE_DIR={{user `abicoirr_be_dir`}}",
+        "INSTALL_DIR={{user `install_dir`}}"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "nginx.sh",
+      "environment_vars": [
+        "INSTALL_DIR={{user `install_dir`}}"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": "sudo rm -rf {{user `install_dir`}}"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "manifest.json"
+    }
+  ]
+}

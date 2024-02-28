@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <property name="FILE_PATH" value="/etc/abicoirr-api/logs/app.log" />
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%t] %-5p %c - %X{TransactionId} - %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <!-- Rolling File Appender -->
+    <appender  name="mainAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${FILE_PATH}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder>
+            <pattern>%d [%t] %-5p %c - %X{TransactionId} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.adp.smartconnect" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="mainAppender" />
+        <appender-ref ref="consoleAppender" />
+    </logger>
+
+    <logger name="org.springframework.web" level="INFO" />
+    <logger name="org.springframework.boot" level="WARN" />
+    <logger name="org.springframework.jmx" level="WARN" />
+    <logger name="com.adp.smartconnect.commons" level="WARN" />
+    <logger name="springfox" level="WARN" />
+
+    <logger name="org.springframework.ws.client.MessageTracing.sent" level="INFO" />
+    <logger name="org.springframework.ws.client.MessageTracing.received" level="INFO" />
+    <logger name="org.springframework.ws.client.MessageTracing" level="INFO" />
+
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="mainAppender" />
+        <appender-ref ref="consoleAppender" />
+    </root>
+</configuration>
+<!-- 
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <property name="FILE_PATH" value="/etc/abicoirr-api/logs/app.log" />
+
+  <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender> 
+
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${FILE_PATH}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <logger name="org.springframework" level="info">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="org.springframework.boot" level="info">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="org.springframework.data.jpa" level="info">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="com.project.abicoirr" level="info">
+        <appender-ref ref="FILE" />
+    </logger>
+
+</configuration> -->

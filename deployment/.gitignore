@@ -1,0 +1,7 @@
+.terraform
+*.tfstate
+*.pem
+*.tfstate.back*
+
+manifest.json
+manifest.json.*
