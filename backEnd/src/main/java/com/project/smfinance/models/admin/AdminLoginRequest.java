@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminLoginRequest {
 
-    @NotNull @Email() private String email;
+  @NotNull @Email() private String email;
 
-    @NotNull private String password;
+  @NotNull private String password;
 }

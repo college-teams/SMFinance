@@ -4,5 +4,4 @@ import com.project.smfinance.entity.Customer;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends AbstractRepository<Customer> {
-}
+public interface CustomerRepository extends AbstractRepository<Customer> {}

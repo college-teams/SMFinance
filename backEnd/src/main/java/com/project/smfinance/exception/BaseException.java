@@ -1,11 +1,10 @@
 package com.project.smfinance.exception;
 
 import com.project.smfinance.models.response.StatusCodes;
-import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serial;
 import java.io.Serializable;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 public class BaseException extends Exception implements Serializable {

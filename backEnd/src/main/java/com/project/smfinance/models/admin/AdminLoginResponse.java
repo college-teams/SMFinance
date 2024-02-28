@@ -11,12 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AdminLoginResponse {
 
-    private String token;
+  private String token;
 
-    public static AdminLoginResponse from(String token) {
-        AdminLoginResponse adminLoginResponse = new AdminLoginResponse();
-        adminLoginResponse.setToken(token);
+  public static AdminLoginResponse from(String token) {
+    AdminLoginResponse adminLoginResponse = new AdminLoginResponse();
+    adminLoginResponse.setToken(token);
 
-        return adminLoginResponse;
-    }
+    return adminLoginResponse;
+  }
 }
