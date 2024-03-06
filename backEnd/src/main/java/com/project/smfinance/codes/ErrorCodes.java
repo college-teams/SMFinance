@@ -18,14 +18,6 @@ public class ErrorCodes extends StatusCodes {
   public static final StatusCodes FORBIDDEN =
       new ErrorCodes(403, HttpStatus.FORBIDDEN, "FORBIDDEN");
 
-  public static final StatusCodes EMPTY_FILE_REQUEST =
-      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "EMPTY_FILE_REQUEST");
-  public static final StatusCodes IMAGE_UPLOAD_FAILED =
-      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "IMAGE_UPLOAD_FAILED");
-
-  public static final StatusCodes IMAGE_DELETE_FAILED =
-      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "IMAGE_DELETE_FAILED");
-
   public static final StatusCodes INTERNAL_SERVER_ERROR =
       new ErrorCodes(500, HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR");
 

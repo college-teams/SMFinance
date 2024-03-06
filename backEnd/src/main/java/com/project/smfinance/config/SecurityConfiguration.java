@@ -30,14 +30,7 @@ public class SecurityConfiguration {
         .csrf()
         .disable()
         .authorizeHttpRequests()
-        .requestMatchers(
-            HttpMethod.POST,
-            "/admin/register",
-            "/admin/login",
-            "/admin/forgot-password/otp-generate",
-            "/contact-details/")
-        .permitAll()
-        .requestMatchers(HttpMethod.GET, "/admin/validate", "/customer/**")
+        .requestMatchers(HttpMethod.POST, "/admin/login")
         .permitAll()
         .anyRequest()
         .authenticated()
