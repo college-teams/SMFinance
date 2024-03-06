@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ public class CustomerController {
   private final CustomerService customerService;
 
   @PostMapping("/")
-  @PreAuthorize("@accessControlService.isAdmin()")
   public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(
       @Valid @RequestBody CreateCustomerRequest createCustomerRequest) {
     return new ResponseEntity<>(
@@ -49,7 +47,6 @@ public class CustomerController {
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("@accessControlService.isAdmin()")
   public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(
       @PathVariable Long id, @Valid @RequestBody UpdateCustomerRequest updateCustomerRequest)
       throws BaseException {
@@ -58,7 +55,6 @@ public class CustomerController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("@accessControlService.isAdmin()")
   public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long id) throws BaseException {
     return new ResponseEntity<>(customerService.deleteCustomer(id), HttpStatus.OK);
   }

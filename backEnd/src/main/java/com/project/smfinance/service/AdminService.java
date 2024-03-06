@@ -18,6 +18,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,22 +30,21 @@ public class AdminService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
-  private final AccessControlService accessControlService;
 
   @PostConstruct
   public void adminSetup() {
-    Optional<Admin> searchByEmail = adminRepository.findByEmail("rahul081@gmail.com");
+    Optional<Admin> searchByEmail = adminRepository.findByEmail("smfinance@gmail.com");
     if (searchByEmail.isEmpty()) {
       Admin admin = new Admin();
       admin.setUsername("Rahul");
-      admin.setEmail("rahul081@gmail.com");
+      admin.setEmail("smfinance@gmail.com");
       admin.setPassword(passwordEncoder.encode("Crnational6@"));
       adminRepository.save(admin);
     }
   }
 
   public ApiResponse<AdminDetailResponse> getAdminSelf() {
-    Admin currentUser = accessControlService.getCurrentAdmin();
+    Admin currentUser = getCurrentAdmin();
     return new ApiResponse<>(
         CURRENT_ADMIN_DETAILS_FETCHED,
         AbstractResponse.StatusType.SUCCESS,
@@ -66,5 +66,9 @@ public class AdminService {
         ADMIN_LOGIN_SUCCESS,
         AbstractResponse.StatusType.SUCCESS,
         AdminLoginResponse.from(jwtToken));
+  }
+
+  private Admin getCurrentAdmin() {
+    return (Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 }

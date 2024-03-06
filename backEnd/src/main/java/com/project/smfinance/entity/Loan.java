@@ -39,7 +39,7 @@ public class Loan extends BaseEntity {
 
   private BigDecimal totalAmountPaid;
 
-  private boolean isPreClosed;
+  private boolean preClosed;
 
   public enum LoanCategory {
     DAILY,
