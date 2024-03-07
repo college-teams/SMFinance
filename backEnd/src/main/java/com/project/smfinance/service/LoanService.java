@@ -3,10 +3,16 @@ package com.project.smfinance.service;
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Emi;
 import com.project.smfinance.entity.Loan;
+import com.project.smfinance.entity.Referral;
+import com.project.smfinance.entity.ReferralDocument;
 import com.project.smfinance.exception.BaseException;
 import com.project.smfinance.models.loan.LoanRequest;
+import com.project.smfinance.models.referral.ReferralDocumentRequest;
+import com.project.smfinance.models.referral.ReferralRequest;
 import com.project.smfinance.repository.EmiRepository;
 import com.project.smfinance.repository.LoanRepository;
+import com.project.smfinance.repository.ReferralDocumentRepository;
+import com.project.smfinance.repository.ReferralRepository;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,9 +34,19 @@ public class LoanService {
   private final LoanRepository loanRepository;
   private final EmiRepository emiRepository;
   private final CustomerService customerService;
+  private final ReferralRepository referralRepository;
+  private final ReferralDocumentRepository referralDocumentRepository;
+
+  private static final int DAILY_EMI_LIMIT = 100;
+
+  private static final int WEEKLY_EMI_LIMIT = 15;
 
   @Transactional
   public void createLoanAndGenerateEMIs(LoanRequest loanRequest) throws BaseException {
+    Referral saveReferral = saveReferralInformation(loanRequest.getReferral());
+
+    saveReferralDocuments(loanRequest.getReferral().getReferralDocuments(), saveReferral);
+
     Customer customer = customerService.getCustomerById(loanRequest.getCustomerId());
     Loan loan = LoanRequest.from(loanRequest, customer);
 
@@ -43,22 +59,15 @@ public class LoanService {
     List<Emi> EMIs = new ArrayList<>();
 
     switch (loanRequest.getLoanCategory()) {
-      case DAILY:
-        generateEMIsForCategory(loanRequest, loan, 100, ChronoUnit.DAYS, EMIs);
-        break;
-      case WEEKLY:
-        generateEMIsForCategory(loanRequest, loan, 15, ChronoUnit.WEEKS, EMIs);
-        break;
-      case MONTHLY:
-        generateEMIsForCategory(
-            loanRequest, loan, loanRequest.getCustomerPreference(), ChronoUnit.MONTHS, EMIs);
-        break;
-      case TIME_TO_TIME:
-        generateSingleEMI(loanRequest, loan, EMIs);
-        break;
-      default:
+      case DAILY -> generateEMIsForCategory(
+          loanRequest, loan, DAILY_EMI_LIMIT, ChronoUnit.DAYS, EMIs);
+      case WEEKLY -> generateEMIsForCategory(
+          loanRequest, loan, WEEKLY_EMI_LIMIT, ChronoUnit.WEEKS, EMIs);
+      case MONTHLY -> generateEMIsForCategory(
+          loanRequest, loan, loanRequest.getCustomerPreference(), ChronoUnit.MONTHS, EMIs);
+      case TIME_TO_TIME -> generateSingleEMI(loanRequest, loan, EMIs);
+      default -> {}
         // Handle other cases TODO: do we need to throw an error ?
-        break;
     }
 
     // Save all EMIs in bulk
@@ -77,7 +86,7 @@ public class LoanService {
     BigDecimal remainingAmount =
         totalLoanAmount.subtract(emiAmount.multiply(BigDecimal.valueOf(numberOfEMIs)));
 
-    LocalDate currentDate = loanRequest.getStartDate().toLocalDate();
+    LocalDate currentDate = loanRequest.getStartDate();
 
     for (int i = 1; i <= numberOfEMIs; i++) {
       if (i == numberOfEMIs) {
@@ -89,6 +98,10 @@ public class LoanService {
 
       currentDate = currentDate.plus(1, temporalUnit);
     }
+
+    //    updating maturity data
+    loan.setMaturityDate(currentDate.minus(1, temporalUnit));
+    loanRepository.save(loan);
   }
 
   private void generateSingleEMI(LoanRequest loanRequest, Loan loan, List<Emi> EMIs) {
@@ -97,7 +110,7 @@ public class LoanService {
         createEmi(
             loan,
             loanAmount,
-            loanRequest.getStartDate().toLocalDate().plusDays(loanRequest.getCustomerPreference()));
+            loanRequest.getStartDate().plusDays(loanRequest.getCustomerPreference()));
     EMIs.add(emi);
   }
 
@@ -108,6 +121,22 @@ public class LoanService {
     emi.setPaymentDueDate(dueDate);
     emi.setPaymentStatus(Emi.PaymentStatus.PENDING);
     emi.setPenaltyAmount(BigDecimal.ZERO);
+    emi.setTotalAmount(
+        emiAmount); // Setting emi amount to total amount because initially penalty will be 0
     return emi;
+  }
+
+  private Referral saveReferralInformation(ReferralRequest referralRequest) {
+    Referral referral = ReferralRequest.from(referralRequest);
+    return referralRepository.save(referral);
+  }
+
+  private void saveReferralDocuments(
+      List<ReferralDocumentRequest> referralDocuments, Referral referral) {
+    for (ReferralDocumentRequest referralDocumentRequest : referralDocuments) {
+      ReferralDocument referralDocument =
+          ReferralDocumentRequest.from(referralDocumentRequest, referral);
+      referralDocumentRepository.save(referralDocument);
+    }
   }
 }

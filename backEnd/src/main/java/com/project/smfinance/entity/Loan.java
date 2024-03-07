@@ -1,12 +1,8 @@
 package com.project.smfinance.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +23,11 @@ public class Loan extends BaseEntity {
 
   private BigDecimal penaltyAmount;
 
-  private LocalDateTime startDate;
+  private BigDecimal interestAmount;
 
-  private LocalDateTime maturityDate;
+  private LocalDate startDate;
+
+  private LocalDate maturityDate;
 
   @Enumerated(EnumType.STRING)
   private LoanCategory loanCategory;
@@ -40,6 +38,10 @@ public class Loan extends BaseEntity {
   private BigDecimal totalAmountPaid;
 
   private boolean preClosed;
+
+  @OneToOne
+  @JoinColumn(name = "referral_id")
+  private Referral referral;
 
   public enum LoanCategory {
     DAILY,

@@ -1,11 +1,11 @@
 package com.project.smfinance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +19,7 @@ import lombok.Setter;
 public class ReferralDocument extends BaseEntity {
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "referralId")
   private Referral referral;
 
@@ -26,8 +27,6 @@ public class ReferralDocument extends BaseEntity {
   private DocumentType documentType;
 
   private String documentPath;
-
-  private LocalDateTime uploadDate;
 
   public enum DocumentType {
     AADHAR,

@@ -29,6 +29,8 @@ public class Emi extends BaseEntity {
 
   private BigDecimal penaltyAmount;
 
+  private BigDecimal totalAmount;
+
   @Enumerated(EnumType.STRING)
   private PaymentStatus paymentStatus;
 
