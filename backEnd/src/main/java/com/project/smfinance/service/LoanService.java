@@ -112,6 +112,10 @@ public class LoanService {
             loanAmount,
             loanRequest.getStartDate().plusDays(loanRequest.getCustomerPreference()));
     EMIs.add(emi);
+
+    //    updating maturity data
+    loan.setMaturityDate(loanRequest.getStartDate().plusDays(loanRequest.getCustomerPreference()));
+    loanRepository.save(loan);
   }
 
   private Emi createEmi(Loan loan, BigDecimal emiAmount, LocalDate dueDate) {
