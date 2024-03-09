@@ -1,2 +1,5 @@
-package com.project.smfinance.repository;public class TranscationRepository {
-}
+package com.project.smfinance.repository;
+
+import com.project.smfinance.entity.Transaction;
+
+public interface TranscationRepository extends AbstractRepository<Transaction> {}

@@ -28,7 +28,9 @@ public class SuccessCodes extends StatusCodes {
       new SuccessCodes(200, HttpStatus.OK, "ADMIN_LOGIN_SUCCESS");
 
   public static final StatusCodes LOAN_CREATED =
-      new SuccessCodes(200, HttpStatus.CREATED, "LOAN_CREATED");
+      new SuccessCodes(201, HttpStatus.CREATED, "LOAN_CREATED");
+
+  public static final StatusCodes EMI_UPDATED = new SuccessCodes(200, HttpStatus.OK, "EMI_UPDATED");
 
   public SuccessCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);

@@ -35,7 +35,7 @@ public class Emi extends BaseEntity {
   private PaymentStatus paymentStatus;
 
   public enum PaymentStatus {
-    PENDING,
+    UN_PAID,
     PAID
   }
 }

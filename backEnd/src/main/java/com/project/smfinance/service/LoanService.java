@@ -1,6 +1,8 @@
 package com.project.smfinance.service;
 
+import static com.project.smfinance.codes.ErrorCodes.EMI_NOT_FOUND;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
+import static com.project.smfinance.codes.SuccessCodes.EMI_UPDATED;
 import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
 
 import com.project.smfinance.entity.Customer;
@@ -8,7 +10,9 @@ import com.project.smfinance.entity.Emi;
 import com.project.smfinance.entity.Loan;
 import com.project.smfinance.entity.Referral;
 import com.project.smfinance.entity.ReferralDocument;
+import com.project.smfinance.entity.Transaction;
 import com.project.smfinance.exception.BaseException;
+import com.project.smfinance.models.loan.EmiUpdateRequest;
 import com.project.smfinance.models.loan.LoanRequest;
 import com.project.smfinance.models.loan.LoanResponse;
 import com.project.smfinance.models.referral.ReferralDocumentRequest;
@@ -19,10 +23,12 @@ import com.project.smfinance.repository.EmiRepository;
 import com.project.smfinance.repository.LoanRepository;
 import com.project.smfinance.repository.ReferralDocumentRepository;
 import com.project.smfinance.repository.ReferralRepository;
+import com.project.smfinance.repository.TranscationRepository;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -43,6 +49,7 @@ public class LoanService {
   private final CustomerService customerService;
   private final ReferralRepository referralRepository;
   private final ReferralDocumentRepository referralDocumentRepository;
+  private final TranscationRepository transcationRepository;
 
   private static final int DAILY_EMI_LIMIT = 100;
 
@@ -66,6 +73,25 @@ public class LoanService {
 
     LoanResponse loanResponse = LoanResponse.from(getLoanById(savedLoan.getId()));
     return new ApiResponse<>(LOAN_CREATED, AbstractResponse.StatusType.SUCCESS, loanResponse);
+  }
+
+  @Transactional
+  public ApiResponse updateEMI(EmiUpdateRequest emiUpdateRequest, long emiId) throws BaseException {
+
+    Optional<Emi> emiById = emiRepository.findById(emiId);
+
+    if (emiById.isEmpty()) {
+      throw new BaseException(EMI_NOT_FOUND);
+    }
+
+    Emi emi = emiById.get();
+    emi.setPaymentStatus(emiUpdateRequest.getStatus());
+
+    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDateTime.now());
+    transcationRepository.save(transaction);
+
+    emiRepository.save(emi);
+    return new ApiResponse<>(EMI_UPDATED, AbstractResponse.StatusType.SUCCESS);
   }
 
   //  private methods
@@ -137,7 +163,7 @@ public class LoanService {
     emi.setLoan(loan);
     emi.setEmiAmount(emiAmount);
     emi.setPaymentDueDate(dueDate);
-    emi.setPaymentStatus(Emi.PaymentStatus.PENDING);
+    emi.setPaymentStatus(Emi.PaymentStatus.UN_PAID);
     emi.setPenaltyAmount(BigDecimal.ZERO);
     emi.setTotalAmount(
         emiAmount); // Setting emi amount to total amount because initially penalty will be 0

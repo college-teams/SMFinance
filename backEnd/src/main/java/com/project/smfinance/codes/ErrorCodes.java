@@ -27,6 +27,9 @@ public class ErrorCodes extends StatusCodes {
   public static final StatusCodes LOAN_NOT_FOUND =
       new ErrorCodes(404, HttpStatus.NOT_FOUND, "LOAN_NOT_FOUND");
 
+  public static final StatusCodes EMI_NOT_FOUND =
+      new ErrorCodes(404, HttpStatus.NOT_FOUND, "EMI_NOT_FOUND");
+
   public ErrorCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

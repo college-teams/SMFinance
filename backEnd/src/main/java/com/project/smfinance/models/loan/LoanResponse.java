@@ -18,6 +18,7 @@ import lombok.*;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoanResponse {
+  private Long id;
 
   private Customer customer;
 
@@ -47,6 +48,7 @@ public class LoanResponse {
 
   public static LoanResponse from(Loan loan) {
     return LoanResponse.builder()
+        .id(loan.getId())
         .customer(loan.getCustomer())
         .loanAmount(loan.getLoanAmount())
         .penaltyAmount(loan.getPenaltyAmount())
