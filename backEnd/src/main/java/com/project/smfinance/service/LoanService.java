@@ -1,9 +1,12 @@
 package com.project.smfinance.service;
 
+import static com.project.smfinance.codes.ErrorCodes.EMI_ALREADY_PAID;
 import static com.project.smfinance.codes.ErrorCodes.EMI_NOT_FOUND;
+import static com.project.smfinance.codes.ErrorCodes.LOAN_ALREADY_PRE_CLOSED;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
 import static com.project.smfinance.codes.SuccessCodes.EMI_UPDATED;
 import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_UPDATED;
 
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Emi;
@@ -76,22 +79,76 @@ public class LoanService {
   }
 
   @Transactional
-  public ApiResponse updateEMI(EmiUpdateRequest emiUpdateRequest, long emiId) throws BaseException {
-
-    Optional<Emi> emiById = emiRepository.findById(emiId);
-
-    if (emiById.isEmpty()) {
-      throw new BaseException(EMI_NOT_FOUND);
+  public ApiResponse updateEMI(EmiUpdateRequest emiUpdateRequest, long loanId, long emiId)
+      throws BaseException {
+    Loan loan = getLoanById(loanId);
+    Emi emi = getEmiByIdAndLoanId(emiId, loanId);
+    if (emi.getPaymentStatus().equals(Emi.PaymentStatus.PAID)) {
+      throw new BaseException(EMI_ALREADY_PAID);
     }
 
-    Emi emi = emiById.get();
     emi.setPaymentStatus(emiUpdateRequest.getStatus());
 
-    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDateTime.now());
-    transcationRepository.save(transaction);
+    saveTransaction(emi);
+
+    List<Emi> allPendingEMIs = emiRepository.getAllPendingEMIs(loan);
+    if (allPendingEMIs.isEmpty()) {
+      loan.setLoanStatus(Loan.LoanStatus.CLOSED);
+      loan.setCloseData(LocalDate.now());
+      calculateTotalAmountPaid(loan);
+    }
 
     emiRepository.save(emi);
+    loanRepository.save(loan);
     return new ApiResponse<>(EMI_UPDATED, AbstractResponse.StatusType.SUCCESS);
+  }
+
+  @Transactional
+  public ApiResponse preCloseLoan(long loanId) throws BaseException {
+    Loan loan = getLoanById(loanId);
+    if (loan.getLoanStatus().equals(Loan.LoanStatus.PRE_CLOSED)) {
+      throw new BaseException(LOAN_ALREADY_PRE_CLOSED);
+    }
+    // Retrieve all pending EMIs associated with the loan
+    List<Emi> pendingEMIs = emiRepository.getAllPendingEMIs(loan);
+
+    if (!pendingEMIs.isEmpty()) {
+      Emi firstUnpaidEmi = null;
+      BigDecimal totalAmountPaid = BigDecimal.ZERO;
+
+      // Calculate the total amount paid as the sum of pending EMIs
+      for (Emi emi : pendingEMIs) {
+        totalAmountPaid = totalAmountPaid.add(emi.getTotalAmount());
+        // If this is the first unpaid EMI, mark it and continue
+        if (firstUnpaidEmi == null) {
+          firstUnpaidEmi = emi;
+          continue;
+        }
+
+        // Delete all other pending EMIs
+        emiRepository.delete(emi);
+      }
+
+      // Update the total amount paid in the loan entity
+      loan.setTotalAmountPaid(totalAmountPaid);
+
+      // Update first unpaid EMI
+      firstUnpaidEmi.setTotalAmount(totalAmountPaid);
+      firstUnpaidEmi.setPaymentStatus(Emi.PaymentStatus.PAID);
+      firstUnpaidEmi.setEmiAmount(totalAmountPaid.subtract(firstUnpaidEmi.getPenaltyAmount()));
+
+      // Update the transaction details
+      saveTransaction(firstUnpaidEmi);
+
+      // Save the updated loan and EMI entities
+      emiRepository.save(firstUnpaidEmi);
+    }
+
+    loan.setLoanStatus(Loan.LoanStatus.PRE_CLOSED);
+    loan.setCloseData(LocalDate.now());
+    calculateTotalAmountPaid(loan);
+    loanRepository.save(loan);
+    return new ApiResponse<>(LOAN_UPDATED, AbstractResponse.StatusType.SUCCESS);
   }
 
   //  private methods
@@ -195,5 +252,33 @@ public class LoanService {
     }
 
     return loan.get();
+  }
+
+  private Emi getEmiById(long emiId) throws BaseException {
+    Optional<Emi> emiById = emiRepository.findById(emiId);
+    if (emiById.isEmpty()) {
+      throw new BaseException(EMI_NOT_FOUND);
+    }
+    return emiById.get();
+  }
+
+  private Emi getEmiByIdAndLoanId(long emiId, long loanId) throws BaseException {
+    Optional<Emi> emiByIdAndLoanId = emiRepository.findByIdAndLoanId(emiId, loanId);
+    if (emiByIdAndLoanId.isEmpty()) {
+      throw new BaseException(EMI_NOT_FOUND);
+    }
+    return emiByIdAndLoanId.get();
+  }
+
+  private void saveTransaction(Emi emi) {
+    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDateTime.now());
+    transcationRepository.save(transaction);
+  }
+
+  private void calculateTotalAmountPaid(Loan loan) {
+    List<Emi> allEMIs = emiRepository.findAllByLoan(loan);
+    BigDecimal totalAmountPaid =
+        allEMIs.stream().map(Emi::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    loan.setTotalAmountPaid(totalAmountPaid);
   }
 }

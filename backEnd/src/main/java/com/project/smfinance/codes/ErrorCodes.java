@@ -30,6 +30,12 @@ public class ErrorCodes extends StatusCodes {
   public static final StatusCodes EMI_NOT_FOUND =
       new ErrorCodes(404, HttpStatus.NOT_FOUND, "EMI_NOT_FOUND");
 
+  public static final StatusCodes EMI_ALREADY_PAID =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "EMI_ALREADY_PAID");
+
+  public static final StatusCodes LOAN_ALREADY_PRE_CLOSED =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "LOAN_ALREADY_PRE_CLOSED");
+
   public ErrorCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

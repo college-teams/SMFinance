@@ -33,6 +33,12 @@ public class LoanController {
       @PathVariable Long emiId,
       @Valid @RequestBody EmiUpdateRequest emiUpdateRequest)
       throws BaseException {
-    return new ResponseEntity<>(loanService.updateEMI(emiUpdateRequest, emiId), HttpStatus.OK);
+    return new ResponseEntity<>(
+        loanService.updateEMI(emiUpdateRequest, loanId, emiId), HttpStatus.OK);
+  }
+
+  @PutMapping("/{loanId}/pre-close")
+  public ResponseEntity<ApiResponse> preCloseLoan(@PathVariable Long loanId) throws BaseException {
+    return new ResponseEntity<>(loanService.preCloseLoan(loanId), HttpStatus.OK);
   }
 }

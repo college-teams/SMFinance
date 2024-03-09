@@ -29,6 +29,8 @@ public class Loan extends BaseEntity {
 
   private LocalDate maturityDate;
 
+  private LocalDate closeData;
+
   @Enumerated(EnumType.STRING)
   private LoanCategory loanCategory;
 
