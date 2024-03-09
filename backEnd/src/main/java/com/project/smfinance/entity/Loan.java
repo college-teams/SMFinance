@@ -39,7 +39,7 @@ public class Loan extends BaseEntity {
 
   private boolean preClosed;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "referral_id")
   private Referral referral;
 

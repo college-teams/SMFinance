@@ -1,5 +1,8 @@
 package com.project.smfinance.service;
 
+import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
+
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Emi;
 import com.project.smfinance.entity.Loan;
@@ -7,8 +10,11 @@ import com.project.smfinance.entity.Referral;
 import com.project.smfinance.entity.ReferralDocument;
 import com.project.smfinance.exception.BaseException;
 import com.project.smfinance.models.loan.LoanRequest;
+import com.project.smfinance.models.loan.LoanResponse;
 import com.project.smfinance.models.referral.ReferralDocumentRequest;
 import com.project.smfinance.models.referral.ReferralRequest;
+import com.project.smfinance.models.response.AbstractResponse;
+import com.project.smfinance.models.response.ApiResponse;
 import com.project.smfinance.repository.EmiRepository;
 import com.project.smfinance.repository.LoanRepository;
 import com.project.smfinance.repository.ReferralDocumentRepository;
@@ -21,6 +27,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,19 +49,26 @@ public class LoanService {
   private static final int WEEKLY_EMI_LIMIT = 15;
 
   @Transactional
-  public void createLoanAndGenerateEMIs(LoanRequest loanRequest) throws BaseException {
+  public ApiResponse<LoanResponse> createLoanAndGenerateEMIs(LoanRequest loanRequest)
+      throws BaseException {
     Referral saveReferral = saveReferralInformation(loanRequest.getReferral());
 
-    saveReferralDocuments(loanRequest.getReferral().getReferralDocuments(), saveReferral);
+    List<ReferralDocument> referralDocuments =
+        saveReferralDocuments(loanRequest.getReferral().getReferralDocuments(), saveReferral);
+    saveReferral.setReferralDocuments(referralDocuments);
 
     Customer customer = customerService.getCustomerById(loanRequest.getCustomerId());
-    Loan loan = LoanRequest.from(loanRequest, customer);
+    Loan loan = LoanRequest.from(loanRequest, customer, saveReferral);
 
     Loan savedLoan = loanRepository.save(loan);
 
     generateEMIs(loanRequest, savedLoan);
+
+    LoanResponse loanResponse = LoanResponse.from(getLoanById(savedLoan.getId()));
+    return new ApiResponse<>(LOAN_CREATED, AbstractResponse.StatusType.SUCCESS, loanResponse);
   }
 
+  //  private methods
   private void generateEMIs(LoanRequest loanRequest, Loan loan) {
     List<Emi> EMIs = new ArrayList<>();
 
@@ -135,12 +149,25 @@ public class LoanService {
     return referralRepository.save(referral);
   }
 
-  private void saveReferralDocuments(
+  private List<ReferralDocument> saveReferralDocuments(
       List<ReferralDocumentRequest> referralDocuments, Referral referral) {
+    List<ReferralDocument> referralDocumentsList = new ArrayList<>();
     for (ReferralDocumentRequest referralDocumentRequest : referralDocuments) {
       ReferralDocument referralDocument =
           ReferralDocumentRequest.from(referralDocumentRequest, referral);
-      referralDocumentRepository.save(referralDocument);
+      ReferralDocument savedReferralDocument = referralDocumentRepository.save(referralDocument);
+      referralDocumentsList.add(savedReferralDocument);
     }
+    return referralDocumentsList;
+  }
+
+  public Loan getLoanById(Long id) throws BaseException {
+    Optional<Loan> loan = loanRepository.findById(id);
+
+    if (loan.isEmpty()) {
+      throw new BaseException(LOAN_NOT_FOUND);
+    }
+
+    return loan.get();
   }
 }

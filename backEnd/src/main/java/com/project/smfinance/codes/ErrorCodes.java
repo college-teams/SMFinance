@@ -24,6 +24,9 @@ public class ErrorCodes extends StatusCodes {
   public static final StatusCodes ADMIN_NOT_EXISTS =
       new ErrorCodes(400, HttpStatus.BAD_REQUEST, "ADMIN_NOT_EXISTS");
 
+  public static final StatusCodes LOAN_NOT_FOUND =
+      new ErrorCodes(404, HttpStatus.NOT_FOUND, "LOAN_NOT_FOUND");
+
   public ErrorCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

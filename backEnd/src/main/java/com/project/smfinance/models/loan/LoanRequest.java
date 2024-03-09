@@ -2,6 +2,7 @@ package com.project.smfinance.models.loan;
 
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Loan;
+import com.project.smfinance.entity.Referral;
 import com.project.smfinance.models.referral.ReferralRequest;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ public class LoanRequest {
 
   @NotNull private ReferralRequest referral;
 
-  public static Loan from(LoanRequest loanRequest, Customer customer) {
+  public static Loan from(LoanRequest loanRequest, Customer customer, Referral referral) {
     Loan loan = new Loan();
     loan.setCustomer(customer);
     loan.setLoanAmount(loanRequest.getLoanAmount());
@@ -43,6 +44,7 @@ public class LoanRequest {
     loan.setInterestAmount(loanRequest.getInterestAmount());
     loan.setLoanStatus(Loan.LoanStatus.ACTIVE);
     loan.setPreClosed(false);
+    loan.setReferral(referral);
     return loan;
   }
 }
