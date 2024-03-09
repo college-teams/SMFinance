@@ -4,9 +4,7 @@ import static com.project.smfinance.codes.ErrorCodes.EMI_ALREADY_PAID;
 import static com.project.smfinance.codes.ErrorCodes.EMI_NOT_FOUND;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_ALREADY_PRE_CLOSED;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
-import static com.project.smfinance.codes.SuccessCodes.EMI_UPDATED;
-import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
-import static com.project.smfinance.codes.SuccessCodes.LOAN_UPDATED;
+import static com.project.smfinance.codes.SuccessCodes.*;
 
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Emi;
@@ -55,8 +53,21 @@ public class LoanService {
   private final TranscationRepository transcationRepository;
 
   private static final int DAILY_EMI_LIMIT = 100;
-
   private static final int WEEKLY_EMI_LIMIT = 15;
+
+  public ApiResponse<List<LoanResponse>> getAllLoans() {
+    List<Loan> loans = loanRepository.findAll();
+
+    List<LoanResponse> loanList = LoanResponse.from(loans);
+    return new ApiResponse<>(LOAN_LIST_FETCHED, AbstractResponse.StatusType.SUCCESS, loanList);
+  }
+
+  public ApiResponse<LoanResponse> getLoanDetails(Long loanId) throws BaseException {
+    Loan loan = getLoanById(loanId);
+
+    LoanResponse loanResponse = LoanResponse.from(loan);
+    return new ApiResponse<>(LOAN_DATA_FETCHED, AbstractResponse.StatusType.SUCCESS, loanResponse);
+  }
 
   @Transactional
   public ApiResponse<LoanResponse> createLoanAndGenerateEMIs(LoanRequest loanRequest)
