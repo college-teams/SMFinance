@@ -36,6 +36,14 @@ public class ErrorCodes extends StatusCodes {
   public static final StatusCodes LOAN_ALREADY_PRE_CLOSED =
       new ErrorCodes(400, HttpStatus.BAD_REQUEST, "LOAN_ALREADY_PRE_CLOSED");
 
+  public static final StatusCodes EMPTY_FILE_REQUEST =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "EMPTY_FILE_REQUEST");
+  public static final StatusCodes IMAGE_UPLOAD_FAILED =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "IMAGE_UPLOAD_FAILED");
+
+  public static final StatusCodes IMAGE_DELETE_FAILED =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "IMAGE_DELETE_FAILED");
+
   public ErrorCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

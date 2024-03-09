@@ -41,6 +41,12 @@ public class SuccessCodes extends StatusCodes {
   public static final StatusCodes LOAN_DATA_FETCHED =
       new SuccessCodes(200, HttpStatus.OK, "LOAN_DATA_FETCHED");
 
+  public static final StatusCodes IMAGE_UPLOAD_SUCCESS =
+      new SuccessCodes(200, HttpStatus.OK, "IMAGE_UPLOAD_SUCCESS");
+
+  public static final StatusCodes IMAGE_DELETE_SUCCESS =
+      new SuccessCodes(200, HttpStatus.OK, "IMAGE_DELETE_SUCCESS");
+
   public SuccessCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }
