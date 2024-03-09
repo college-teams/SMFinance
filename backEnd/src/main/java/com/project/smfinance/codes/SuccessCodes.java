@@ -10,7 +10,7 @@ public class SuccessCodes extends StatusCodes {
       new SuccessCodes(200, HttpStatus.OK, "CUSTOMER_LIST_FETCHED");
 
   public static final StatusCodes CUSTOMER_DATA_FETCHED =
-          new SuccessCodes(200, HttpStatus.OK, "CUSTOMER_DATA_FETCHED");
+      new SuccessCodes(200, HttpStatus.OK, "CUSTOMER_DATA_FETCHED");
 
   public static final StatusCodes CUSTOMER_DELETE_SUCCESS =
       new SuccessCodes(200, HttpStatus.OK, "CUSTOMER_DELETE_SUCCESS");
@@ -22,19 +22,19 @@ public class SuccessCodes extends StatusCodes {
       new SuccessCodes(200, HttpStatus.OK, "CUSTOMER_UPDATED");
 
   public static final StatusCodes CURRENT_ADMIN_DETAILS_FETCHED =
-          new SuccessCodes(200, HttpStatus.OK, "CURRENT_ADMIN_DETAILS_FETCHED");
-
-  public static final StatusCodes ADMIN_REGISTER_SUCCESS =
-          new SuccessCodes(201, HttpStatus.CREATED, "ADMIN_REGISTER_SUCCESS");
+      new SuccessCodes(200, HttpStatus.OK, "CURRENT_ADMIN_DETAILS_FETCHED");
 
   public static final StatusCodes ADMIN_LOGIN_SUCCESS =
-          new SuccessCodes(200, HttpStatus.OK, "ADMIN_LOGIN_SUCCESS");
+      new SuccessCodes(200, HttpStatus.OK, "ADMIN_LOGIN_SUCCESS");
 
-  public static final StatusCodes FORGOT_PASSWORD_REQUEST_SENDS =
-          new SuccessCodes(200, HttpStatus.OK, "FORGOT_PASSWORD_REQUEST_SENDS");
+  public static final StatusCodes LOAN_CREATED =
+      new SuccessCodes(201, HttpStatus.CREATED, "LOAN_CREATED");
 
-  public static final StatusCodes All_ADMIN_DETAILS_FETCHED =
-          new SuccessCodes(200, HttpStatus.OK, "All_ADMIN_DETAILS_FETCHED");
+  public static final StatusCodes EMI_UPDATED = new SuccessCodes(200, HttpStatus.OK, "EMI_UPDATED");
+
+  public static final StatusCodes LOAN_UPDATED =
+      new SuccessCodes(200, HttpStatus.OK, "LOAN_UPDATED");
+
   public SuccessCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

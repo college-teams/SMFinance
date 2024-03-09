@@ -7,6 +7,4 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateCustomerRequest extends CreateCustomerRequest {
-
-}
+public class UpdateCustomerRequest extends CreateCustomerRequest {}

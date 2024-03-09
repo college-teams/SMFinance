@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "SM finance",
+  title: "SM Finance",
   description: "This is finance emi manage app",
   icons: {
     icon: [
