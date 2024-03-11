@@ -1,15 +1,14 @@
-"use client";
-
-/* eslint-disable react/jsx-key */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from "react";
 import { useTable, usePagination, useSortBy, Column } from "react-table";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as Config from "../../types/react-table-config";
 import {
   IoMdArrowDropdown,
   IoMdArrowDropup,
-  IoMdArrowBack,
 } from "react-icons/io";
 
 interface TableProps<T extends object> {
@@ -33,7 +32,6 @@ const Table = <T extends object>({
     headerGroups,
     page,
     nextPage,
-    gotoPage,
     setPageSize,
     pageOptions,
     previousPage,
@@ -51,21 +49,6 @@ const Table = <T extends object>({
     useSortBy,
     usePagination
   );
-
-  const onPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value) {
-      const val =
-        Number(e.target.value) - 1 > 0 ? Number(e.target.value) - 1 : 0;
-      gotoPage(val);
-    }
-  };
-
-  const onPageBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
-    const val = e.target.value ? Number(e.target.value) : 0;
-    if (val < 1 || val > pageOptions.length) {
-      e.target.value = String(val);
-    }
-  };
 
   return (
     <div>
