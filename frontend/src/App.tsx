@@ -6,6 +6,7 @@ import React from "react";
 import DashboardLayout from "./pages/DashboardLayout";
 import DashboardHome from "./components/DashboardHome";
 import Transactions from "./pages/Transactions";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
   return (
@@ -14,7 +15,14 @@ function App() {
         <Routes>
           <Route path="/">
             <Route index element={<Login />} />
-            <Route path="dashboard" element={<DashboardLayout />}>
+            <Route
+              path="dashboard"
+              element={
+                <PrivateRoute>
+                  <DashboardLayout />
+                </PrivateRoute>
+              }
+            >
               <Route index element={<DashboardHome />} />
               <Route path="transactions" element={<Transactions />} />
             </Route>

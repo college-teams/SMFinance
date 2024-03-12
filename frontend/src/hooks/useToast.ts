@@ -1,5 +1,5 @@
+import { NotificationType } from "@/types/NotificationType";
 import { toast } from "react-hot-toast";
-import { NotificationType } from "../types/NotificationType";
 
 const useToast = () => {
   const showToast = (
@@ -10,18 +10,18 @@ const useToast = () => {
     switch (type) {
       case "success":
         toast.success(message, {
-          className: "relative font-semibold text-[1.4rem]",
+          className: "relative font-semibold",
           duration,
         });
         break;
       case "error":
         toast.error(message, {
-          className: "relative font-semibold text-[1.4rem]",
+          className: "relative font-semibold",
         });
         break;
       default:
         toast(message, {
-          className: "relative font-semibold text-[1.4rem]",
+          className: "relative font-semibold",
         });
     }
   };

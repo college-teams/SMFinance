@@ -1,25 +1,25 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useRef } from "react";
-import useToast from "./useToast";
-import { clearLocalStorage, getHeaderToken } from "@/utils";
+import { getHeaderToken } from "@/utils";
+// import useToast from "./useToast";
 
 export const useAPI = () => {
-  const showToast = useToast();
+  // const showToast = useToast();
 
   const controller = new AbortController();
 
   const api = useRef(
     axios.create({
-      baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+      baseURL: import.meta.env.VITE_BASE_URL,
       headers: { "Content-Type": "application/json" },
     })
   );
 
-  const logoutHandler = () => {
-    clearLocalStorage();
-    showToast("Logged out successfully!!", "success");
-  };
+  // const logoutHandler = () => {
+  //   clearLocalStorage();
+  //   showToast("Logged out successfully!!", "success");
+  // };
 
   useEffect(() => {
     const currentAPI = api.current;
@@ -43,17 +43,17 @@ export const useAPI = () => {
         //   return Promise.resolve(null);
         // }
 
-        if (error.response && error.response.status === 401) {
-          logoutHandler();
+        // if (error.response && error.response.status === 401) {
+        // logoutHandler();
 
-          // Example:
-          // removeToken(); // Assuming you have a function to remove the token
-          // performLogout(); // Assuming you have a function to handle logout
+        // Example:
+        // removeToken(); // Assuming you have a function to remove the token
+        // performLogout(); // Assuming you have a function to handle logout
 
-          // You can also redirect to a login page if needed
-          // Example:
-          // window.location.href = '/login';
-        }
+        // You can also redirect to a login page if needed
+        // Example:
+        // window.location.href = '/login';
+        // }
 
         return Promise.reject(error);
       }
