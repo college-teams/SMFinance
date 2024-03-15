@@ -8,11 +8,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar";
+import { useAppDispatch } from "@/store/configureStore";
+import { clearUserDetails } from "@/store/slices/user";
+import { clearLocalStorage } from "@/utils";
+import useToast from "@/hooks/useToast";
 
 const Navbar = () => {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const showToast = useToast();
+
   const { pathname } = location;
   const [openMenuItems, setOpenMenuItems] = useState(false);
   const pageName = pathname.split("/").pop();
@@ -30,6 +38,13 @@ const Navbar = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const logoutHandler = () => {
+    dispatch(clearUserDetails());
+    clearLocalStorage();
+    showToast(`Successfully loggedOut`, "success");
+    navigate("/");
+  };
 
   return (
     <Fragment>
@@ -59,7 +74,10 @@ const Navbar = () => {
               <FaRegCircleUser size={25} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="relative bg-secondaryBg text-white mt-2 hover:bg-primaryBg">
-              <DropdownMenuItem className="relative cursor-pointer">
+              <DropdownMenuItem
+                onClick={logoutHandler}
+                className="relative cursor-pointer"
+              >
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>

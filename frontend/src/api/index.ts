@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import useToast from "@/hooks/useToast";
-import { AbstractResponse, ApiError, HttpMethod, UserLogin } from "@/types/Api";
-import { LoginResponse } from "@/types/admin";
+import { AbstractResponse, ApiError, GetCurrentUser, HttpMethod, UserLogin } from "@/types/Api";
+import { AdminDetails, LoginResponse } from "@/types/admin";
 import axios, { AxiosResponse } from "axios";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -104,5 +104,15 @@ export const userLogin: UserLogin = async (api, data) => {
     "Error occurred while login to the system",
     "POST",
     data
+  );
+};
+
+export const getCurrentUser: GetCurrentUser = async (api) => {
+  return makeRequest<AdminDetails>(
+    api,
+    "/admin/self",
+    "getCurrentUser",
+    "Error occurred while fetching loggedIn account details",
+    "GET"
   );
 };

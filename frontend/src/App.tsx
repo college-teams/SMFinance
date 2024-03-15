@@ -13,8 +13,10 @@ function App() {
     <React.Fragment>
       <BrowserRouter>
         <Routes>
+
           <Route path="/">
             <Route index element={<Login />} />
+
             <Route
               path="dashboard"
               element={
@@ -26,7 +28,9 @@ function App() {
               <Route index element={<DashboardHome />} />
               <Route path="transactions" element={<Transactions />} />
             </Route>
+            
           </Route>
+
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" replace={true} />} />
         </Routes>
