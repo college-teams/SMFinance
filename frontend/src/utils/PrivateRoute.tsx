@@ -44,7 +44,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   }, [user]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // TODO: Add proper loader
   }
 
   if (isLoggedIn() && user) {

@@ -7,6 +7,10 @@ import DashboardLayout from "./pages/DashboardLayout";
 import DashboardHome from "./components/DashboardHome";
 import Transactions from "./pages/Transactions";
 import PrivateRoute from "./utils/PrivateRoute";
+import LoanList from "./pages/Loan/LoanList";
+import CustomerList from "./pages/Customer/CustomerList";
+import Revenue from "./pages/Revenue";
+import Reports from "./pages/Reports";
 
 function App() {
   return (
@@ -26,7 +30,11 @@ function App() {
               }
             >
               <Route index element={<DashboardHome />} />
+              <Route path="customers" element={<CustomerList />} />
+              <Route path="loans" element={<LoanList />} />
               <Route path="transactions" element={<Transactions />} />
+              <Route path="revenue" element={<Revenue />} />
+              <Route path="reports" element={<Reports />} />
             </Route>
             
           </Route>

@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AdminDetailResponse {
   private long id;
-  private String username;
+  private String name;
   private String email;
 
   public static List<AdminDetailResponse> from(List<Admin> admins) {
@@ -25,7 +25,7 @@ public class AdminDetailResponse {
     AdminDetailResponse adminResponse = new AdminDetailResponse();
     adminResponse.setId(admin.getId());
     adminResponse.setEmail(admin.getEmail());
-    adminResponse.setUsername(admin.getUsername());
+    adminResponse.setName(admin.getName());
 
     return adminResponse;
   }

@@ -9,6 +9,7 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link, useLocation } from "react-router-dom";
+import { useAppSelector } from "@/store/configureStore";
 
 const sideBarItems = [
   {
@@ -45,6 +46,8 @@ const sideBarItems = [
 
 const Sidebar = () => {
   const location = useLocation();
+  const { user } = useAppSelector((state) => state.appState);
+
   const { pathname } = location;
 
   return (
@@ -55,14 +58,14 @@ const Sidebar = () => {
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.pngs" alt="profile" />
               <AvatarFallback className="text-black" color="#000">
-                N
+                {user?.name?.charAt(0) || "A"}
               </AvatarFallback>
             </Avatar>
           </div>
 
           <div className="relative flex-col gap-y-1 flex">
             <span className="relative text-[1.1rem] font-medium">
-              Nanthagopal
+              {user?.name || 'Admin'}
             </span>
             <span className="relative text-xs text-lightWhite">
               Adminstrator
