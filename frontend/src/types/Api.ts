@@ -1,5 +1,6 @@
 import { AxiosInstance } from "axios";
-import { LoginRequest, LoginResponse } from "./admin";
+import { AdminDetails, LoginRequest, LoginResponse } from "./admin";
+import { LoanResponse } from "./loan";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -26,3 +27,11 @@ export type UserLogin = (
   api: AxiosInstance,
   data: LoginRequest
 ) => Promise<LoginResponse | ApiError>;
+
+export type GetCurrentUser = (
+  api: AxiosInstance
+) => Promise<AdminDetails | ApiError>;
+
+export type GetLoanList = (
+  api: AxiosInstance,
+) => Promise<LoanResponse[] | ApiError>;

@@ -6,7 +6,9 @@ import useToast from "@/hooks/useToast";
 import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
 import { isApiError } from "@/types/Api";
 import { setHeaderToken } from "@/utils";
-import { userLogin } from "@/api";
+import { getCurrentUser, userLogin } from "@/api";
+import { useAppDispatch } from "@/store/configureStore";
+import { setCurrentUserDetails } from "@/store/slices/user";
 
 const LoginForm = () => {
   const {
@@ -25,21 +27,34 @@ const LoginForm = () => {
   const showToast = useToast();
   const [loading, startLoading, endLoading] = useLoadingIndicator();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const loginSuccessHandler = (token: string): void => {
+  const fetchLoggedInUserDetails = async () => {
+    startLoading("/getCurrentUser");
+    try {
+      return await getCurrentUser(api);
+    } finally {
+      endLoading("/getCurrentUser");
+    }
+  };
+
+  const loginSuccessHandler = async (token: string): Promise<void> => {
     reset({});
     setHeaderToken(token);
-    navigate("/dashboard/");
+    const res = await fetchLoggedInUserDetails();
+    if (!isApiError(res)) {
+      dispatch(setCurrentUserDetails(res));
+      showToast(`Successfully loggedIn`, "success");
+      navigate("/dashboard/");
+    }
   };
 
   const submitHandler = async (data: LoginRequest) => {
     startLoading("/authRequest");
     const res = await userLogin(api, data as LoginRequest);
     if (!isApiError(res)) {
-      showToast(`Successfully loggedIn`, "success");
-      loginSuccessHandler(res.token);
+      await loginSuccessHandler(res.token);
     }
-
     endLoading("/authRequest");
   };
 

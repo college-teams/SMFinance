@@ -1,8 +1,17 @@
 export interface Customer {
   name: string;
-  email: string;
   phoneNumber: string;
   altPhoneNumber: string;
-  occupation: string;
   address: string;
+  aadhaarNumber: string;
+  panNumber: string;
+  rationNumber: string;
+  email: string;
+  occupation: string;
+}
+
+export interface CustomerRequest extends Customer { }
+
+export interface CustomerResponse extends Customer {
+  id: number;
 }

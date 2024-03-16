@@ -4,7 +4,11 @@ import static com.project.smfinance.codes.ErrorCodes.EMI_ALREADY_PAID;
 import static com.project.smfinance.codes.ErrorCodes.EMI_NOT_FOUND;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_ALREADY_PRE_CLOSED;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
-import static com.project.smfinance.codes.SuccessCodes.*;
+import static com.project.smfinance.codes.SuccessCodes.EMI_UPDATED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_DATA_FETCHED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_LIST_FETCHED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_UPDATED;
 
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Emi;
@@ -75,8 +79,8 @@ public class LoanService {
     Referral saveReferral = saveReferralInformation(loanRequest.getReferral());
 
     List<ReferralDocument> referralDocuments =
-        saveReferralDocuments(loanRequest.getReferral().getReferralDocuments(), saveReferral);
-    saveReferral.setReferralDocuments(referralDocuments);
+        saveReferralDocuments(loanRequest.getReferral().getDocuments(), saveReferral);
+    saveReferral.setDocuments(referralDocuments);
 
     Customer customer = customerService.getCustomerById(loanRequest.getCustomerId());
     Loan loan = LoanRequest.from(loanRequest, customer, saveReferral);

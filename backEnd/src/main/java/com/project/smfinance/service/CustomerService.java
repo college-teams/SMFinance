@@ -80,12 +80,12 @@ public class CustomerService {
 
   private void updateCustomerFields(
       Customer existingCustomer, UpdateCustomerRequest updateCustomerRequest) {
-    existingCustomer.setCustomerName(updateCustomerRequest.getCustomerName());
-    existingCustomer.setCustomerPhoneNumber(updateCustomerRequest.getCustomerPhoneNumber());
-    existingCustomer.setCustomerAddress(updateCustomerRequest.getCustomerAddress());
-    existingCustomer.setCustomerOccupation(updateCustomerRequest.getCustomerOccupation());
-    existingCustomer.setCustomerEmail(updateCustomerRequest.getCustomerEmail());
-    existingCustomer.setCustomerAltNumber(updateCustomerRequest.getCustomerAltNumber());
+    existingCustomer.setName(updateCustomerRequest.getName());
+    existingCustomer.setPhoneNumber(updateCustomerRequest.getPhoneNumber());
+    existingCustomer.setAddress(updateCustomerRequest.getAddress());
+    existingCustomer.setOccupation(updateCustomerRequest.getOccupation());
+    existingCustomer.setEmail(updateCustomerRequest.getEmail());
+    existingCustomer.setAltPhoneNumber(updateCustomerRequest.getAltPhoneNumber());
     existingCustomer.setAadhaarNumber(updateCustomerRequest.getAadhaarNumber());
     existingCustomer.setPanNumber(updateCustomerRequest.getPanNumber());
     existingCustomer.setRationNumber(updateCustomerRequest.getRationNumber());

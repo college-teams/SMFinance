@@ -13,27 +13,27 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateCustomerRequest {
 
-  @NotNull private String customerName;
-  @NotNull private String customerPhoneNumber;
-  private String customerAltNumber;
-  @NotNull private String customerAddress;
+  @NotNull private String name;
+  @NotNull private String phoneNumber;
+  private String altPhoneNumber;
+  @NotNull private String address;
   @NotNull private String aadhaarNumber;
   @NotNull private String panNumber;
   @NotNull private String rationNumber;
-  private String customerEmail;
-  @NotNull private String customerOccupation;
+  private String email;
+  @NotNull private String occupation;
 
   public static Customer from(CreateCustomerRequest createCustomerRequest) {
     Customer customer = new Customer();
-    customer.setCustomerName(createCustomerRequest.getCustomerName());
-    customer.setCustomerPhoneNumber(createCustomerRequest.getCustomerPhoneNumber());
-    customer.setCustomerAddress(createCustomerRequest.getCustomerAddress());
-    customer.setCustomerAltNumber(createCustomerRequest.getCustomerAltNumber());
+    customer.setName(createCustomerRequest.getName());
+    customer.setPhoneNumber(createCustomerRequest.getPhoneNumber());
+    customer.setAddress(createCustomerRequest.getAddress());
+    customer.setAltPhoneNumber(createCustomerRequest.getAltPhoneNumber());
     customer.setAadhaarNumber(createCustomerRequest.getAadhaarNumber());
     customer.setPanNumber(createCustomerRequest.getPanNumber());
     customer.setRationNumber(createCustomerRequest.getRationNumber());
-    customer.setCustomerEmail(createCustomerRequest.getCustomerEmail());
-    customer.setCustomerOccupation(createCustomerRequest.getCustomerOccupation());
+    customer.setEmail(createCustomerRequest.getEmail());
+    customer.setOccupation(createCustomerRequest.getOccupation());
 
     return customer;
   }

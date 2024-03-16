@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useRef } from "react";
-import { getHeaderToken } from "@/utils";
-// import useToast from "./useToast";
+import { clearLocalStorage, getHeaderToken } from "@/utils";
+import { useAppDispatch } from "@/store/configureStore";
+import { clearUserDetails } from "@/store/slices/user";
+import { useNavigate } from "react-router-dom";
 
 export const useAPI = () => {
-  // const showToast = useToast();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const controller = new AbortController();
 
@@ -16,20 +19,22 @@ export const useAPI = () => {
     })
   );
 
-  // const logoutHandler = () => {
-  //   clearLocalStorage();
-  //   showToast("Logged out successfully!!", "success");
-  // };
+  const logoutHandler = () => {
+    dispatch(clearUserDetails());
+    clearLocalStorage();
+    navigate("/");
+  };
 
   useEffect(() => {
     const currentAPI = api.current;
 
     const requestInterceptorId = currentAPI.interceptors.request.use(
       async (config) => {
-        // ADD Token assign code.
-        const token = getHeaderToken();
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+        if (!config.url?.includes("/login")) {
+          const token = getHeaderToken();
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         }
         return config;
       }
@@ -43,17 +48,16 @@ export const useAPI = () => {
         //   return Promise.resolve(null);
         // }
 
-        // if (error.response && error.response.status === 401) {
-        // logoutHandler();
+        if (error.response && error.response.status === 401) {
+          logoutHandler();
+          // Example:
+          // removeToken(); // Assuming you have a function to remove the token
+          // performLogout(); // Assuming you have a function to handle logout
 
-        // Example:
-        // removeToken(); // Assuming you have a function to remove the token
-        // performLogout(); // Assuming you have a function to handle logout
-
-        // You can also redirect to a login page if needed
-        // Example:
-        // window.location.href = '/login';
-        // }
+          // You can also redirect to a login page if needed
+          // Example:
+          // window.location.href = '/login';
+        }
 
         return Promise.reject(error);
       }

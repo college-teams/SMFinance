@@ -18,18 +18,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Referral extends BaseEntity {
 
-  private String referralFirstName;
+  private String firstName;
 
-  private String referralLastName;
+  private String lastName;
 
-  private String referralEmail;
+  private String email;
 
-  private String referralPhoneNumber;
+  private String phoneNumber;
 
   @OneToMany(
       mappedBy = "referral",
       cascade = CascadeType.ALL,
       orphanRemoval = true,
       fetch = FetchType.EAGER)
-  private List<ReferralDocument> referralDocuments = new ArrayList<>();
+  private List<ReferralDocument> documents = new ArrayList<>();
 }
