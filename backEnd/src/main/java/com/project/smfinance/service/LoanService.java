@@ -248,7 +248,7 @@ public class LoanService {
   }
 
   private List<ReferralDocument> saveReferralDocuments(
-      List<ReferralDocumentRequest> referralDocuments, Referral referral) {
+      List<ReferralDocumentRequest> referralDocuments, Referral referral) throws BaseException {
     List<ReferralDocument> referralDocumentsList = new ArrayList<>();
     for (ReferralDocumentRequest referralDocumentRequest : referralDocuments) {
       ReferralDocument referralDocument =

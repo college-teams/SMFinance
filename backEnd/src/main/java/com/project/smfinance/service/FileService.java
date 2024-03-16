@@ -1,10 +1,10 @@
 package com.project.smfinance.service;
 
 import static com.project.smfinance.codes.ErrorCodes.EMPTY_FILE_REQUEST;
-import static com.project.smfinance.codes.ErrorCodes.IMAGE_DELETE_FAILED;
-import static com.project.smfinance.codes.ErrorCodes.IMAGE_UPLOAD_FAILED;
-import static com.project.smfinance.codes.SuccessCodes.IMAGE_DELETE_SUCCESS;
-import static com.project.smfinance.codes.SuccessCodes.IMAGE_UPLOAD_SUCCESS;
+import static com.project.smfinance.codes.ErrorCodes.FILE_DELETE_FAILED;
+import static com.project.smfinance.codes.ErrorCodes.FILE_UPLOAD_FAILED;
+import static com.project.smfinance.codes.SuccessCodes.FILE_DELETE_SUCCESS;
+import static com.project.smfinance.codes.SuccessCodes.FILE_UPLOAD_SUCCESS;
 
 import com.project.smfinance.exception.BaseException;
 import com.project.smfinance.models.File.FileResponse;
@@ -32,17 +32,17 @@ public class FileService {
     }
     String uniqueKey = Util.generateUniqueImageKey(entityKey, multipartFile.getOriginalFilename());
     try {
-      String imagePath = awsService.uploadFile(uniqueKey, multipartFile);
+      String filePath = awsService.uploadFile(uniqueKey, multipartFile);
       return new ApiResponse<>(
-          IMAGE_UPLOAD_SUCCESS,
+          FILE_UPLOAD_SUCCESS,
           AbstractResponse.StatusType.SUCCESS,
-          FileResponse.from(uniqueKey, imagePath, entityKey));
+          FileResponse.from(uniqueKey, filePath, entityKey, multipartFile.getContentType()));
     } catch (Exception ex) {
       log.info("Rollback the uploaded images");
       deleteImage(uniqueKey);
       log.error("Unknown exception occurred while uploading image to aws {}", ex.getMessage());
       log.error("ERROR STACK", ex);
-      throw new BaseException(IMAGE_UPLOAD_FAILED);
+      throw new BaseException(FILE_UPLOAD_FAILED);
     }
   }
 
@@ -51,8 +51,8 @@ public class FileService {
       awsService.deleteFile(key);
     } catch (Exception ex) {
       log.error("Error ", ex);
-      throw new BaseException(IMAGE_DELETE_FAILED);
+      throw new BaseException(FILE_DELETE_FAILED);
     }
-    return new ApiResponse<>(IMAGE_DELETE_SUCCESS, AbstractResponse.StatusType.SUCCESS);
+    return new ApiResponse<>(FILE_DELETE_SUCCESS, AbstractResponse.StatusType.SUCCESS);
   }
 }

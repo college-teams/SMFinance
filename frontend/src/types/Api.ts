@@ -1,6 +1,8 @@
 import { AxiosInstance } from "axios";
 import { AdminDetails, LoginRequest, LoginResponse } from "./admin";
-import { LoanResponse } from "./loan";
+import { LoanRequest, LoanResponse } from "./loan";
+import { FileResponse } from "./file";
+import { CustomerResponse } from "./customer";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -35,3 +37,18 @@ export type GetCurrentUser = (
 export type GetLoanList = (
   api: AxiosInstance,
 ) => Promise<LoanResponse[] | ApiError>;
+
+export type UploadFile = (
+  api: AxiosInstance,
+  file: File,
+  entityKey: string
+) => Promise<FileResponse | ApiError>;
+
+export type GetCustomerList = (
+  api: AxiosInstance
+) => Promise<CustomerResponse[] | ApiError>;
+
+export type SaveLoan = (
+  api: AxiosInstance,
+  data: LoanRequest
+) => Promise<LoanResponse | ApiError>;
