@@ -1,201 +1,76 @@
-import { UserDetails } from "@/components/LatestTransactions";
+import { getLoanList } from "@/api";
 import Table from "@/components/Table";
 import TextSearch from "@/components/TextSearch";
-import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAPI } from "@/hooks/useApi";
+import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
+import { isApiError } from "@/types/Api";
+import { LoanResponse } from "@/types/loan";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Column } from "react-table";
 
 const LoanList = () => {
   const navigate = useNavigate();
+  const api = useAPI();
+  const [loading, startLoading, endLoading] = useLoadingIndicator();
 
-  const columns = useMemo<Column<UserDetails>[]>(
+  const [data, setData] = useState<LoanResponse[]>([]);
+
+  const fetchLoanList = async () => {
+    startLoading("/getLoanList");
+    try {
+      const res = await getLoanList(api);
+      if (!isApiError(res)) {
+        setData(res);
+      }
+    } finally {
+      endLoading("/getLoanList");
+    }
+  };
+
+  const columns = useMemo<Column<LoanResponse>[]>(
     () => [
       {
-        Header: "Firstname",
-        accessor: "firstName",
-        Cell: ({ cell: { value } }): JSX.Element => {
+        Header: "Customer Name",
+        accessor: "customer",
+        Cell: ({ cell: { value, row } }): JSX.Element => {
           return (
-            <div
-              className="relative cursor-pointer font-medium text-blue-500"
-              onClick={() => {
-                navigate("/dashboard/customers/id");
-              }}
-            >
-              {value}
+            <div className="relative font-medium text-blue-500">
+              <Link to={`/dashboard/loans/${row.original.id}`}>
+                {value.name}
+              </Link>
             </div>
           );
         },
       },
-      { Header: "Lastname", accessor: "lastName" },
-      { Header: "Email", accessor: "email" },
-      { Header: "PhoneNumber", accessor: "phoneNumber" },
-      { Header: "Role", accessor: "role" },
+      { Header: "Loan Amount", accessor: "loanAmount" },
+      { Header: "Loan Category", accessor: "loanCategory" },
+      { Header: "Maturity Date", accessor: "maturityDate" },
+      {
+        Header: "Pre Closed",
+        accessor: "preClosed",
+        Cell: ({ cell: { value } }): string => (value ? "Yes" : "No"),
+      },
+      {
+        Header: "Loan Status",
+        accessor: "loanStatus",
+        Cell: ({ cell: { value } }): JSX.Element => (
+          <div
+            className={`relative ${
+              value === "ACTIVE" ? "bg-green-600" : "bg-gray-600"
+            }  px-2 py-1 rounded-sm text-black font-semibold text-sm loan_status inline`}
+          >
+            {value}
+          </div>
+        ),
+      },
     ],
     []
   );
 
-  const dummyUserDetails: UserDetails[] = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-  ];
+  useEffect(() => {
+    fetchLoanList();
+  }, []);
 
   return (
     <div>
@@ -214,9 +89,9 @@ const LoanList = () => {
 
       <div className="relative  max-w-full overflow-x-auto">
         <Table
-          data={dummyUserDetails}
+          data={data}
           columns={columns}
-          loading={false}
+          loading={loading}
           showPagination={true}
         />
       </div>

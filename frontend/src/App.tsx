@@ -11,13 +11,14 @@ import LoanList from "./pages/Loan/LoanList";
 import CustomerList from "./pages/Customer/CustomerList";
 import Revenue from "./pages/Revenue";
 import Reports from "./pages/Reports";
+import CreateLoan from "./pages/Loan/CreateLoan";
+import EditLoan from "./pages/Loan/EditLoan";
 
 function App() {
   return (
     <React.Fragment>
       <BrowserRouter>
         <Routes>
-
           <Route path="/">
             <Route index element={<Login />} />
 
@@ -31,12 +32,17 @@ function App() {
             >
               <Route index element={<DashboardHome />} />
               <Route path="customers" element={<CustomerList />} />
-              <Route path="loans" element={<LoanList />} />
+
+              <Route path="loans">
+                <Route index element={<LoanList />} />
+                <Route path="create" element={<CreateLoan />} />
+                <Route path=":loanId" element={<EditLoan />} />
+              </Route>
+
               <Route path="transactions" element={<Transactions />} />
               <Route path="revenue" element={<Revenue />} />
               <Route path="reports" element={<Reports />} />
             </Route>
-            
           </Route>
 
           <Route path="/404" element={<NotFound />} />

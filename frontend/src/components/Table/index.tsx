@@ -10,6 +10,7 @@ import {
   IoMdArrowDropdown,
   IoMdArrowDropup,
 } from "react-icons/io";
+import Loader from "../Loader";
 
 interface TableProps<T extends object> {
   data: T[];
@@ -107,8 +108,7 @@ const Table = <T extends object>({
 
         {loading && (
           <div className="relative w-full pt-8 flex items-center justify-center">
-            {/* <Loader /> TODO: Loader */}
-            <span>Loader..</span>
+            <Loader />
           </div>
         )}
 

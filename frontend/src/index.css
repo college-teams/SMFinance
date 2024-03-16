@@ -134,6 +134,10 @@ thead {
     grid-template-columns: 19ch auto;
   }
 
+  .loan_status {
+    width: max-content;
+  }
+
   td::before {
     content: attr(data-cell) ":  ";
     font-weight: 600;

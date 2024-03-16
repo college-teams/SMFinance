@@ -1,8 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import useToast from "@/hooks/useToast";
-import { AbstractResponse, ApiError, GetCurrentUser, HttpMethod, UserLogin } from "@/types/Api";
+import {
+  AbstractResponse,
+  ApiError,
+  GetCurrentUser,
+  GetLoanList,
+  HttpMethod,
+  UserLogin,
+} from "@/types/Api";
 import { AdminDetails, LoginResponse } from "@/types/admin";
+import { LoanResponse } from "@/types/loan";
 import axios, { AxiosResponse } from "axios";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -113,6 +121,18 @@ export const getCurrentUser: GetCurrentUser = async (api) => {
     "/admin/self",
     "getCurrentUser",
     "Error occurred while fetching loggedIn account details",
+    "GET"
+  );
+};
+
+// Loan
+
+export const getLoanList: GetLoanList = async (api) => {
+  return makeRequest<LoanResponse[]>(
+    api,
+    "/loan/",
+    "getLoanList",
+    "Error occurred while fetching loan list",
     "GET"
   );
 };

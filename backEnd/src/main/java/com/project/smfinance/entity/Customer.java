@@ -16,17 +16,17 @@ import lombok.Setter;
 public class Customer extends BaseEntity {
 
   @Column(nullable = false)
-  private String customerName;
+  private String name;
 
   @Column(nullable = false)
-  private String customerPhoneNumber;
+  private String phoneNumber;
 
   @Column(nullable = true)
-  private String customerAltNumber;
+  private String altPhoneNumber;
 
   @Column(nullable = false, columnDefinition = "LONGTEXT")
   @Lob
-  private String customerAddress;
+  private String address;
 
   @Column(nullable = false)
   private String aadhaarNumber;
@@ -38,8 +38,8 @@ public class Customer extends BaseEntity {
   private String rationNumber;
 
   @Column(nullable = true)
-  private String customerEmail;
+  private String email;
 
   @Column(nullable = false)
-  private String customerOccupation;
+  private String occupation;
 }

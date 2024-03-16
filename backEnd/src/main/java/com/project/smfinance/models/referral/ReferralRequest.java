@@ -16,22 +16,22 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReferralRequest {
 
-  @NotNull private String referralFirstName;
+  @NotNull private String firstName;
 
-  @NotNull private String referralLastName;
+  @NotNull private String lastName;
 
-  private String referralEmail;
+  private String email;
 
-  @NotNull private String referralPhoneNumber;
+  @NotNull private String phoneNumber;
 
-  @NotEmpty private List<ReferralDocumentRequest> referralDocuments = new ArrayList<>();
+  @NotEmpty private List<ReferralDocumentRequest> documents = new ArrayList<>();
 
   public static Referral from(ReferralRequest referralRequest) {
     Referral referral = new Referral();
-    referral.setReferralEmail(referralRequest.getReferralEmail());
-    referral.setReferralFirstName(referralRequest.getReferralFirstName());
-    referral.setReferralLastName(referralRequest.getReferralLastName());
-    referral.setReferralPhoneNumber(referralRequest.getReferralPhoneNumber());
+    referral.setEmail(referralRequest.getEmail());
+    referral.setFirstName(referralRequest.getFirstName());
+    referral.setLastName(referralRequest.getLastName());
+    referral.setPhoneNumber(referralRequest.getPhoneNumber());
     return referral;
   }
 }
