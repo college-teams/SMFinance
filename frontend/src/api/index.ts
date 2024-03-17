@@ -191,12 +191,23 @@ export const getCustomerList: GetCustomerList = async (api) => {
 };
 
 // Loan
-export const getTransactionList: GetTransactionList = async (api) => {
+export const getTransactionList: GetTransactionList = async (
+  api,
+  limit = -1,
+  customerName = ""
+) => {
+  const params = {
+    limit,
+    customerName,
+  };
+
   return makeRequest<TransactionResponse[]>(
     api,
     "/transaction/",
     "getTransactionList",
     "Error occurred while fetching transaction list",
-    "GET"
+    "GET",
+    null,
+    params
   );
 };
