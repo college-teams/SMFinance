@@ -3,6 +3,7 @@ import { AdminDetails, LoginRequest, LoginResponse } from "./admin";
 import { LoanRequest, LoanResponse } from "./loan";
 import { FileResponse } from "./file";
 import { CustomerResponse } from "./customer";
+import { TransactionResponse } from "./transaction";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -52,3 +53,7 @@ export type SaveLoan = (
   api: AxiosInstance,
   data: LoanRequest
 ) => Promise<LoanResponse | ApiError>;
+
+export type GetTransactionList = (
+  api: AxiosInstance,
+) => Promise<TransactionResponse[] | ApiError>;

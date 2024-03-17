@@ -7,6 +7,7 @@ import {
   GetCurrentUser,
   GetCustomerList,
   GetLoanList,
+  GetTransactionList,
   HttpMethod,
   SaveLoan,
   UploadFile,
@@ -16,6 +17,7 @@ import { AdminDetails, LoginResponse } from "@/types/admin";
 import { CustomerResponse } from "@/types/customer";
 import { FileResponse } from "@/types/file";
 import { LoanResponse } from "@/types/loan";
+import { TransactionResponse } from "@/types/transaction";
 import axios, { AxiosResponse } from "axios";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -184,6 +186,17 @@ export const getCustomerList: GetCustomerList = async (api) => {
     "/customer/",
     "getCustomerList",
     "Error occurred while fetching customer list",
+    "GET"
+  );
+};
+
+// Loan
+export const getTransactionList: GetTransactionList = async (api) => {
+  return makeRequest<TransactionResponse[]>(
+    api,
+    "/transaction/",
+    "getTransactionList",
+    "Error occurred while fetching transaction list",
     "GET"
   );
 };
