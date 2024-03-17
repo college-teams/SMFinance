@@ -168,6 +168,7 @@ thead {
 
 .form_container {
   @apply relative flex flex-col gap-y-2 my-4 w-full;
+  height: max-content;
 }
 
 .form_label {
@@ -188,3 +189,14 @@ thead {
   bottom: 0px;
   left: 0px;
 }
+
+/* React select plugin styles */
+
+.css-13cymwt-control {
+  background: transparent !important;
+  padding: 5px 0;
+}
+
+/* .css-1nmdiq5-menu {
+  background: transparent !important;
+} */

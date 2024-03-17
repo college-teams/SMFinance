@@ -8,6 +8,23 @@ import { LoanResponse } from "@/types/loan";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Column } from "react-table";
+import styled from "styled-components";
+
+export const Backdrop = styled.div`
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  overflow: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 
 const LoanList = () => {
   const navigate = useNavigate();

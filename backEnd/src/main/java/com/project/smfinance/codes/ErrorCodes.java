@@ -38,11 +38,14 @@ public class ErrorCodes extends StatusCodes {
 
   public static final StatusCodes EMPTY_FILE_REQUEST =
       new ErrorCodes(400, HttpStatus.BAD_REQUEST, "EMPTY_FILE_REQUEST");
-  public static final StatusCodes IMAGE_UPLOAD_FAILED =
-      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "IMAGE_UPLOAD_FAILED");
+  public static final StatusCodes FILE_UPLOAD_FAILED =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "FILE_UPLOAD_FAILED");
 
-  public static final StatusCodes IMAGE_DELETE_FAILED =
-      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "IMAGE_DELETE_FAILED");
+  public static final StatusCodes FILE_DELETE_FAILED =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "FILE_DELETE_FAILED");
+
+  public static final StatusCodes UNSUPPORTED_FILE_TYPE =
+      new ErrorCodes(400, HttpStatus.BAD_REQUEST, "UNSUPPORTED_FILE_TYPE");
 
   public ErrorCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);

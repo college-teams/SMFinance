@@ -5,12 +5,19 @@ import {
   AbstractResponse,
   ApiError,
   GetCurrentUser,
+  GetCustomerList,
   GetLoanList,
+  GetTransactionList,
   HttpMethod,
+  SaveLoan,
+  UploadFile,
   UserLogin,
 } from "@/types/Api";
 import { AdminDetails, LoginResponse } from "@/types/admin";
+import { CustomerResponse } from "@/types/customer";
+import { FileResponse } from "@/types/file";
 import { LoanResponse } from "@/types/loan";
+import { TransactionResponse } from "@/types/transaction";
 import axios, { AxiosResponse } from "axios";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -126,13 +133,70 @@ export const getCurrentUser: GetCurrentUser = async (api) => {
 };
 
 // Loan
-
 export const getLoanList: GetLoanList = async (api) => {
   return makeRequest<LoanResponse[]>(
     api,
     "/loan/",
     "getLoanList",
     "Error occurred while fetching loan list",
+    "GET"
+  );
+};
+
+export const saveLoan: SaveLoan = async (api, data) => {
+  return makeRequest<LoanResponse>(
+    api,
+    `/loan/`,
+    "saveLoan",
+    "Error occurred while adding loan details",
+    "POST",
+    data
+  );
+};
+
+// File
+export const uploadFile: UploadFile = async (api, file, entityKey) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const headers: HeadersInit = {
+    "content-type": "multipart/form-data",
+  };
+
+  const params = {
+    entityKey: entityKey,
+  };
+
+  return makeRequest<FileResponse>(
+    api,
+    `/file`,
+    "uploadFile",
+    "Error occurred while uploading file to the server",
+    "POST",
+    formData,
+    params,
+    headers
+  );
+};
+
+// Customer
+export const getCustomerList: GetCustomerList = async (api) => {
+  return makeRequest<CustomerResponse[]>(
+    api,
+    "/customer/",
+    "getCustomerList",
+    "Error occurred while fetching customer list",
+    "GET"
+  );
+};
+
+// Loan
+export const getTransactionList: GetTransactionList = async (api) => {
+  return makeRequest<TransactionResponse[]>(
+    api,
+    "/transaction/",
+    "getTransactionList",
+    "Error occurred while fetching transaction list",
     "GET"
   );
 };

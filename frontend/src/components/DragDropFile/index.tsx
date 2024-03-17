@@ -2,17 +2,50 @@ import React, { DragEvent, useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
 import { LuUpload } from "react-icons/lu";
+import { DocumentType } from "@/types/file";
+import Loader from "../Loader";
+import NoImage from "/images/noImage.png";
+import ImageWithFallback from "@/utils/ImageWithFallback";
+import IframeWithFallback from "@/utils/IframeWithFallback";
+import useToast from "@/hooks/useToast";
+import { ReferralDocumentRequest } from "@/types/loan";
 
-const DragDropFile = () => {
+type DragDropFileProps = {
+  referralDocument: ReferralDocumentRequest | undefined;
+  uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
+  loading: boolean;
+  documentType: DocumentType;
+  clearDocument: (documentType: DocumentType) => void;
+};
+
+const DragDropFile = ({
+  referralDocument,
+  uploadImage,
+  documentType,
+  loading,
+  clearDocument,
+}: DragDropFileProps) => {
+  const showToast = useToast();
+
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [filePreview, setFilePreview] = useState<string | null>(null);
+
+  const isValidFileType = (file: File): boolean => {
+    if (
+      !(file.type.startsWith("image/") || file.type === "application/pdf") &&
+      file.type !== ""
+    ) {
+      showToast("Only images or PDF files are accepted.", "error");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleDrag = function (e: DragEvent) {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(" handleDrag ", e.type);
     if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
     } else if (e.type === "dragleave") {
@@ -24,19 +57,23 @@ const DragDropFile = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // handleFiles(e.dataTransfer.files);
-      console.log(" handleDrop ", e.dataTransfer.files[0]);
-      handleFiles(e.dataTransfer.files[0]);
+    if (
+      e.dataTransfer.files &&
+      e.dataTransfer.files[0] &&
+      isValidFileType(e.dataTransfer.files[0])
+    ) {
+      uploadImage(e.dataTransfer.files[0], documentType);
     }
   };
 
   const handleChange = function (e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
-    if (e.target.files && e.target.files[0]) {
-      // handleFiles(e.target.files);
-      console.log(" file clicked ", e.target.files[0]);
-      handleFiles(e.target.files[0]);
+    if (
+      e.target.files &&
+      e.target.files[0] &&
+      isValidFileType(e.target.files[0])
+    ) {
+      uploadImage(e.target.files[0], documentType);
     }
   };
 
@@ -46,29 +83,8 @@ const DragDropFile = () => {
     }
   };
 
-  const handleFiles = (file: File) => {
-    if (
-      (file.type.startsWith("image/") || file.type === "application/pdf") &&
-      file.type !== ""
-    ) {
-      if (file.type.startsWith("image/")) {
-        // Read image files
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setFilePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      } else if (file.type === "application/pdf") {
-        // For PDF files, create a data URL for the iframe src
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setFilePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      }
-    } else {
-      setFilePreview(null);
-    }
+  const deleteFile = () => {
+    clearDocument(documentType);
   };
 
   return (
@@ -85,24 +101,29 @@ const DragDropFile = () => {
         accept="image/*,application/pdf"
       />
 
-      {filePreview ? (
+      {loading ? (
+        <div className="relative flex items-center justify-center">
+          <Loader />
+        </div>
+      ) : referralDocument ? (
         <div className="relative flex items-center justify-evenly gap-y-5 flex-wrap">
           <div>
-            {filePreview.startsWith("data:image/") ? (
+            {referralDocument.documentContentType.startsWith("image/") ? (
               <div className="relative h-[150px] w-[200px] overflow-hidden">
-                <img
-                  src={filePreview}
+                <ImageWithFallback
+                  imagePath={referralDocument.documentPath}
                   alt="File Preview"
                   className="relative object-cover h-full w-full min-w-full"
-                  width={150}
-                  height={100}
+                  defaultImage={NoImage}
                 />
               </div>
-            ) : filePreview.startsWith("data:application/pdf") ? (
-              <div className="relative  max-w-[200px]"> 
-                <iframe
-                  title="PDF Preview"
-                  src={filePreview}
+            ) : referralDocument.documentContentType.startsWith(
+                "application/pdf"
+              ) ? (
+              <div className="relative  max-w-[200px]">
+                <IframeWithFallback
+                  iframeSrc={referralDocument.documentPath}
+                  defaultSrc={NoImage}
                   className="relative max-w-full"
                 />
               </div>
@@ -114,7 +135,7 @@ const DragDropFile = () => {
               <span>upload</span>
             </button>
             <button
-              onClick={() => setFilePreview(null)}
+              onClick={deleteFile}
               className="relative px-5 py-2 bg-red-400 capitalize rounded-md flex items-center justify-between gap-x-2"
             >
               <MdDeleteOutline size={20} /> <span>Delete</span>

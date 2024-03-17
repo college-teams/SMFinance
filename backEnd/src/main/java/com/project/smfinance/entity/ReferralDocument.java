@@ -1,11 +1,7 @@
 package com.project.smfinance.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +20,17 @@ public class ReferralDocument extends BaseEntity {
   private Referral referral;
 
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private DocumentType documentType;
 
+  @Column(nullable = false)
   private String documentPath;
+
+  @Column(nullable = false)
+  private String documentKey;
+
+  @Column(nullable = false)
+  private String documentContentType;
 
   public enum DocumentType {
     AADHAR,

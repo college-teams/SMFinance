@@ -11,14 +11,17 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileResponse {
   private String entityKey;
-  private String imagePath;
-  private String imageKey;
+  private String filePath;
+  private String fileKey;
+  private String fileType;
 
-  public static FileResponse from(String imageKey, String imagePath, String entityKey) {
+  public static FileResponse from(
+      String fileKey, String filePath, String entityKey, String fileType) {
     return FileResponse.builder()
-        .imageKey(imageKey)
+        .fileKey(fileKey)
         .entityKey(entityKey)
-        .imagePath(imagePath)
+        .filePath(filePath)
+        .fileType(fileType)
         .build();
   }
 }
