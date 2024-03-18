@@ -13,6 +13,7 @@ import Revenue from "./pages/Revenue";
 import Reports from "./pages/Reports";
 import CreateLoan from "./pages/Loan/CreateLoan";
 import EditLoan from "./pages/Loan/EditLoan";
+import SaveCustomer from "./pages/Customer/SaveCustomer";
 
 function App() {
   return (
@@ -31,7 +32,12 @@ function App() {
               }
             >
               <Route index element={<DashboardHome />} />
-              <Route path="customers" element={<CustomerList />} />
+
+              <Route path="customers">
+                <Route index element={<CustomerList />} />
+                <Route path="create" element={<SaveCustomer />} />
+                <Route path=":customerId" element={<SaveCustomer />} />
+              </Route>
 
               <Route path="loans">
                 <Route index element={<LoanList />} />

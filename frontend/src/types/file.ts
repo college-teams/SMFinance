@@ -1,3 +1,6 @@
+import { CustomerDocumentRequest } from "./customer";
+import { ReferralDocumentRequest } from "./loan";
+
 export interface FileResponse {
   entityKey: string;
   filePath: string;
@@ -10,3 +13,5 @@ export enum DocumentType {
   PAN = "PAN",
   RATION_CARD = "RATION_CARD",
 }
+
+export type Document = CustomerDocumentRequest | ReferralDocumentRequest;

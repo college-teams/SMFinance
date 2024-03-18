@@ -9,6 +9,7 @@ import {
   GetLoanList,
   GetTransactionList,
   HttpMethod,
+  SaveCustomer,
   SaveLoan,
   UploadFile,
   UserLogin,
@@ -203,7 +204,19 @@ export const getCustomerList: GetCustomerList = async (
   );
 };
 
-// Loan
+export const saveCustomer: SaveCustomer = async (api, data) => {
+  return makeRequest<CustomerResponse>(
+    api,
+    `/customer/`,
+    "saveCustomer",
+    "Error occurred while adding customer details",
+    "POST",
+    data
+  );
+};
+
+
+// Transactions
 export const getTransactionList: GetTransactionList = async (
   api,
   limit = -1,
