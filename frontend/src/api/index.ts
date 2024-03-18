@@ -133,13 +133,18 @@ export const getCurrentUser: GetCurrentUser = async (api) => {
 };
 
 // Loan
-export const getLoanList: GetLoanList = async (api) => {
+export const getLoanList: GetLoanList = async (api, customerName = "") => {
+  const params = {
+    customerName,
+  };
   return makeRequest<LoanResponse[]>(
     api,
     "/loan/",
     "getLoanList",
     "Error occurred while fetching loan list",
-    "GET"
+    "GET",
+    null,
+    params
   );
 };
 

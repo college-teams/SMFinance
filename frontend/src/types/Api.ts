@@ -36,7 +36,8 @@ export type GetCurrentUser = (
 ) => Promise<AdminDetails | ApiError>;
 
 export type GetLoanList = (
-  api: AxiosInstance
+  api: AxiosInstance,
+  customerName?: string
 ) => Promise<LoanResponse[] | ApiError>;
 
 export type UploadFile = (

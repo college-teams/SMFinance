@@ -44,7 +44,7 @@ public class TransactionService {
         TRANSACTION_LIST_FETCHED, AbstractResponse.StatusType.SUCCESS, transactionResponses);
   }
 
-  public Specification<Transaction> filterByCustomerName(String customerName) {
+  private Specification<Transaction> filterByCustomerName(String customerName) {
     return (root, query, criteriaBuilder) -> {
       List<Predicate> predicates = new ArrayList<>();
       if (StringUtils.isNotBlank(customerName)) {
