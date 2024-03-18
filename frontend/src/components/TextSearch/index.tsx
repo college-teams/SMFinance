@@ -2,7 +2,7 @@ import { IoSearch } from "react-icons/io5";
 
 interface TextSearchProps {
   handleSearchTextChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  searchText?: string;
+  searchText: string;
 }
 const TextSearch = ({
   handleSearchTextChange,

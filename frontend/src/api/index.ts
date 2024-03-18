@@ -185,13 +185,21 @@ export const uploadFile: UploadFile = async (api, file, entityKey) => {
 };
 
 // Customer
-export const getCustomerList: GetCustomerList = async (api) => {
+export const getCustomerList: GetCustomerList = async (
+  api,
+  customerName = ""
+) => {
+  const params = {
+    customerName,
+  };
   return makeRequest<CustomerResponse[]>(
     api,
     "/customer/",
     "getCustomerList",
     "Error occurred while fetching customer list",
-    "GET"
+    "GET",
+    null,
+    params
   );
 };
 

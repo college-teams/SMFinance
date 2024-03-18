@@ -1,8 +1,13 @@
 package com.project.smfinance.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,18 +33,16 @@ public class Customer extends BaseEntity {
   @Lob
   private String address;
 
-  @Column(nullable = false)
-  private String aadhaarNumber;
-
-  @Column(nullable = false)
-  private String panNumber;
-
-  @Column(nullable = false)
-  private String rationNumber;
-
-  @Column(nullable = true)
+  @Column(nullable = true, unique = true)
   private String email;
 
   @Column(nullable = false)
   private String occupation;
+
+  @OneToMany(
+      mappedBy = "customer",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.EAGER)
+  private List<CustomerDocument> documents = new ArrayList<>();
 }

@@ -47,7 +47,8 @@ export type UploadFile = (
 ) => Promise<FileResponse | ApiError>;
 
 export type GetCustomerList = (
-  api: AxiosInstance
+  api: AxiosInstance,
+  customerName?: string
 ) => Promise<CustomerResponse[] | ApiError>;
 
 export type SaveLoan = (

@@ -1,14 +1,36 @@
+import { getCustomerList } from "@/api";
 import Table from "@/components/Table";
 import TextSearch from "@/components/TextSearch";
-import { Customer } from "@/types/customer";
-import { useMemo } from "react";
+import { useAPI } from "@/hooks/useApi";
+import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
+import { isApiError } from "@/types/Api";
+import { CustomerResponse } from "@/types/customer";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Column } from "react-table";
 
 const CustomerList = () => {
   const navigate = useNavigate();
+  const api = useAPI();
+  const [loading, startLoading, endLoading] = useLoadingIndicator();
 
-  const columns = useMemo<Column<Customer>[]>(
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  const [data, setData] = useState<CustomerResponse[]>([]);
+
+  const fetchCustomerList = async () => {
+    startLoading("/getLoanList");
+    try {
+      const res = await getCustomerList(api, debouncedSearchText);
+      if (!isApiError(res)) {
+        setData(res);
+      }
+    } finally {
+      endLoading("/getLoanList");
+    }
+  };
+
+  const columns = useMemo<Column<CustomerResponse>[]>(
     () => [
       {
         Header: "Name",
@@ -33,12 +55,32 @@ const CustomerList = () => {
     []
   );
 
-  const dummyCustomers: Customer[] = [];
+  const handleSearchTextChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const text = event.target.value;
+    setSearchText(text);
+  };
+
+  useEffect(() => {
+    fetchCustomerList();
+  }, [debouncedSearchText]);
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [searchText]);
 
   return (
     <div>
       <div className="relative my-7 flex justify-center sm:justify-between items-center gap-4 flex-wrap">
-        <TextSearch />
+        <TextSearch
+          searchText={searchText}
+          handleSearchTextChange={handleSearchTextChange}
+        />
 
         <div>
           <button
@@ -52,9 +94,9 @@ const CustomerList = () => {
 
       <div className="relative  max-w-full overflow-x-auto">
         <Table
-          data={dummyCustomers}
+          data={data}
           columns={columns}
-          loading={false}
+          loading={loading}
           showPagination={true}
         />
       </div>

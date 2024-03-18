@@ -2,6 +2,7 @@ package com.project.smfinance.models.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.smfinance.entity.Customer;
+import com.project.smfinance.entity.CustomerDocument;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -23,11 +24,9 @@ public class CustomerResponse {
   private String phoneNumber;
   private String altPhoneNumber;
   private String address;
-  private String aadhaarNumber;
-  private String panNumber;
-  private String rationNumber;
   private String email;
   private String occupation;
+  private List<CustomerDocument> documents;
 
   public static List<CustomerResponse> from(List<Customer> customers) {
     return customers.stream().map(CustomerResponse::from).collect(Collectors.toList());
@@ -38,12 +37,11 @@ public class CustomerResponse {
         .id(customer.getId() > 0 ? customer.getId() : null)
         .name(customer.getName())
         .phoneNumber(customer.getPhoneNumber())
+        .altPhoneNumber(customer.getAltPhoneNumber())
         .address(customer.getAddress())
-        .aadhaarNumber(customer.getAadhaarNumber())
-        .panNumber(customer.getPanNumber())
-        .rationNumber(customer.getRationNumber())
         .email(customer.getEmail())
         .occupation(customer.getOccupation())
+        .documents(customer.getDocuments())
         .build();
   }
 }
