@@ -25,18 +25,19 @@ export const Backdrop = styled.div`
   }
 `;
 
-
 const LoanList = () => {
   const navigate = useNavigate();
   const api = useAPI();
   const [loading, startLoading, endLoading] = useLoadingIndicator();
 
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [data, setData] = useState<LoanResponse[]>([]);
 
   const fetchLoanList = async () => {
     startLoading("/getLoanList");
     try {
-      const res = await getLoanList(api);
+      const res = await getLoanList(api, debouncedSearchText);
       if (!isApiError(res)) {
         setData(res);
       }
@@ -85,14 +86,32 @@ const LoanList = () => {
     []
   );
 
+  const handleSearchTextChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const text = event.target.value;
+    setSearchText(text);
+  };
+
   useEffect(() => {
     fetchLoanList();
-  }, []);
+  }, [debouncedSearchText]);
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [searchText]);
 
   return (
     <div>
       <div className="relative my-7 flex justify-between items-center flex-wrap">
-        <TextSearch />
+        <TextSearch
+          searchText={searchText}
+          handleSearchTextChange={handleSearchTextChange}
+        />
 
         <div>
           <button

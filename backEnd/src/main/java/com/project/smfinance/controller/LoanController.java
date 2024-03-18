@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,8 +29,9 @@ public class LoanController {
   private final LoanService loanService;
 
   @GetMapping("/")
-  public ResponseEntity<ApiResponse<List<LoanResponse>>> getLoanList() {
-    return new ResponseEntity<>(loanService.getAllLoans(), HttpStatus.OK);
+  public ResponseEntity<ApiResponse<List<LoanResponse>>> getLoanList(
+      @RequestParam(name = "customerName", defaultValue = "") String customerName) {
+    return new ResponseEntity<>(loanService.getAllLoans(customerName), HttpStatus.OK);
   }
 
   @GetMapping("/{loanId}")

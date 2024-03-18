@@ -1,79 +1,59 @@
 import { Column } from "react-table";
 import Table from "../Table";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-
-export interface UserDetails {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  role: ROLE;
-}
-
-export type ROLE = "USER" | "ADMIN";
+import { useAPI } from "@/hooks/useApi";
+import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
+import { TransactionResponse } from "@/types/transaction";
+import { getTransactionList } from "@/api";
+import { isApiError } from "@/types/Api";
+import { format } from "date-fns";
 
 const LatestTransactions = () => {
   const navigate = useNavigate();
+  const api = useAPI();
+  const [loading, startLoading, endLoading] = useLoadingIndicator();
 
-  const columns = useMemo<Column<UserDetails>[]>(
+  const [data, setData] = useState<TransactionResponse[]>([]);
+
+  const fetchTransactionList = async () => {
+    startLoading("/getTransactionList");
+    try {
+      const res = await getTransactionList(api, 5);
+      if (!isApiError(res)) {
+        setData(res);
+      }
+    } finally {
+      endLoading("/getTransactionList");
+    }
+  };
+
+  const columns = useMemo<Column<TransactionResponse>[]>(
     () => [
       {
-        Header: "Firstname",
-        accessor: "firstName",
+        Header: "Customer Name",
+        accessor: (row: TransactionResponse) =>
+          row.emi?.loan?.customer?.name ?? "",
       },
-      { Header: "Lastname", accessor: "lastName" },
-      { Header: "Email", accessor: "email" },
-      { Header: "PhoneNumber", accessor: "phoneNumber" },
-      { Header: "Role", accessor: "role" },
+      {
+        Header: "Customer PhoneNumber",
+        accessor: (row: TransactionResponse) =>
+          row.emi?.loan?.customer?.phoneNumber ?? "",
+      },
+      { Header: "Amount Paid", accessor: "amountPaid" },
+      {
+        Header: "Payment Date",
+        accessor: "paymentDate",
+        Cell: ({ value }): string => format(new Date(value), "yyyy-mm-dd"),
+      },
     ],
     []
   );
 
-  const dummyUserDetails: UserDetails[] = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      role: "USER",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "987-654-3210",
-      role: "ADMIN",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-    {
-      id: 7,
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "555-123-4567",
-      role: "USER",
-    },
-  ];
+  useEffect(() => {
+    fetchTransactionList();
+  }, []);
 
   return (
     <div className="relative bg-secondaryBg p-5 rounded-md">
@@ -91,7 +71,7 @@ const LatestTransactions = () => {
       </span>
 
       <div className="relative mt-7 max-w-full overflow-x-auto">
-        <Table data={dummyUserDetails} columns={columns} loading={false} />
+        <Table data={data} columns={columns} loading={loading} />
       </div>
     </div>
   );

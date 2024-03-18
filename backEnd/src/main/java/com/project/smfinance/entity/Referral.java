@@ -1,6 +1,7 @@
 package com.project.smfinance.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -18,12 +19,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Referral extends BaseEntity {
 
+  @Column(nullable = false)
   private String firstName;
 
+  @Column(nullable = false)
   private String lastName;
 
   private String email;
 
+  @Column(nullable = false)
   private String phoneNumber;
 
   @OneToMany(

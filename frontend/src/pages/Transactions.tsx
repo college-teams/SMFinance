@@ -15,11 +15,13 @@ const Transactions = () => {
   const [loading, startLoading, endLoading] = useLoadingIndicator();
 
   const [data, setData] = useState<TransactionResponse[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
 
   const fetchTransactionList = async () => {
     startLoading("/getTransactionList");
     try {
-      const res = await getTransactionList(api);
+      const res = await getTransactionList(api, -1, debouncedSearchText);
       if (!isApiError(res)) {
         setData(res);
       }
@@ -32,29 +34,50 @@ const Transactions = () => {
     () => [
       {
         Header: "Customer Name",
-        accessor: (row: TransactionResponse) => row.emi?.loan?.customer?.name ?? '',
+        accessor: (row: TransactionResponse) =>
+          row.emi?.loan?.customer?.name ?? "",
       },
       {
         Header: "Customer PhoneNumber",
-        accessor: (row: TransactionResponse) => row.emi?.loan?.customer?.phoneNumber ?? '',
+        accessor: (row: TransactionResponse) =>
+          row.emi?.loan?.customer?.phoneNumber ?? "",
       },
       { Header: "Amount Paid", accessor: "amountPaid" },
       {
-        Header: "Payment Date", accessor: "paymentDate",
-        Cell: ({ value }): string => format(new Date(value), "yyyy-mm-dd")
+        Header: "Payment Date",
+        accessor: "paymentDate",
+        Cell: ({ value }): string => format(new Date(value), "yyyy-mm-dd"),
       },
     ],
     []
   );
 
+  const handleSearchTextChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const text = event.target.value;
+    setSearchText(text);
+  };
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [searchText]);
+
   useEffect(() => {
     fetchTransactionList();
-  }, []);
+  }, [debouncedSearchText]);
 
   return (
     <div>
       <div className="relative my-7">
-        <TextSearch />
+        <TextSearch
+          searchText={searchText}
+          handleSearchTextChange={handleSearchTextChange}
+        />
       </div>
 
       <div className="relative  max-w-full overflow-x-auto">

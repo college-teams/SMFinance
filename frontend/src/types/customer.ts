@@ -1,17 +1,25 @@
-export interface Customer {
-  name: string;
-  phoneNumber: string;
-  altPhoneNumber: string;
-  address: string;
-  aadhaarNumber: string;
-  panNumber: string;
-  rationNumber: string;
-  email: string;
-  occupation: string;
+export interface CustomerDocumentRequest {
+  documentType: string;
+  documentPath: string;
+  documentKey: string;
+  documentContentType: string;
 }
 
-export interface CustomerRequest extends Customer { }
+export interface CustomerRequest {
+  name: string;
+  phoneNumber: string;
+  altPhoneNumber: string,
+  address: string;
+  email: string;
+  occupation: string;
+  documents: CustomerDocumentRequest[];
+}
 
-export interface CustomerResponse extends Customer {
+export interface CustomerDocumentResponse extends CustomerDocumentRequest {
   id: number;
+}
+
+export interface CustomerResponse extends CustomerRequest {
+  id: number;
+  documents: CustomerDocumentResponse[];
 }

@@ -9,6 +9,7 @@ import {
   GetLoanList,
   GetTransactionList,
   HttpMethod,
+  SaveCustomer,
   SaveLoan,
   UploadFile,
   UserLogin,
@@ -133,13 +134,18 @@ export const getCurrentUser: GetCurrentUser = async (api) => {
 };
 
 // Loan
-export const getLoanList: GetLoanList = async (api) => {
+export const getLoanList: GetLoanList = async (api, customerName = "") => {
+  const params = {
+    customerName,
+  };
   return makeRequest<LoanResponse[]>(
     api,
     "/loan/",
     "getLoanList",
     "Error occurred while fetching loan list",
-    "GET"
+    "GET",
+    null,
+    params
   );
 };
 
@@ -180,23 +186,54 @@ export const uploadFile: UploadFile = async (api, file, entityKey) => {
 };
 
 // Customer
-export const getCustomerList: GetCustomerList = async (api) => {
+export const getCustomerList: GetCustomerList = async (
+  api,
+  customerName = ""
+) => {
+  const params = {
+    customerName,
+  };
   return makeRequest<CustomerResponse[]>(
     api,
     "/customer/",
     "getCustomerList",
     "Error occurred while fetching customer list",
-    "GET"
+    "GET",
+    null,
+    params
   );
 };
 
-// Loan
-export const getTransactionList: GetTransactionList = async (api) => {
+export const saveCustomer: SaveCustomer = async (api, data) => {
+  return makeRequest<CustomerResponse>(
+    api,
+    `/customer/`,
+    "saveCustomer",
+    "Error occurred while adding customer details",
+    "POST",
+    data
+  );
+};
+
+
+// Transactions
+export const getTransactionList: GetTransactionList = async (
+  api,
+  limit = -1,
+  customerName = ""
+) => {
+  const params = {
+    limit,
+    customerName,
+  };
+
   return makeRequest<TransactionResponse[]>(
     api,
     "/transaction/",
     "getTransactionList",
     "Error occurred while fetching transaction list",
-    "GET"
+    "GET",
+    null,
+    params
   );
 };

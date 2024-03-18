@@ -2,16 +2,15 @@ import React, { DragEvent, useRef, useState } from "react";
 import { BsCloudUpload } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
 import { LuUpload } from "react-icons/lu";
-import { DocumentType } from "@/types/file";
+import { Document, DocumentType } from "@/types/file";
 import Loader from "../Loader";
 import NoImage from "/images/noImage.png";
 import ImageWithFallback from "@/utils/ImageWithFallback";
 import IframeWithFallback from "@/utils/IframeWithFallback";
 import useToast from "@/hooks/useToast";
-import { ReferralDocumentRequest } from "@/types/loan";
 
 type DragDropFileProps = {
-  referralDocument: ReferralDocumentRequest | undefined;
+  document: Document | undefined;
   uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
   loading: boolean;
   documentType: DocumentType;
@@ -19,7 +18,7 @@ type DragDropFileProps = {
 };
 
 const DragDropFile = ({
-  referralDocument,
+  document,
   uploadImage,
   documentType,
   loading,
@@ -105,24 +104,24 @@ const DragDropFile = ({
         <div className="relative flex items-center justify-center">
           <Loader />
         </div>
-      ) : referralDocument ? (
+      ) : document ? (
         <div className="relative flex items-center justify-evenly gap-y-5 flex-wrap">
           <div>
-            {referralDocument.documentContentType.startsWith("image/") ? (
+            {document.documentContentType.startsWith("image/") ? (
               <div className="relative h-[150px] w-[200px] overflow-hidden">
                 <ImageWithFallback
-                  imagePath={referralDocument.documentPath}
+                  imagePath={document.documentPath}
                   alt="File Preview"
                   className="relative object-cover h-full w-full min-w-full"
                   defaultImage={NoImage}
                 />
               </div>
-            ) : referralDocument.documentContentType.startsWith(
+            ) : document.documentContentType.startsWith(
                 "application/pdf"
               ) ? (
               <div className="relative  max-w-[200px]">
                 <IframeWithFallback
-                  iframeSrc={referralDocument.documentPath}
+                  iframeSrc={document.documentPath}
                   defaultSrc={NoImage}
                   className="relative max-w-full"
                 />

@@ -8,18 +8,26 @@ import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_LIST_FETCHED;
 import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_UPDATED;
 
 import com.project.smfinance.entity.Customer;
+import com.project.smfinance.entity.CustomerDocument;
 import com.project.smfinance.exception.BaseException;
 import com.project.smfinance.models.customer.CreateCustomerRequest;
+import com.project.smfinance.models.customer.CustomerDocumentRequest;
 import com.project.smfinance.models.customer.CustomerResponse;
 import com.project.smfinance.models.customer.UpdateCustomerRequest;
 import com.project.smfinance.models.response.AbstractResponse.StatusType;
 import com.project.smfinance.models.response.ApiResponse;
+import com.project.smfinance.repository.CustomerDocumentRepository;
 import com.project.smfinance.repository.CustomerRepository;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,18 +36,37 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
 
   private final CustomerRepository customerRepository;
+  private final CustomerDocumentRepository customerDocumentRepository;
 
-  public ApiResponse<CustomerResponse> addCustomer(CreateCustomerRequest createCustomerRequest) {
-
+  @Transactional
+  public ApiResponse<CustomerResponse> addCustomer(CreateCustomerRequest createCustomerRequest)
+      throws BaseException {
     Customer customer = CreateCustomerRequest.from(createCustomerRequest);
-    customerRepository.save(customer);
+    Customer savedCustomer = customerRepository.save(customer);
+
+    List<CustomerDocument> customerDocuments =
+        saveCustomerDocuments(createCustomerRequest.getDocuments(), savedCustomer);
+    customer.setDocuments(customerDocuments);
 
     CustomerResponse customerResponse = CustomerResponse.from(customer);
     return new ApiResponse<>(CUSTOMER_CREATED, StatusType.SUCCESS, customerResponse);
   }
 
-  public ApiResponse<List<CustomerResponse>> getCustomerList() {
-    List<Customer> customers = customerRepository.findAll();
+  public ApiResponse<List<CustomerResponse>> getCustomerList(String customerName) {
+
+    Specification<Customer> spec =
+        (root, query, criteriaBuilder) -> {
+          List<Predicate> predicates = new ArrayList<>();
+          if (StringUtils.isNotBlank(customerName)) {
+            predicates.add(
+                criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("name")),
+                    "%" + customerName.toLowerCase() + "%"));
+          }
+          return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+    List<Customer> customers = customerRepository.findAll(spec);
     List<CustomerResponse> customerList = CustomerResponse.from(customers);
     return new ApiResponse<>(CUSTOMER_LIST_FETCHED, StatusType.SUCCESS, customerList);
   }
@@ -86,8 +113,17 @@ public class CustomerService {
     existingCustomer.setOccupation(updateCustomerRequest.getOccupation());
     existingCustomer.setEmail(updateCustomerRequest.getEmail());
     existingCustomer.setAltPhoneNumber(updateCustomerRequest.getAltPhoneNumber());
-    existingCustomer.setAadhaarNumber(updateCustomerRequest.getAadhaarNumber());
-    existingCustomer.setPanNumber(updateCustomerRequest.getPanNumber());
-    existingCustomer.setRationNumber(updateCustomerRequest.getRationNumber());
+  }
+
+  private List<CustomerDocument> saveCustomerDocuments(
+      List<CustomerDocumentRequest> customerDocuments, Customer customer) throws BaseException {
+    List<CustomerDocument> customerDocumentsList = new ArrayList<>();
+    for (CustomerDocumentRequest customerDocumentRequest : customerDocuments) {
+      CustomerDocument customerDocument =
+          CustomerDocumentRequest.from(customerDocumentRequest, customer);
+      CustomerDocument savedReferralDocument = customerDocumentRepository.save(customerDocument);
+      customerDocumentsList.add(savedReferralDocument);
+    }
+    return customerDocumentsList;
   }
 }

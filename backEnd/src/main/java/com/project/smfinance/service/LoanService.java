@@ -29,6 +29,7 @@ import com.project.smfinance.repository.LoanRepository;
 import com.project.smfinance.repository.ReferralDocumentRepository;
 import com.project.smfinance.repository.ReferralRepository;
 import com.project.smfinance.repository.TranscationRepository;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -41,7 +42,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -59,8 +62,9 @@ public class LoanService {
   private static final int DAILY_EMI_LIMIT = 100;
   private static final int WEEKLY_EMI_LIMIT = 15;
 
-  public ApiResponse<List<LoanResponse>> getAllLoans() {
-    List<Loan> loans = loanRepository.findAll();
+  public ApiResponse<List<LoanResponse>> getAllLoans(String customerName) {
+    Specification<Loan> specification = filterByCustomerName(customerName);
+    List<Loan> loans = loanRepository.findAll(specification);
 
     List<LoanResponse> loanList = LoanResponse.from(loans);
     return new ApiResponse<>(LOAN_LIST_FETCHED, AbstractResponse.StatusType.SUCCESS, loanList);
@@ -295,5 +299,18 @@ public class LoanService {
     BigDecimal totalAmountPaid =
         allEMIs.stream().map(Emi::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     loan.setTotalAmountPaid(totalAmountPaid);
+  }
+
+  private Specification<Loan> filterByCustomerName(String customerName) {
+    return (root, query, criteriaBuilder) -> {
+      List<Predicate> predicates = new ArrayList<>();
+      if (StringUtils.isNotBlank(customerName)) {
+        predicates.add(
+            criteriaBuilder.like(
+                criteriaBuilder.lower(root.get("customer").get("name")),
+                "%" + customerName.toLowerCase() + "%"));
+      }
+      return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    };
   }
 }

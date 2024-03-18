@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,14 +31,15 @@ public class CustomerController {
 
   @PostMapping("/")
   public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(
-      @Valid @RequestBody CreateCustomerRequest createCustomerRequest) {
+      @Valid @RequestBody CreateCustomerRequest createCustomerRequest) throws BaseException {
     return new ResponseEntity<>(
         customerService.addCustomer(createCustomerRequest), HttpStatus.CREATED);
   }
 
   @GetMapping("/")
-  public ResponseEntity<ApiResponse<List<CustomerResponse>>> getCustomerList() {
-    return new ResponseEntity<>(customerService.getCustomerList(), HttpStatus.OK);
+  public ResponseEntity<ApiResponse<List<CustomerResponse>>> getCustomerList(
+      @RequestParam(name = "customerName", defaultValue = "") String customerName) {
+    return new ResponseEntity<>(customerService.getCustomerList(customerName), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")

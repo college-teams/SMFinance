@@ -82,7 +82,7 @@ const ReferralForm = ({
           </label>
           <input
             className="form_input"
-            type="text"
+            type="email"
             id="email"
             placeholder="Email"
             {...register("referral.email", {
@@ -112,7 +112,7 @@ const ReferralForm = ({
               required: "Phone Number is required",
               pattern: {
                 value: /^\+?\d[\d -]{8,12}\d$/,
-                message: "Please enter a phone number",
+                message: "Please enter a valid phone number",
               },
             })}
           />
@@ -131,7 +131,7 @@ const ReferralForm = ({
           <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 h-full flex flex-col gap-y-5">
             <label className="relative text-[1.2rem]">Aadhar</label>
             <DragDropFile
-              referralDocument={referralDocuments.find(
+              document={referralDocuments.find(
                 (document) => document.documentType === DocumentType.AADHAR
               )}
               uploadImage={uploadImage}
@@ -144,7 +144,7 @@ const ReferralForm = ({
           <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 flex flex-col gap-y-5">
             <label className="relative text-[1.2rem]">Pan card</label>
             <DragDropFile
-              referralDocument={referralDocuments.find(
+              document={referralDocuments.find(
                 (document) => document.documentType === DocumentType.PAN
               )}
               uploadImage={uploadImage}
@@ -157,7 +157,7 @@ const ReferralForm = ({
           <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 flex flex-col gap-y-5">
             <label className="relative text-[1.2rem]">Ration card</label>
             <DragDropFile
-              referralDocument={referralDocuments.find(
+              document={referralDocuments.find(
                 (document) => document.documentType === DocumentType.RATION_CARD
               )}
               uploadImage={uploadImage}

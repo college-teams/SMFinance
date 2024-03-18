@@ -1,5 +1,6 @@
 package com.project.smfinance.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,10 +19,12 @@ import lombok.Setter;
 public class Transaction extends BaseEntity {
 
   @ManyToOne
-  @JoinColumn(name = "emiId")
+  @JoinColumn(name = "emiId", nullable = false)
   private Emi emi;
 
+  @Column(nullable = false)
   private BigDecimal amountPaid;
 
+  @Column(nullable = false)
   private LocalDateTime paymentDate;
 }
