@@ -50,6 +50,9 @@ public class SuccessCodes extends StatusCodes {
   public static final StatusCodes TRANSACTION_LIST_FETCHED =
       new SuccessCodes(200, HttpStatus.OK, "TRANSACTION_LIST_FETCHED");
 
+  public static final StatusCodes ENTITIES_ITEM_COUNT_FETCHED =
+      new SuccessCodes(200, HttpStatus.OK, "ENTITIES_ITEM_COUNT_FETCHED");
+
   public SuccessCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

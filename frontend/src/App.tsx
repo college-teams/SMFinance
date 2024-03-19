@@ -36,7 +36,7 @@ function App() {
               <Route path="customers">
                 <Route index element={<CustomerList />} />
                 <Route path="create" element={<SaveCustomer />} />
-                <Route path=":customerId" element={<SaveCustomer />} />
+                <Route path=":customerId/edit" element={<SaveCustomer />} />
               </Route>
 
               <Route path="loans">

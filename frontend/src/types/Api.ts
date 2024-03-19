@@ -4,6 +4,7 @@ import { LoanRequest, LoanResponse } from "./loan";
 import { FileResponse } from "./file";
 import { CustomerRequest, CustomerResponse } from "./customer";
 import { TransactionResponse } from "./transaction";
+import { DashboardEntityItemsCount } from "./Dashboard copy";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -66,3 +67,18 @@ export type SaveCustomer = (
   api: AxiosInstance,
   data: CustomerRequest
 ) => Promise<CustomerResponse | ApiError>;
+
+export type GetCustomerById = (
+  api: AxiosInstance,
+  id: number
+) => Promise<CustomerResponse | ApiError>;
+
+export type UpdateCustomer = (
+  api: AxiosInstance,
+  id: number,
+  data: CustomerRequest
+) => Promise<CustomerResponse | ApiError>;
+
+export type GetDashboardEntityItemsCount = (
+  api: AxiosInstance
+) => Promise<DashboardEntityItemsCount | ApiError>;

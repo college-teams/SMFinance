@@ -1,7 +1,6 @@
 package com.project.smfinance.models.customer;
 
 import com.project.smfinance.entity.Customer;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class CreateCustomerRequest {
   @NotNull private String address;
   private String email;
   @NotNull private String occupation;
-  @NotEmpty private List<CustomerDocumentRequest> documents = new ArrayList<>();
+  private List<CustomerDocumentRequest> documents = new ArrayList<>();
 
   public static Customer from(CreateCustomerRequest createCustomerRequest) {
     Customer customer = new Customer();

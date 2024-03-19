@@ -78,12 +78,14 @@ public class CustomerService {
     return new ApiResponse<>(CUSTOMER_DATA_FETCHED, StatusType.SUCCESS, customer);
   }
 
+  @Transactional
   public ApiResponse<CustomerResponse> updateCustomer(
       Long customerId, UpdateCustomerRequest updateCustomerRequest) throws BaseException {
 
     Customer existingCustomer = getCustomerById(customerId);
     updateCustomerFields(existingCustomer, updateCustomerRequest);
     Customer updatedCustomer = customerRepository.save(existingCustomer);
+    updateCustomerDocuments(updateCustomerRequest, updatedCustomer);
 
     CustomerResponse customerResponse = CustomerResponse.from(updatedCustomer);
     return new ApiResponse<>(CUSTOMER_UPDATED, StatusType.SUCCESS, customerResponse);
@@ -125,5 +127,20 @@ public class CustomerService {
       customerDocumentsList.add(savedReferralDocument);
     }
     return customerDocumentsList;
+  }
+
+  private void updateCustomerDocuments(
+      UpdateCustomerRequest updateCustomerRequest, Customer existingCustomer) throws BaseException {
+    List<CustomerDocumentRequest> updatedCustomerDocuments = updateCustomerRequest.getDocuments();
+    List<CustomerDocument> existingCustomerDocuments = existingCustomer.getDocuments();
+
+    for (CustomerDocument customerDocument : existingCustomerDocuments)
+      customerDocument.setCustomer(null);
+
+    existingCustomer.getDocuments().clear();
+
+    List<CustomerDocument> customerDocuments =
+        saveCustomerDocuments(updatedCustomerDocuments, existingCustomer);
+    existingCustomer.getDocuments().addAll(customerDocuments);
   }
 }
