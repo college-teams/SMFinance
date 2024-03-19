@@ -5,15 +5,19 @@ import {
   AbstractResponse,
   ApiError,
   GetCurrentUser,
+  GetCustomerById,
   GetCustomerList,
+  GetDashboardEntityItemsCount,
   GetLoanList,
   GetTransactionList,
   HttpMethod,
   SaveCustomer,
   SaveLoan,
+  UpdateCustomer,
   UploadFile,
   UserLogin,
 } from "@/types/Api";
+import { DashboardEntityItemsCount } from "@/types/Dashboard copy";
 import { AdminDetails, LoginResponse } from "@/types/admin";
 import { CustomerResponse } from "@/types/customer";
 import { FileResponse } from "@/types/file";
@@ -215,6 +219,26 @@ export const saveCustomer: SaveCustomer = async (api, data) => {
   );
 };
 
+export const getCustometById: GetCustomerById = async (api, id) => {
+  return makeRequest<CustomerResponse>(
+    api,
+    `/customer/${id}`,
+    "getCustometById",
+    "Error occurred while fetching customer details",
+    "GET"
+  );
+};
+
+export const updateCustomer: UpdateCustomer = async (api, id, data) => {
+  return makeRequest<CustomerResponse>(
+    api,
+    `/customer/${id}`,
+    "updateCustomer",
+    "Error occurred while updating customer details",
+    "PUT",
+    data
+  );
+};
 
 // Transactions
 export const getTransactionList: GetTransactionList = async (
@@ -237,3 +261,16 @@ export const getTransactionList: GetTransactionList = async (
     params
   );
 };
+
+// Dashboard
+export const getDashboardEntityItemsCount: GetDashboardEntityItemsCount =
+  async (api) => {
+    return makeRequest<DashboardEntityItemsCount>(
+      api,
+      "dashboard/entityItemsCount",
+      "getDashboardEntityItemsCount",
+      "Error occurred while fetching dashboard details",
+      "GET",
+      null
+    );
+  };

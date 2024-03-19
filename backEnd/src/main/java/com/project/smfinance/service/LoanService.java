@@ -34,7 +34,6 @@ import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -290,7 +289,7 @@ public class LoanService {
   }
 
   private void saveTransaction(Emi emi) {
-    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDateTime.now());
+    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDate.now());
     transcationRepository.save(transaction);
   }
 

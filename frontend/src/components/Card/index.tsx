@@ -2,8 +2,9 @@ import { LuUsers } from "react-icons/lu";
 
 import { CardProps } from "@/types/dashboard";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
-const Card = ({ title, redirect_link, showStats }: CardProps) => {
+const Card = ({ title, redirect_link, loading, value }: CardProps) => {
   const navigate = useNavigate();
 
   const handleClickhandler = () => {
@@ -21,12 +22,20 @@ const Card = ({ title, redirect_link, showStats }: CardProps) => {
         </div>
         <div className="relative flex flex-col gap-2">
           <span>{title}</span>
-          <span className="relative font-semibold text-[1.3rem]">10,278</span>
-          {showStats && (
-            <span className="relative text-[0.75rem]">
-              <span className="relative text-green-500 pr-1">12%</span> more
-              than previous week
-            </span>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <span className="relative font-semibold text-[1.3rem]">
+                {value}
+              </span>
+              {/* {showStats && (
+                <span className="relative text-[0.75rem]">
+                  <span className="relative text-green-500 pr-1">12%</span> more
+                  than previous week
+                </span>
+              )} */}
+            </>
           )}
         </div>
       </div>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { StepConnector, styled } from "@mui/material";
 import { stepConnectorClasses } from "@mui/material/StepConnector";
 import { Step, StepIconProps, StepLabel, Stepper } from "@mui/material";
@@ -10,11 +10,20 @@ import useToast from "@/hooks/useToast";
 import { DocumentType } from "@/types/file";
 import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
 import { isApiError } from "@/types/Api";
-import { saveCustomer, uploadFile } from "@/api";
+import {
+  getCustometById,
+  saveCustomer,
+  updateCustomer,
+  uploadFile,
+} from "@/api";
 import { useAPI } from "@/hooks/useApi";
 import { useForm } from "react-hook-form";
 import Loader from "@/components/Loader";
-import { CustomerDocumentRequest, CustomerRequest } from "@/types/customer";
+import {
+  CustomerDocumentRequest,
+  CustomerRequest,
+  CustomerResponse,
+} from "@/types/customer";
 import CustomerForm from "@/components/CustomerForm";
 import { Backdrop } from "../Loan/LoanList";
 import DocumentUploadForm from "@/components/CustomerForm/DocumentUpload";
@@ -22,6 +31,7 @@ import DocumentUploadForm from "@/components/CustomerForm/DocumentUpload";
 const steps = ["Customer Information", "Documents"];
 
 const SaveCustomer = () => {
+  const { customerId } = useParams();
   const navigate = useNavigate();
   const showToast = useToast();
   const api = useAPI();
@@ -30,8 +40,9 @@ const SaveCustomer = () => {
     register,
     getValues,
     trigger,
+    setValue,
     formState: { errors },
-  } = useForm<CustomerRequest>({ mode: "onChange" });
+  } = useForm<CustomerRequest | CustomerResponse>({ mode: "onChange" });
 
   const [activeStep, setActiveStep] = useState(0);
   const [customerDocuments, setCustomerDocuments] = useState<
@@ -97,7 +108,13 @@ const SaveCustomer = () => {
     };
 
     startLoading("/saveCustomer");
-    const res = await saveCustomer(api, data);
+
+    let res;
+    if (customerId) {
+      res = await updateCustomer(api, Number(customerId), data);
+    } else {
+      res = await saveCustomer(api, data);
+    }
 
     if (!isApiError(res)) {
       showToast(`Customer details saved successfully`, "success");
@@ -210,15 +227,45 @@ const SaveCustomer = () => {
     }
   };
 
+  const setFormValues = useCallback(
+    (data: CustomerResponse) => {
+      Object.keys(data).forEach((key) => {
+        setValue(
+          key as keyof CustomerResponse,
+          data[key as keyof CustomerResponse]
+        );
+      });
+      setCustomerDocuments(data.documents);
+    },
+    [setValue]
+  );
+
+  const fetchCustomerDetailsById = async (id: number) => {
+    startLoading("/getProductById");
+    try {
+      const res = await getCustometById(api, id);
+      if (!isApiError(res)) {
+        setFormValues(res);
+      }
+    } finally {
+      endLoading("/getProductById");
+    }
+  };
+
+  useEffect(() => {
+    if (customerId) {
+      fetchCustomerDetailsById(Number(customerId));
+    }
+  }, []);
+
   return (
     <div className="mt-10">
-      {loading ||
-        (loading && (
-          <div className="absolute left-[45%] mt-[12rem] z-[1000]">
-            <Backdrop />
-            <Loader />
-          </div>
-        ))}
+      {loading && (
+        <div className="absolute left-[45%] mt-[12rem] z-[1000]">
+          <Backdrop />
+          <Loader />
+        </div>
+      )}
       <>
         <div className="w-full hidden md:block">
           <Stepper

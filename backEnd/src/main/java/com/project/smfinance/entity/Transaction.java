@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +26,5 @@ public class Transaction extends BaseEntity {
   private BigDecimal amountPaid;
 
   @Column(nullable = false)
-  private LocalDateTime paymentDate;
+  private LocalDate paymentDate;
 }

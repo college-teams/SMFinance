@@ -35,12 +35,12 @@ const CustomerList = () => {
       {
         Header: "Name",
         accessor: "name",
-        Cell: ({ cell: { value } }): JSX.Element => {
+        Cell: ({ cell: { value, row } }): JSX.Element => {
           return (
             <div
               className="relative cursor-pointer font-medium text-blue-500"
               onClick={() => {
-                navigate("/dashboard/customers/id");
+                navigate(`/dashboard/customers/${row.original.id}/edit`);
               }}
             >
               {value}
@@ -48,9 +48,17 @@ const CustomerList = () => {
           );
         },
       },
-      { Header: "Email", accessor: "email" },
+      {
+        Header: "Email",
+        accessor: "email",
+        Cell: ({ cell: { value } }): string => (value ? value : "Not added."),
+      },
       { Header: "PhoneNumber", accessor: "phoneNumber" },
-      { Header: "AltPhoneNumber", accessor: "altPhoneNumber" },
+      {
+        Header: "AltPhoneNumber",
+        accessor: "altPhoneNumber",
+        Cell: ({ cell: { value } }): string => (value ? value : "Not added."),
+      },
     ],
     []
   );
