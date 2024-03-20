@@ -1,14 +1,10 @@
 package com.project.smfinance.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +52,9 @@ public class Loan extends BaseEntity {
   @OneToOne
   @JoinColumn(name = "referral_id")
   private Referral referral;
+
+  @OneToMany(mappedBy = "loan", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  private List<Emi> emis = new ArrayList<>();
 
   public enum LoanCategory {
     DAILY,

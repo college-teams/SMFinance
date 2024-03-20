@@ -1,5 +1,6 @@
 package com.project.smfinance.models.transaction;
 
+import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.Emi;
 import com.project.smfinance.entity.Transaction;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class TransactionResponse {
   private Long id;
 
   private Emi emi;
+  private Customer customer;
 
   private BigDecimal amountPaid;
 
@@ -34,6 +36,7 @@ public class TransactionResponse {
     return TransactionResponse.builder()
         .id(transaction.getId())
         .emi(transaction.getEmi())
+        .customer(transaction.getEmi().getLoan().getCustomer())
         .amountPaid(transaction.getAmountPaid())
         .paymentDate(transaction.getPaymentDate())
         .build();

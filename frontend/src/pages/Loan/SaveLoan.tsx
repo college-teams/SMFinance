@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { StepConnector, styled } from "@mui/material";
 import { stepConnectorClasses } from "@mui/material/StepConnector";
 import { Step, StepIconProps, StepLabel, Stepper } from "@mui/material";
@@ -12,17 +12,38 @@ import useToast from "@/hooks/useToast";
 import { DocumentType } from "@/types/file";
 import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
 import { isApiError } from "@/types/Api";
-import { getCustomerList, saveLoan, uploadFile } from "@/api";
+import {
+  getCustomerList,
+  getLoanDetailsById,
+  preCloseLoan,
+  saveLoan,
+  updateEmiStatus,
+  uploadFile,
+} from "@/api";
 import { useAPI } from "@/hooks/useApi";
-import { LoanRequest, ReferralDocumentRequest } from "@/types/loan";
+import {
+  EmiResponse,
+  LoanRequest,
+  LoanResponse,
+  ReferralDocumentRequest,
+  UpdateEMIStatus,
+} from "@/types/loan";
 import { useForm } from "react-hook-form";
 import Loader from "@/components/Loader";
 import { Backdrop } from "./LoanList";
+import { GiReceiveMoney } from "react-icons/gi";
+import EmiInfoForm from "@/components/LoanForm/EmiInfoForm";
 
-const steps = ["Loan Information", "Referral Information"];
+const stepsCreateMode = ["Loan Information", "Referral Information"];
+const stepsEditMode = [
+  "Loan Information",
+  "Emi details",
+  "Referral Information",
+];
 
-const CreateLoan = () => {
+const SaveLoan = () => {
   const navigate = useNavigate();
+  const { loanId } = useParams();
   const showToast = useToast();
   const api = useAPI();
   const [loading, startLoading, endLoading, isLoading] = useLoadingIndicator();
@@ -36,13 +57,18 @@ const CreateLoan = () => {
     trigger,
     watch,
     formState: { errors },
-  } = useForm<LoanRequest>({ mode: "onChange" });
+  } = useForm<LoanRequest | LoanResponse>({ mode: "onChange" });
 
+  const isEditMode = loanId != null;
+  const steps = isEditMode ? stepsEditMode : stepsCreateMode;
   const [activeStep, setActiveStep] = useState(0);
   const [referralDocuments, setReferralDocuments] = useState<
     ReferralDocumentRequest[]
   >([]);
   const [customerList, setCustomerList] = useState([]);
+  const [seletedCustomerName, setSeletedCustomerName] = useState<string>("");
+  const [emiList, setEmiList] = useState<EmiResponse[]>([]);
+  const [loanDetails, setLoanDetails] = useState<LoanResponse>();
 
   const clearDocument = (documentType: DocumentType) => {
     const filteredDocuments =
@@ -186,10 +212,20 @@ const CreateLoan = () => {
   function ColorlibStepIcon(props: StepIconProps) {
     const { active, completed, className } = props;
 
-    const icons: { [index: string]: React.ReactElement } = {
+    const iconsCreateMode: { [index: string]: React.ReactElement } = {
       1: <IoMdSettings />,
       2: <IoDocumentAttachSharp />,
     };
+
+    const iconsEditMode: { [index: string]: React.ReactElement } = {
+      1: <IoMdSettings />,
+      2: <GiReceiveMoney />,
+      3: <IoDocumentAttachSharp />,
+    };
+
+    const icons: { [index: string]: React.ReactElement } = isEditMode
+      ? iconsEditMode
+      : iconsCreateMode;
 
     return (
       <ColorlibStepIconRoot
@@ -216,9 +252,37 @@ const CreateLoan = () => {
             control={control}
             watch={watch}
             clearErrors={clearErrors}
+            seletedCustomerName={seletedCustomerName}
           />
         );
       case 1:
+        if (isEditMode) {
+          return (
+            <EmiInfoForm
+              onNext={handleNext}
+              onBack={handleBack}
+              emis={emiList}
+              updateEMI={updateEMI}
+              handleLoanPreClose={handleLoanPreClose}
+            />
+          );
+        } else {
+          return (
+            <ReferralForm
+              uploadImage={uploadImage}
+              isLoading={isLoading}
+              onBack={handleBack}
+              onSubmit={handleSubmit}
+              referralDocuments={referralDocuments}
+              clearDocument={clearDocument}
+              register={register}
+              getValues={getValues}
+              errors={errors}
+              isEditMode={isEditMode}
+            />
+          );
+        }
+      default:
         return (
           <ReferralForm
             uploadImage={uploadImage}
@@ -230,26 +294,90 @@ const CreateLoan = () => {
             register={register}
             getValues={getValues}
             errors={errors}
+            isEditMode={isEditMode}
           />
         );
-      default:
-        console.log("Unknown step");
-        return (
-          <LoanInfoForm
-            onNext={handleNext}
-            register={register}
-            reset={reset}
-            setValue={setValue}
-            getValues={getValues}
-            errors={errors}
-            customerList={customerList}
-            control={control}
-            watch={watch}
-            clearErrors={clearErrors}
-          />
-        ); // Error handling
     }
   };
+
+  const setFormValues = useCallback(
+    (data: LoanResponse) => {
+      Object.keys(data).forEach((key) => {
+        switch (key) {
+          case "customer": {
+            setValue("customerId", {
+              label: data.customer.name,
+              value: data.customer.id,
+            } as any);
+            setSeletedCustomerName(data.customer.name);
+            break;
+          }
+          default: {
+            setValue(
+              key as keyof LoanResponse,
+              data[key as keyof LoanResponse]
+            );
+            break;
+          }
+        }
+      });
+      setReferralDocuments(data.referral.documents);
+      setEmiList(data.emis);
+    },
+    [setValue]
+  );
+
+  const fetchLoanDetailsById = async (id: number) => {
+    startLoading("/getLoanDetailsById");
+    try {
+      const res = await getLoanDetailsById(api, id);
+      if (!isApiError(res)) {
+        setLoanDetails(res);
+        setFormValues(res);
+      }
+    } finally {
+      endLoading("/getLoanDetailsById");
+    }
+  };
+
+  const updateEMI = async (emiId: number) => {
+    if (loanDetails) {
+      const data: UpdateEMIStatus = {
+        customerId: loanDetails.customer.id,
+        status: "PAID",
+      };
+      startLoading("/updateEmiStatus");
+      const res = await updateEmiStatus(api, Number(loanId), emiId, data);
+      if (!res) {
+        showToast(`Emi updated saved successfully`, "success");
+        await fetchLoanDetailsById(Number(loanId));
+      }
+      endLoading("/updateEmiStatus");
+    } else {
+      showToast(`Something went wrong`, "error");
+    }
+  };
+
+  const handleLoanPreClose = async () => {
+    if (loanDetails) {
+      startLoading("/preCloseLoan");
+      const res = await preCloseLoan(api, loanDetails?.id);
+
+      if (!res) {
+        showToast(`Loan preclosed successfully`, "success");
+        navigate("/dashboard/loans");
+      }
+      endLoading("/preCloseLoan");
+    } else {
+      showToast(`Something went wrong`, "error");
+    }
+  };
+
+  useEffect(() => {
+    if (loanId) {
+      fetchLoanDetailsById(Number(loanId));
+    }
+  }, []);
 
   useEffect(() => {
     fetchCustomerList();
@@ -257,13 +385,12 @@ const CreateLoan = () => {
 
   return (
     <div className="mt-10">
-      {loading ||
-        (loading && (
-          <div className="absolute left-[45%] mt-[12rem] z-[1000]">
-            <Backdrop />
-            <Loader />
-          </div>
-        ))}
+      {loading && (
+        <div className="absolute left-[45%] mt-[12rem] z-[1000]">
+          <Backdrop />
+          <Loader />
+        </div>
+      )}
       <>
         <div className="w-full hidden md:block">
           <Stepper
@@ -293,4 +420,4 @@ const CreateLoan = () => {
   );
 };
 
-export default CreateLoan;
+export default SaveLoan;

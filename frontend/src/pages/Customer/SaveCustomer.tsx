@@ -241,14 +241,14 @@ const SaveCustomer = () => {
   );
 
   const fetchCustomerDetailsById = async (id: number) => {
-    startLoading("/getProductById");
+    startLoading("/getCustometById");
     try {
       const res = await getCustometById(api, id);
       if (!isApiError(res)) {
         setFormValues(res);
       }
     } finally {
-      endLoading("/getProductById");
+      endLoading("/getCustometById");
     }
   };
 

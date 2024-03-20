@@ -54,7 +54,7 @@ const LoanList = () => {
         Cell: ({ cell: { value, row } }): JSX.Element => {
           return (
             <div className="relative font-medium text-blue-500">
-              <Link to={`/dashboard/loans/${row.original.id}`}>
+              <Link to={`/dashboard/loans/${row.original.id}/edit`}>
                 {value.name}
               </Link>
             </div>

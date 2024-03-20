@@ -33,13 +33,11 @@ const LatestTransactions = () => {
     () => [
       {
         Header: "Customer Name",
-        accessor: (row: TransactionResponse) =>
-          row.emi?.loan?.customer?.name ?? "",
+        accessor: (row: TransactionResponse) => row.customer?.name ?? "",
       },
       {
         Header: "Customer PhoneNumber",
-        accessor: (row: TransactionResponse) =>
-          row.emi?.loan?.customer?.phoneNumber ?? "",
+        accessor: (row: TransactionResponse) => row.customer?.phoneNumber ?? "",
       },
       { Header: "Amount Paid", accessor: "amountPaid" },
       {

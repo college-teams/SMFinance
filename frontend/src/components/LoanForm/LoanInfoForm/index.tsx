@@ -33,6 +33,7 @@ type LoanInfoFormProps = {
   control?: Control<LoanRequest>;
   watch: UseFormWatch<LoanRequest>;
   clearErrors: UseFormClearErrors<LoanRequest>;
+  seletedCustomerName: string;
 };
 
 const LoanInfoForm = ({
@@ -44,6 +45,7 @@ const LoanInfoForm = ({
   watch,
   clearErrors,
   setValue,
+  seletedCustomerName,
 }: LoanInfoFormProps) => {
   const loanCategory = watch("loanCategory");
 
@@ -78,7 +80,7 @@ const LoanInfoForm = ({
                     field.onChange(newValue);
                     // setSeletedCustomerId(newValue?.value);
                   }}
-                  // defaultInputValue={seletedCustomerName}
+                  defaultInputValue={seletedCustomerName}
                   options={customerList}
                   isSearchable={true}
                   isClearable={true}
@@ -173,10 +175,7 @@ const LoanInfoForm = ({
             control={control}
             rules={{ required: "Loan category is required" }}
             render={({ field }) => (
-              <CustomSelect
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <CustomSelect onValueChange={field.onChange} value={field.value}>
                 <SelectTrigger className="form_input bg-transparent h-full">
                   <SelectValue placeholder="Loan category" />
                 </SelectTrigger>

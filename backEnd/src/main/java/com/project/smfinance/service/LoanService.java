@@ -2,7 +2,6 @@ package com.project.smfinance.service;
 
 import static com.project.smfinance.codes.ErrorCodes.EMI_ALREADY_PAID;
 import static com.project.smfinance.codes.ErrorCodes.EMI_NOT_FOUND;
-import static com.project.smfinance.codes.ErrorCodes.LOAN_ALREADY_PRE_CLOSED;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
 import static com.project.smfinance.codes.SuccessCodes.EMI_UPDATED;
 import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
@@ -125,7 +124,7 @@ public class LoanService {
   public ApiResponse preCloseLoan(long loanId) throws BaseException {
     Loan loan = getLoanById(loanId);
     if (loan.getLoanStatus().equals(Loan.LoanStatus.PRE_CLOSED)) {
-      throw new BaseException(LOAN_ALREADY_PRE_CLOSED);
+      //      throw new BaseException(LOAN_ALREADY_PRE_CLOSED);
     }
     // Retrieve all pending EMIs associated with the loan
     List<Emi> pendingEMIs = emiRepository.getAllPendingEMIs(loan);
@@ -144,7 +143,7 @@ public class LoanService {
         }
 
         // Delete all other pending EMIs
-        emiRepository.delete(emi);
+        emiRepository.deleteEmi(emi.getId());
       }
 
       // Update the total amount paid in the loan entity

@@ -11,8 +11,7 @@ import LoanList from "./pages/Loan/LoanList";
 import CustomerList from "./pages/Customer/CustomerList";
 import Revenue from "./pages/Revenue";
 import Reports from "./pages/Reports";
-import CreateLoan from "./pages/Loan/CreateLoan";
-import EditLoan from "./pages/Loan/EditLoan";
+import SaveLoan from "./pages/Loan/SaveLoan";
 import SaveCustomer from "./pages/Customer/SaveCustomer";
 
 function App() {
@@ -41,8 +40,8 @@ function App() {
 
               <Route path="loans">
                 <Route index element={<LoanList />} />
-                <Route path="create" element={<CreateLoan />} />
-                <Route path=":loanId" element={<EditLoan />} />
+                <Route path="create" element={<SaveLoan />} />
+                <Route path=":loanId/edit" element={<SaveLoan />} />
               </Route>
 
               <Route path="transactions" element={<Transactions />} />

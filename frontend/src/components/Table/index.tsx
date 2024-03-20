@@ -6,10 +6,7 @@ import React, { useMemo } from "react";
 import { useTable, usePagination, useSortBy, Column } from "react-table";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as Config from "../../types/react-table-config";
-import {
-  IoMdArrowDropdown,
-  IoMdArrowDropup,
-} from "react-icons/io";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import Loader from "../Loader";
 
 interface TableProps<T extends object> {
@@ -17,12 +14,16 @@ interface TableProps<T extends object> {
   columns: Column<T>[];
   loading?: boolean;
   showPagination?: boolean;
+  initialState?: {
+    hiddenColumns: string[];
+  };
 }
 
 const Table = <T extends object>({
   data,
   columns,
   loading,
+  initialState,
   showPagination,
 }: TableProps<T>): JSX.Element => {
   const tableData = useMemo(() => data, [data]);
@@ -44,7 +45,7 @@ const Table = <T extends object>({
     {
       columns,
       data: tableData,
-      initialState: { pageIndex: 0, pageSize: 5 },
+      initialState: { pageIndex: 0, pageSize: 5, ...initialState },
     },
 
     useSortBy,
