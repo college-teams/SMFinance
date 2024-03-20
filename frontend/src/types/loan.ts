@@ -33,6 +33,7 @@ export interface LoanResponse extends LoanRequest {
   loanStatus: string;
   preClosed: boolean;
   referral: ReferralResponse;
+  emis: EmiResponse[];
 }
 
 export interface ReferralResponse {
@@ -46,4 +47,18 @@ export interface ReferralResponse {
 
 export interface ReferralDocumentResponse extends ReferralDocumentRequest {
   id: number;
+}
+
+export interface UpdateEMIStatus {
+  customerId: number;
+  status: string;
+}
+
+export interface EmiResponse {
+  id: number;
+  emiAmount: number;
+  paymentDueDate: string;
+  penaltyAmount: number;
+  totalAmount: number;
+  paymentStatus: string;
 }

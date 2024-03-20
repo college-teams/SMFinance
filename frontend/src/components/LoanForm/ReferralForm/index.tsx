@@ -9,7 +9,7 @@ import {
 
 type ReferralFormProps = {
   onBack: () => void;
-  onSubmit: () =>  Promise<void>;
+  onSubmit: () => Promise<void>;
   uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
   referralDocuments: ReferralDocumentRequest[];
   isLoading: (endpoint: string) => boolean;
@@ -18,6 +18,7 @@ type ReferralFormProps = {
   register: UseFormRegister<LoanRequest>;
   getValues: UseFormGetValues<LoanRequest>;
   errors: FieldErrors<LoanRequest>;
+  isEditMode: boolean;
 };
 
 const EMAIL_REGREX =
@@ -32,6 +33,7 @@ const ReferralForm = ({
   clearDocument,
   register,
   errors,
+  isEditMode,
 }: ReferralFormProps) => {
   return (
     <div className="relative mt-10">
@@ -126,7 +128,9 @@ const ReferralForm = ({
 
       {/* Documents */}
       <div className="mt-10">
-        <p className="relative mb-8 text-[1.5rem] font-medium text-center">Documents</p>
+        <p className="relative mb-8 text-[1.5rem] font-medium text-center">
+          Documents
+        </p>
         <div className="flex flex-col gap-y-8 w-full md:w-[80%] mx-auto">
           <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 h-full flex flex-col gap-y-5">
             <label className="relative text-[1.2rem]">Aadhar</label>
@@ -175,12 +179,14 @@ const ReferralForm = ({
           >
             Back
           </button>
-          <button
-            onClick={onSubmit}
-            className="relative bg-orange-500 text-center  px-6 py-2 rounded-md hover:bg-orange-600"
-          >
-            submit
-          </button>
+          {!isEditMode && (
+            <button
+              onClick={onSubmit}
+              className="relative bg-orange-500 text-center  px-6 py-2 rounded-md hover:bg-orange-600"
+            >
+              submit
+            </button>
+          )}
         </div>
       </div>
     </div>

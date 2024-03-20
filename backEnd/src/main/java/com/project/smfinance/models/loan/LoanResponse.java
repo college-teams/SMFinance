@@ -2,6 +2,7 @@ package com.project.smfinance.models.loan;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.smfinance.entity.Customer;
+import com.project.smfinance.entity.Emi;
 import com.project.smfinance.entity.Loan;
 import com.project.smfinance.entity.Referral;
 import jakarta.persistence.*;
@@ -42,6 +43,8 @@ public class LoanResponse {
 
   private Referral referral;
 
+  private List<Emi> emis;
+
   public static List<LoanResponse> from(List<Loan> loans) {
     return loans.stream().map(LoanResponse::from).collect(Collectors.toList());
   }
@@ -60,6 +63,7 @@ public class LoanResponse {
         .totalAmountPaid(loan.getTotalAmountPaid())
         .preClosed(loan.isPreClosed())
         .referral(loan.getReferral())
+        .emis(loan.getEmis())
         .build();
   }
 }

@@ -1,5 +1,6 @@
 package com.project.smfinance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,7 @@ import lombok.Setter;
 public class Emi extends BaseEntity {
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "loanId")
   private Loan loan;
 

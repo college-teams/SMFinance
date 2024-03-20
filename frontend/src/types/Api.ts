@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
 import { AdminDetails, LoginRequest, LoginResponse } from "./admin";
-import { LoanRequest, LoanResponse } from "./loan";
+import { LoanRequest, LoanResponse, UpdateEMIStatus } from "./loan";
 import { FileResponse } from "./file";
 import { CustomerRequest, CustomerResponse } from "./customer";
 import { TransactionResponse } from "./transaction";
@@ -40,6 +40,23 @@ export type GetLoanList = (
   api: AxiosInstance,
   customerName?: string
 ) => Promise<LoanResponse[] | ApiError>;
+
+export type GetLoanDetailsById = (
+  api: AxiosInstance,
+  id:number
+) => Promise<LoanResponse | ApiError>;
+
+export type PreCloseLoan = (
+  api: AxiosInstance,
+  id:number
+) => Promise<void | ApiError>;
+
+export type UpdateEmiStatus = (
+  api: AxiosInstance,
+  loanId:number,
+  emiId:number,
+  data:UpdateEMIStatus
+) => Promise<void | ApiError>;
 
 export type UploadFile = (
   api: AxiosInstance,

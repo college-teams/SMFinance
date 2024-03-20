@@ -8,12 +8,15 @@ import {
   GetCustomerById,
   GetCustomerList,
   GetDashboardEntityItemsCount,
+  GetLoanDetailsById,
   GetLoanList,
   GetTransactionList,
   HttpMethod,
+  PreCloseLoan,
   SaveCustomer,
   SaveLoan,
   UpdateCustomer,
+  UpdateEmiStatus,
   UploadFile,
   UserLogin,
 } from "@/types/Api";
@@ -160,6 +163,42 @@ export const saveLoan: SaveLoan = async (api, data) => {
     "saveLoan",
     "Error occurred while adding loan details",
     "POST",
+    data
+  );
+};
+
+export const getLoanDetailsById: GetLoanDetailsById = async (api, id) => {
+  return makeRequest<LoanResponse>(
+    api,
+    `/loan/${id}`,
+    "getLoanDetailsById",
+    "Error occurred while fetching loan details",
+    "GET"
+  );
+};
+
+export const preCloseLoan: PreCloseLoan = async (api, id) => {
+  return makeRequest(
+    api,
+    `/loan/${id}/pre-close`,
+    "preCloseLoan",
+    "Error occurred while pre closing the loan",
+    "PUT"
+  );
+};
+
+export const updateEmiStatus: UpdateEmiStatus = async (
+  api,
+  loanId,
+  emiId,
+  data
+) => {
+  return makeRequest(
+    api,
+    `/loan/${loanId}/emi/${emiId}`,
+    "updateEmiStatus",
+    "Error occurred while updating the emi status",
+    "PUT",
     data
   );
 };
