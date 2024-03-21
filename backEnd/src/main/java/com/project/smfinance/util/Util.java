@@ -8,4 +8,8 @@ public class Util {
     String fileKey = UUID.randomUUID() + "_" + fileName;
     return String.format("%s/%s", entityName, fileKey);
   }
+
+  public static boolean isEmpty(String s) {
+    return s == null || s.isEmpty();
+  }
 }

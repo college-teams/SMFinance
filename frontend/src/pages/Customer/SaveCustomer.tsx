@@ -11,6 +11,8 @@ import { DocumentType } from "@/types/file";
 import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
 import { isApiError } from "@/types/Api";
 import {
+  deleteCustomerFile,
+  deleteFile,
   getCustometById,
   saveCustomer,
   updateCustomer,
@@ -49,16 +51,6 @@ const SaveCustomer = () => {
     CustomerDocumentRequest[]
   >([]);
 
-  const clearDocument = (documentType: DocumentType) => {
-    const filteredDocuments =
-      customerDocuments.filter(
-        (document) => document.documentType !== documentType
-      ) || [];
-    setCustomerDocuments(filteredDocuments);
-
-    //  TODO: call api to delete document file
-  };
-
   const uploadImage = async (
     file: File,
     documentType: DocumentType
@@ -82,6 +74,45 @@ const SaveCustomer = () => {
       } finally {
         endLoading(documentType);
       }
+    }
+  };
+
+  console.log(customerDocuments);
+  const deleteFileHandler = async (
+    documentType: DocumentType
+  ): Promise<void> => {
+    const findDocument =
+      customerDocuments.filter(
+        (document) => document.documentType === documentType
+      ) || [];
+
+    if (findDocument.length && findDocument.length === 1) {
+      try {
+        startLoading("/deleteCustomerFile");
+        let res;
+        if (customerId) {
+          res = await deleteCustomerFile(
+            api,
+            Number(customerId),
+            findDocument[0].documentKey
+          );
+        } else {
+          res = await deleteFile(api, findDocument[0].documentKey);
+        }
+
+        if (!res || !isApiError(res)) {
+          const filteredDocuments =
+            customerDocuments.filter(
+              (document) => document.documentType !== documentType
+            ) || [];
+          setCustomerDocuments(filteredDocuments);
+          showToast("File successfully removed from the database", "success");
+        }
+      } finally {
+        endLoading("/deleteCustomerFile");
+      }
+    } else {
+      showToast("Something went wrong", "error");
     }
   };
 
@@ -212,7 +243,7 @@ const SaveCustomer = () => {
             onBack={handleBack}
             onSubmit={handleSubmit}
             customerDocuments={customerDocuments}
-            clearDocument={clearDocument}
+            deleteFileHandler={deleteFileHandler}
           />
         );
       default:
@@ -260,12 +291,17 @@ const SaveCustomer = () => {
 
   return (
     <div className="mt-10">
-      {loading && (
-        <div className="absolute left-[45%] mt-[12rem] z-[1000]">
-          <Backdrop />
-          <Loader />
-        </div>
-      )}
+      {loading &&
+        !(
+          isLoading(DocumentType.AADHAR) ||
+          isLoading(DocumentType.PAN) ||
+          isLoading(DocumentType.RATION_CARD)
+        ) && (
+          <div className="absolute left-[45%] mt-[12rem] z-[1000]">
+            <Backdrop />
+            <Loader />
+          </div>
+        )}
       <>
         <div className="w-full hidden md:block">
           <Stepper

@@ -47,6 +47,9 @@ public class ErrorCodes extends StatusCodes {
   public static final StatusCodes UNSUPPORTED_FILE_TYPE =
       new ErrorCodes(400, HttpStatus.BAD_REQUEST, "UNSUPPORTED_FILE_TYPE");
 
+  public static final StatusCodes FILE_NOT_FOUND =
+      new ErrorCodes(404, HttpStatus.NOT_FOUND, "FILE_NOT_FOUND");
+
   public ErrorCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

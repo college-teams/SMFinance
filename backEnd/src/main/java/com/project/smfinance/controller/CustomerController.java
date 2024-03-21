@@ -60,4 +60,10 @@ public class CustomerController {
   public ResponseEntity<ApiResponse> deleteCustomer(@PathVariable Long id) throws BaseException {
     return new ResponseEntity<>(customerService.deleteCustomer(id), HttpStatus.OK);
   }
+
+  @DeleteMapping("/{id}/file")
+  public ResponseEntity<ApiResponse<?>> deleteFile(
+      @PathVariable Long id, @Valid @RequestParam("fileKey") String key) throws BaseException {
+    return new ResponseEntity<>(customerService.deleteCustomerFile(id, key), HttpStatus.OK);
+  }
 }

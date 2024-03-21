@@ -31,7 +31,7 @@ public class FileController {
   }
 
   @DeleteMapping
-  public ResponseEntity<ApiResponse<?>> deleteImage(@Valid @RequestParam("imageKey") String key)
+  public ResponseEntity<ApiResponse<?>> deleteImage(@Valid @RequestParam("fileKey") String key)
       throws BaseException {
     return new ResponseEntity<>(fileService.deleteImage(key), HttpStatus.OK);
   }
