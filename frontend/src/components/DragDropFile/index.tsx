@@ -18,7 +18,8 @@ type DragDropFileProps = {
   uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
   loading: boolean;
   documentType: DocumentType;
-  deleteFileHandler: (documentType: DocumentType) => Promise<void>
+  deleteFileHandler: (documentType: DocumentType) => Promise<void>;
+  disabled?: boolean;
 };
 
 const DragDropFile = ({
@@ -27,6 +28,7 @@ const DragDropFile = ({
   documentType,
   loading,
   deleteFileHandler,
+  disabled,
 }: DragDropFileProps) => {
   const showToast = useToast();
   const [props, activateConfirmModal] = useConfirmModal();
@@ -141,6 +143,7 @@ const DragDropFile = ({
           className="relative hidden"
           onChange={handleChange}
           accept="image/*,application/pdf"
+          disabled={disabled}
         />
 
         {loading ? (
@@ -177,13 +180,15 @@ const DragDropFile = ({
                 <MdOutlineRemoveRedEye />
                 <span>Preview</span>
               </button>
-              <button
-                onClick={deleteFile}
-                className="relative px-5 py-2 bg-red-400 hover:bg-red-500  capitalize rounded-md flex items-center justify-between gap-x-2"
-              >
-                <MdDeleteOutline size={20} />
-                <span>Delete</span>
-              </button>
+              {!disabled && (
+                <button
+                  onClick={deleteFile}
+                  className="relative px-5 py-2 bg-red-400 hover:bg-red-500  capitalize rounded-md flex items-center justify-between gap-x-2"
+                >
+                  <MdDeleteOutline size={20} />
+                  <span>Delete</span>
+                </button>
+              )}
             </div>
           </div>
         ) : (
@@ -191,7 +196,9 @@ const DragDropFile = ({
             htmlFor="input-file-upload"
             className={`${
               dragActive && " bg-primaryBg"
-            } h-full flex items-center justify-center border-[2px] px-7 py-12 rounded-md border-dashed cursor-pointer`}
+            } h-full flex items-center justify-center border-[2px] px-7 py-12 rounded-md border-dashed ${
+              !disabled && "cursor-pointer"
+            }`}
             onClick={onButtonClick}
           >
             <div className="relative text-center flex gap-5 flex-wrap justify-center">
@@ -219,10 +226,11 @@ const DragDropFile = ({
         {dragActive && (
           <div
             id="drag-file-element"
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
+            draggable={!disabled}
+            onDragEnter={!disabled ? handleDrag : undefined} // Only attach event handler if disableMode is false
+            onDragLeave={!disabled ? handleDrag : undefined}
+            onDragOver={!disabled ? handleDrag : undefined}
+            onDrop={!disabled ? handleDrop : undefined}
           ></div>
         )}
       </form>

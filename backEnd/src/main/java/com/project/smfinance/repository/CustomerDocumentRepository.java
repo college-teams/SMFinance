@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface CustomerDocumentRepository extends AbstractRepository<CustomerDocument> {
   Optional<CustomerDocument> findByCustomer_IdAndDocumentKey(Long customerId, String key);
 
+  Optional<CustomerDocument> findByDocumentKey(String key);
+
   @Transactional
   @Modifying
   @Query(value = "DELETE FROM customer_document WHERE id = :id", nativeQuery = true)

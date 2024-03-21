@@ -164,6 +164,7 @@ public class LoanService {
 
     loan.setLoanStatus(Loan.LoanStatus.PRE_CLOSED);
     loan.setCloseData(LocalDate.now());
+    loan.setPreClosed(true);
     calculateTotalAmountPaid(loan);
     loanRepository.save(loan);
     return new ApiResponse<>(LOAN_UPDATED, AbstractResponse.StatusType.SUCCESS);

@@ -69,7 +69,7 @@ const SaveCustomer = () => {
               documentType,
             },
           ]);
-          showToast("Image uploaded successfully", "success");
+          showToast("File uploaded successfully", "success");
         }
       } finally {
         endLoading(documentType);
@@ -77,7 +77,6 @@ const SaveCustomer = () => {
     }
   };
 
-  console.log(customerDocuments);
   const deleteFileHandler = async (
     documentType: DocumentType
   ): Promise<void> => {
