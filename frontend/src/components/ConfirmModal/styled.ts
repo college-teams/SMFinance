@@ -21,15 +21,16 @@ const OpacityAnimation = keyframes`
 
 export const ConfirmationContainer = styled.div`
   position: relative;
-  background: var(--white-color);
+  background: #fff;
   max-width: 500px;
   height: auto;
   max-height: 650px;
   overflow-y: overlay;
   overflow-x: hidden;
   border-radius: 4px;
-  padding: 2rem 3rem;
+  padding: 1.2rem 2rem;
   opacity: 0;
+  color: #000;
   animation: ${OpacityAnimation} 0.5s ease-in-out forwards;
 
   & > * {

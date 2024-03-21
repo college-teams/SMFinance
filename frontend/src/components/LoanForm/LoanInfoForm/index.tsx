@@ -34,6 +34,7 @@ type LoanInfoFormProps = {
   watch: UseFormWatch<LoanRequest>;
   clearErrors: UseFormClearErrors<LoanRequest>;
   seletedCustomerName: string;
+  isEditMode: boolean;
 };
 
 const LoanInfoForm = ({
@@ -46,6 +47,7 @@ const LoanInfoForm = ({
   clearErrors,
   setValue,
   seletedCustomerName,
+  isEditMode,
 }: LoanInfoFormProps) => {
   const loanCategory = watch("loanCategory");
 
@@ -84,6 +86,7 @@ const LoanInfoForm = ({
                   options={customerList}
                   isSearchable={true}
                   isClearable={true}
+                  isDisabled={isEditMode}
                   className="relative font-medium outline-none rounded-md mt-[1.5rem]"
                 />
               </>
@@ -111,6 +114,7 @@ const LoanInfoForm = ({
                 message: "Please enter a valid loan amount",
               },
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.loanAmount &&
@@ -134,6 +138,7 @@ const LoanInfoForm = ({
                 message: "Please enter a valid penalty amount",
               },
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.penaltyAmount &&
@@ -158,6 +163,7 @@ const LoanInfoForm = ({
                 message: "Please enter a valid interest amount",
               },
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.interestAmount &&
@@ -175,7 +181,11 @@ const LoanInfoForm = ({
             control={control}
             rules={{ required: "Loan category is required" }}
             render={({ field }) => (
-              <CustomSelect onValueChange={field.onChange} value={field.value}>
+              <CustomSelect
+                disabled={isEditMode}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <SelectTrigger className="form_input bg-transparent h-full">
                   <SelectValue placeholder="Loan category" />
                 </SelectTrigger>
@@ -221,6 +231,7 @@ const LoanInfoForm = ({
                   message: "Please enter a valid customer Preference",
                 },
               })}
+              disabled={isEditMode}
             />
             <span className="relative text-red-600 font-medium mt-2">
               {errors?.customerPreference &&

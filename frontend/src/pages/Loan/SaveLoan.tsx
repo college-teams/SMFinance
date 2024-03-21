@@ -13,6 +13,7 @@ import { DocumentType } from "@/types/file";
 import { useLoadingIndicator } from "@/hooks/useLoadingIndicator";
 import { isApiError } from "@/types/Api";
 import {
+  deleteFile,
   getCustomerList,
   getLoanDetailsById,
   preCloseLoan,
@@ -70,16 +71,6 @@ const SaveLoan = () => {
   const [emiList, setEmiList] = useState<EmiResponse[]>([]);
   const [loanDetails, setLoanDetails] = useState<LoanResponse>();
 
-  const clearDocument = (documentType: DocumentType) => {
-    const filteredDocuments =
-      referralDocuments.filter(
-        (document) => document.documentType !== documentType
-      ) || [];
-    setReferralDocuments(filteredDocuments);
-
-    // call api to delete document file
-  };
-
   const uploadImage = async (
     file: File,
     documentType: DocumentType
@@ -98,11 +89,41 @@ const SaveLoan = () => {
               documentType,
             },
           ]);
-          showToast("Image uploaded successfully", "success");
+          showToast("File uploaded successfully", "success");
         }
       } finally {
         endLoading(documentType);
       }
+    }
+  };
+
+  const deleteFileHandler = async (
+    documentType: DocumentType
+  ): Promise<void> => {
+    const findDocument =
+      referralDocuments.filter(
+        (document) => document.documentType === documentType
+      ) || [];
+
+    if (findDocument.length && findDocument.length === 1) {
+      try {
+        startLoading("/deleteReferralFile");
+
+        const res = await deleteFile(api, findDocument[0].documentKey);
+
+        if (!res || !isApiError(res)) {
+          const filteredDocuments =
+            referralDocuments.filter(
+              (document) => document.documentType !== documentType
+            ) || [];
+          setReferralDocuments(filteredDocuments);
+          showToast("File successfully removed from the database", "success");
+        }
+      } finally {
+        endLoading("/deleteReferralFile");
+      }
+    } else {
+      showToast("Something went wrong", "error");
     }
   };
 
@@ -253,6 +274,7 @@ const SaveLoan = () => {
             watch={watch}
             clearErrors={clearErrors}
             seletedCustomerName={seletedCustomerName}
+            isEditMode={isEditMode}
           />
         );
       case 1:
@@ -264,6 +286,7 @@ const SaveLoan = () => {
               emis={emiList}
               updateEMI={updateEMI}
               handleLoanPreClose={handleLoanPreClose}
+              loanDetails={loanDetails}
             />
           );
         } else {
@@ -274,11 +297,11 @@ const SaveLoan = () => {
               onBack={handleBack}
               onSubmit={handleSubmit}
               referralDocuments={referralDocuments}
-              clearDocument={clearDocument}
               register={register}
               getValues={getValues}
               errors={errors}
               isEditMode={isEditMode}
+              deleteFileHandler={deleteFileHandler}
             />
           );
         }
@@ -290,11 +313,11 @@ const SaveLoan = () => {
             onBack={handleBack}
             onSubmit={handleSubmit}
             referralDocuments={referralDocuments}
-            clearDocument={clearDocument}
             register={register}
             getValues={getValues}
             errors={errors}
             isEditMode={isEditMode}
+            deleteFileHandler={deleteFileHandler}
           />
         );
     }
@@ -334,6 +357,8 @@ const SaveLoan = () => {
       if (!isApiError(res)) {
         setLoanDetails(res);
         setFormValues(res);
+      } else {
+        navigate("/dashboard/loans");
       }
     } finally {
       endLoading("/getLoanDetailsById");

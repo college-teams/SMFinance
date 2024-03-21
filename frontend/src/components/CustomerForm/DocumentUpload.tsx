@@ -8,7 +8,7 @@ type DocumentUploadFormProps = {
   uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
   customerDocuments: CustomerDocumentRequest[];
   isLoading: (endpoint: string) => boolean;
-  clearDocument: (documentType: DocumentType) => void;
+  deleteFileHandler: (documentType: DocumentType) => Promise<void>
 };
 
 const DocumentUploadForm = ({
@@ -17,7 +17,7 @@ const DocumentUploadForm = ({
   customerDocuments,
   uploadImage,
   isLoading,
-  clearDocument,
+  deleteFileHandler,
 }: DocumentUploadFormProps) => {
   return (
     <div className="mt-10">
@@ -35,7 +35,7 @@ const DocumentUploadForm = ({
             uploadImage={uploadImage}
             loading={isLoading(DocumentType.AADHAR)}
             documentType={DocumentType.AADHAR}
-            clearDocument={clearDocument}
+            deleteFileHandler={deleteFileHandler}
           />
         </div>
 
@@ -48,7 +48,7 @@ const DocumentUploadForm = ({
             uploadImage={uploadImage}
             loading={isLoading(DocumentType.PAN)}
             documentType={DocumentType.PAN}
-            clearDocument={clearDocument}
+            deleteFileHandler={deleteFileHandler}
           />
         </div>
 
@@ -61,7 +61,7 @@ const DocumentUploadForm = ({
             uploadImage={uploadImage}
             loading={isLoading(DocumentType.RATION_CARD)}
             documentType={DocumentType.RATION_CARD}
-            clearDocument={clearDocument}
+            deleteFileHandler={deleteFileHandler}
           />
         </div>
       </div>

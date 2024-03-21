@@ -1,5 +1,9 @@
 const Reports = () => {
-  return <div>Coming soon..</div>;
+  return (
+    <div className="relative flex items-center justify-center mt-10">
+      <p className="relative text-2xl">Coming soon..</p>
+    </div>
+  );
 };
 
 export default Reports;

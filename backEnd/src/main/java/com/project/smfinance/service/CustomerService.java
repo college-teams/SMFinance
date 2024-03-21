@@ -1,11 +1,13 @@
 package com.project.smfinance.service;
 
 import static com.project.smfinance.codes.ErrorCodes.CUSTOMER_NOT_FOUND;
+import static com.project.smfinance.codes.ErrorCodes.FILE_DELETE_FAILED;
 import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_CREATED;
 import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_DATA_FETCHED;
 import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_DELETE_SUCCESS;
 import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_LIST_FETCHED;
 import static com.project.smfinance.codes.SuccessCodes.CUSTOMER_UPDATED;
+import static com.project.smfinance.codes.SuccessCodes.FILE_DELETE_SUCCESS;
 
 import com.project.smfinance.entity.Customer;
 import com.project.smfinance.entity.CustomerDocument;
@@ -14,10 +16,12 @@ import com.project.smfinance.models.customer.CreateCustomerRequest;
 import com.project.smfinance.models.customer.CustomerDocumentRequest;
 import com.project.smfinance.models.customer.CustomerResponse;
 import com.project.smfinance.models.customer.UpdateCustomerRequest;
+import com.project.smfinance.models.response.AbstractResponse;
 import com.project.smfinance.models.response.AbstractResponse.StatusType;
 import com.project.smfinance.models.response.ApiResponse;
 import com.project.smfinance.repository.CustomerDocumentRepository;
 import com.project.smfinance.repository.CustomerRepository;
+import com.project.smfinance.util.Util;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -37,6 +41,7 @@ public class CustomerService {
 
   private final CustomerRepository customerRepository;
   private final CustomerDocumentRepository customerDocumentRepository;
+  private final AwsService awsService;
 
   @Transactional
   public ApiResponse<CustomerResponse> addCustomer(CreateCustomerRequest createCustomerRequest)
@@ -95,6 +100,25 @@ public class CustomerService {
     Customer customerData = getCustomerById(customerId);
     customerRepository.delete(customerData);
     return new ApiResponse<>(CUSTOMER_DELETE_SUCCESS, StatusType.SUCCESS);
+  }
+
+  @Transactional
+  public ApiResponse<?> deleteCustomerFile(Long customerId, String key) throws BaseException {
+    try {
+      Optional<CustomerDocument> customerDocument =
+          customerDocumentRepository.findByCustomer_IdAndDocumentKey(customerId, key);
+
+      if (!Util.isEmpty(key)) {
+        awsService.deleteFile(key);
+      }
+
+      customerDocument.ifPresent(
+          document -> customerDocumentRepository.deleteCustomerDocument(document.getId()));
+    } catch (Exception ex) {
+      log.error("Error ", ex);
+      throw new BaseException(FILE_DELETE_FAILED);
+    }
+    return new ApiResponse<>(FILE_DELETE_SUCCESS, AbstractResponse.StatusType.SUCCESS);
   }
 
   public Customer getCustomerById(Long id) throws BaseException {

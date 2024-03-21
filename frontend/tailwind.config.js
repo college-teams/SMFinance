@@ -16,6 +16,7 @@ export default {
         lightWhite: "#b7bac1",
         hoverSecondaryBg: "#2e374a",
         addBtnBg: "#5d57c9",
+        addBtnBgHover: "#4a45a0",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

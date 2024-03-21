@@ -64,6 +64,17 @@ export type UploadFile = (
   entityKey: string
 ) => Promise<FileResponse | ApiError>;
 
+export type DeleteFile = (
+  api: AxiosInstance,
+  fileKey: string
+) => Promise<void | ApiError>;
+
+export type DeleteCustomerFile = (
+  api: AxiosInstance,
+  customerId: number,
+  fileKey: string
+) => Promise<void | ApiError>;
+
 export type GetCustomerList = (
   api: AxiosInstance,
   customerName?: string

@@ -62,3 +62,10 @@ export interface EmiResponse {
   totalAmount: number;
   paymentStatus: string;
 }
+
+
+export enum LoanStatus {
+  ACTIVE = "ACTIVE",
+  CLOSED = "CLOSED",
+  PRE_CLOSED = "PRE_CLOSED",
+}

@@ -4,6 +4,8 @@ import useToast from "@/hooks/useToast";
 import {
   AbstractResponse,
   ApiError,
+  DeleteCustomerFile,
+  DeleteFile,
   GetCurrentUser,
   GetCustomerById,
   GetCustomerList,
@@ -228,6 +230,21 @@ export const uploadFile: UploadFile = async (api, file, entityKey) => {
   );
 };
 
+export const deleteFile: DeleteFile = async (api, fileKey) => {
+  const params = {
+    fileKey,
+  };
+  return makeRequest<void>(
+    api,
+    `/file`,
+    "deleteFile",
+    "Error occurred while deleting file",
+    "DELETE",
+    null,
+    params
+  );
+};
+
 // Customer
 export const getCustomerList: GetCustomerList = async (
   api,
@@ -276,6 +293,25 @@ export const updateCustomer: UpdateCustomer = async (api, id, data) => {
     "Error occurred while updating customer details",
     "PUT",
     data
+  );
+};
+
+export const deleteCustomerFile: DeleteCustomerFile = async (
+  api,
+  customerId,
+  fileKey
+) => {
+  const params = {
+    fileKey,
+  };
+  return makeRequest<void>(
+    api,
+    `/customer/${customerId}/file`,
+    "deleteProductImage",
+    "Error occurred while deleting customer file",
+    "DELETE",
+    null,
+    params
   );
 };
 

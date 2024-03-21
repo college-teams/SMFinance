@@ -13,7 +13,7 @@ type ReferralFormProps = {
   uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
   referralDocuments: ReferralDocumentRequest[];
   isLoading: (endpoint: string) => boolean;
-  clearDocument: (documentType: DocumentType) => void;
+  deleteFileHandler: (documentType: DocumentType) => Promise<void>
 
   register: UseFormRegister<LoanRequest>;
   getValues: UseFormGetValues<LoanRequest>;
@@ -30,7 +30,7 @@ const ReferralForm = ({
   referralDocuments,
   uploadImage,
   isLoading,
-  clearDocument,
+  deleteFileHandler,
   register,
   errors,
   isEditMode,
@@ -50,6 +50,7 @@ const ReferralForm = ({
             {...register("referral.firstName", {
               required: "First Name is required",
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.referral?.firstName &&
@@ -70,6 +71,7 @@ const ReferralForm = ({
             {...register("referral.lastName", {
               required: "Last Name is required",
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.referral?.lastName &&
@@ -93,6 +95,7 @@ const ReferralForm = ({
                 message: "Please enter valid email address!!",
               },
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.referral?.email &&
@@ -117,6 +120,7 @@ const ReferralForm = ({
                 message: "Please enter a valid phone number",
               },
             })}
+            disabled={isEditMode}
           />
           <span className="relative text-red-600 font-medium mt-2">
             {errors?.referral?.phoneNumber &&
@@ -141,7 +145,8 @@ const ReferralForm = ({
               uploadImage={uploadImage}
               loading={isLoading(DocumentType.AADHAR)}
               documentType={DocumentType.AADHAR}
-              clearDocument={clearDocument}
+              deleteFileHandler={deleteFileHandler}
+              disabled={isEditMode}
             />
           </div>
 
@@ -154,7 +159,8 @@ const ReferralForm = ({
               uploadImage={uploadImage}
               loading={isLoading(DocumentType.PAN)}
               documentType={DocumentType.PAN}
-              clearDocument={clearDocument}
+              deleteFileHandler={deleteFileHandler}
+              disabled={isEditMode}
             />
           </div>
 
@@ -167,7 +173,8 @@ const ReferralForm = ({
               uploadImage={uploadImage}
               loading={isLoading(DocumentType.RATION_CARD)}
               documentType={DocumentType.RATION_CARD}
-              clearDocument={clearDocument}
+              deleteFileHandler={deleteFileHandler}
+              disabled={isEditMode}
             />
           </div>
         </div>

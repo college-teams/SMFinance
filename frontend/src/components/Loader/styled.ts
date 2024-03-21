@@ -5,12 +5,12 @@ export const LoaderStyle = styled.div`
   width: 85px;
   height: 50px;
   background-repeat: no-repeat;
-  background-image: linear-gradient(#888 50px, transparent 0),
-    linear-gradient(#888 50px, transparent 0),
-    linear-gradient(#888 50px, transparent 0),
-    linear-gradient(#888 50px, transparent 0),
-    linear-gradient(#888 50px, transparent 0),
-    linear-gradient(#888 50px, transparent 0);
+  background-image: linear-gradient(#f3f3f3 50px, transparent 0),
+    linear-gradient(#f3f3f3 50px, transparent 0),
+    linear-gradient(#f3f3f3 50px, transparent 0),
+    linear-gradient(#f3f3f3 50px, transparent 0),
+    linear-gradient(#f3f3f3 50px, transparent 0),
+    linear-gradient(#f3f3f3 50px, transparent 0);
   background-position: 0px center, 15px center, 30px center, 45px center,
     60px center, 75px center, 90px center;
   animation: rikSpikeRoll 0.65s linear infinite alternate;
