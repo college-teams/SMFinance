@@ -35,6 +35,10 @@ export const DetailsContainer = styled.div`
     height: inherit;
     align-self: stretch;
   }
+
+  @media screen and (max-width: 500px) {
+    height: 50vh;
+      }
 `;
 
 export const CloseIcon = styled(IoMdClose)`
@@ -55,5 +59,9 @@ export const CloseIcon = styled(IoMdClose)`
   &:hover {
     opacity: 1;
     transition: 0.2s;
+  }
+
+  @media screen and (max-width: 500px) {
+    right: 1.6rem;
   }
 `;

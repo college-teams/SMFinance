@@ -14,7 +14,7 @@ const Card = ({ title, redirect_link, loading, value }: CardProps) => {
   return (
     <div
       onClick={handleClickhandler}
-      className="relative flex items-center bg-secondaryBg gap-6 py-5 px-5 rounded-lg cursor-pointer transition hover:bg-hoverSecondaryBg h-[150px] w-full sm:w-[250px]"
+      className="relative flex items-center bg-secondaryBg gap-6 py-5 px-5 rounded-lg cursor-pointer transition hover:bg-hoverSecondaryBg h-[120px] w-full sm:w-[250px]"
     >
       <div className="relative flex gap-6">
         <div>

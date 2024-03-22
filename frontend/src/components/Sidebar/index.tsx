@@ -53,7 +53,7 @@ const Sidebar = () => {
   return (
     <div className="overflow-x-hidden">
       <div className="relative">
-        <div className="relative  gap-5 items-center my-5 pl-2 mb-10 hidden sm:flex">
+        <div className="relative gap-5 items-center my-5 pl-2 mb-10 hidden sm:flex">
           <div className="relative h-[60] w-[60]">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.pngs" alt="profile" />
