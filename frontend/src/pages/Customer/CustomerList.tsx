@@ -84,7 +84,7 @@ const CustomerList = () => {
 
   return (
     <div>
-      <div className="relative my-7 flex justify-center sm:justify-between items-center gap-4 flex-wrap">
+      <div className="relative my-7 flex justify-center sm:justify-between items-center gap-4 flex-wrap gap-y-5">
         <TextSearch
           searchText={searchText}
           handleSearchTextChange={handleSearchTextChange}

@@ -129,9 +129,9 @@ const EmiInfoForm = ({
     <>
       <ConfirmationModal {...props} />
 
-      <div className="relative mt-14 w-[80%] mx-auto">
+      <div className="relative mt-14 w-full sm:w-[90%] mx-auto">
         <div className="relative flex justify-between flex-wrap items-center">
-          <div className="relative mb-8 text-lg ">
+          <div className="relative mb-8 text-lg flex items-center justify-center">
             <span>
               Total Pending Emi Amount :
               <span className="relative ml-4 tracking-wider font-semibold bg-transparent">
@@ -140,7 +140,7 @@ const EmiInfoForm = ({
             </span>
           </div>
 
-          <div className="relative mb-5 text-lg">
+          <div className="relative mb-8 text-lg flex items-center justify-center">
             <span>
               Total Paid Emi Amount :
               <span className="relative ml-4 tracking-wider font-semibold bg-transparent">
@@ -156,7 +156,7 @@ const EmiInfoForm = ({
             loanDetails?.loanStatus === LoanStatus.PRE_CLOSED ||
             loanDetails?.loanStatus === LoanStatus.CLOSED
           }
-          className="relative bg-orange-500 text-center px-6 py-2  rounded-md hover:bg-orange-600 mb-5 disabled:bg-gray-300"
+          className="relative bg-orange-500 text-center px-6 py-2  rounded-md hover:bg-orange-600 mb-7 disabled:bg-gray-300 disabled:text-black disabled:font-medium"
         >
           Pre close loan
         </button>
@@ -165,11 +165,14 @@ const EmiInfoForm = ({
             <TabsList className="w-full">
               <TabsTrigger
                 value="un_paid"
-                className="w-full  active:bg-orange-500 text-black"
+                className="w-full focus:bg-orange-500 text-black data-[state=active]:bg-red-400"
               >
                 Unpaid EMIs
               </TabsTrigger>
-              <TabsTrigger value="paid" className="w-full">
+              <TabsTrigger
+                value="paid"
+                className="w-full data-[state=active]:bg-red-400"
+              >
                 Paid EMIs
               </TabsTrigger>
             </TabsList>

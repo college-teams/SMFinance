@@ -107,7 +107,7 @@ const LoanList = () => {
 
   return (
     <div>
-      <div className="relative my-7 flex justify-between items-center flex-wrap">
+      <div className="relative my-7 flex justify-between items-center flex-wrap gap-y-5">
         <TextSearch
           searchText={searchText}
           handleSearchTextChange={handleSearchTextChange}

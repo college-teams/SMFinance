@@ -13,7 +13,7 @@ type ReferralFormProps = {
   uploadImage: (file: File, documentType: DocumentType) => Promise<void>;
   referralDocuments: ReferralDocumentRequest[];
   isLoading: (endpoint: string) => boolean;
-  deleteFileHandler: (documentType: DocumentType) => Promise<void>
+  deleteFileHandler: (documentType: DocumentType) => Promise<void>;
 
   register: UseFormRegister<LoanRequest>;
   getValues: UseFormGetValues<LoanRequest>;
@@ -35,6 +35,11 @@ const ReferralForm = ({
   errors,
   isEditMode,
 }: ReferralFormProps) => {
+  const getDocument = (documentType: DocumentType) =>
+    referralDocuments.find(
+      (document) => document.documentType === documentType
+    );
+
   return (
     <div className="relative mt-10">
       <form className="relative grid grid-cols-1 sm:grid-cols-2  gap-x-8 gap-y-3">
@@ -131,71 +136,80 @@ const ReferralForm = ({
       </form>
 
       {/* Documents */}
-      <div className="mt-10">
-        <p className="relative mb-8 text-[1.5rem] font-medium text-center">
-          Documents
-        </p>
-        <div className="flex flex-col gap-y-8 w-full md:w-[80%] mx-auto">
-          <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 h-full flex flex-col gap-y-5">
-            <label className="relative text-[1.2rem]">Aadhar</label>
-            <DragDropFile
-              document={referralDocuments.find(
-                (document) => document.documentType === DocumentType.AADHAR
-              )}
-              uploadImage={uploadImage}
-              loading={isLoading(DocumentType.AADHAR)}
-              documentType={DocumentType.AADHAR}
-              deleteFileHandler={deleteFileHandler}
-              disabled={isEditMode}
-            />
+      {getDocument(DocumentType.AADHAR) ||
+      getDocument(DocumentType.PAN) ||
+      getDocument(DocumentType.RATION_CARD) ||
+      !isEditMode ? (
+        <div className="mt-10">
+          <p className="relative mb-8 text-[1.5rem] font-medium text-center">
+            Documents
+          </p>
+          <div className="flex flex-col gap-y-8 w-full md:w-[80%] mx-auto">
+            {(getDocument(DocumentType.AADHAR) || !isEditMode) && (
+              <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 h-full flex flex-col gap-y-5">
+                <label className="relative text-[1.2rem]">Aadhar</label>
+                <DragDropFile
+                  document={getDocument(DocumentType.AADHAR)}
+                  uploadImage={uploadImage}
+                  loading={isLoading(DocumentType.AADHAR)}
+                  documentType={DocumentType.AADHAR}
+                  deleteFileHandler={deleteFileHandler}
+                  disabled={isEditMode}
+                />
+              </div>
+            )}
+
+            {(getDocument(DocumentType.PAN) || !isEditMode) && (
+              <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 flex flex-col gap-y-5">
+                <label className="relative text-[1.2rem]">Pan card</label>
+                <DragDropFile
+                  document={getDocument(DocumentType.PAN)}
+                  uploadImage={uploadImage}
+                  loading={isLoading(DocumentType.PAN)}
+                  documentType={DocumentType.PAN}
+                  deleteFileHandler={deleteFileHandler}
+                  disabled={isEditMode}
+                />
+              </div>
+            )}
+
+            {(getDocument(DocumentType.RATION_CARD) || !isEditMode) && (
+              <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 flex flex-col gap-y-5">
+                <label className="relative text-[1.2rem]">Ration card</label>
+                <DragDropFile
+                  document={getDocument(DocumentType.RATION_CARD)}
+                  uploadImage={uploadImage}
+                  loading={isLoading(DocumentType.RATION_CARD)}
+                  documentType={DocumentType.RATION_CARD}
+                  deleteFileHandler={deleteFileHandler}
+                  disabled={isEditMode}
+                />
+              </div>
+            )}
           </div>
 
-          <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 flex flex-col gap-y-5">
-            <label className="relative text-[1.2rem]">Pan card</label>
-            <DragDropFile
-              document={referralDocuments.find(
-                (document) => document.documentType === DocumentType.PAN
-              )}
-              uploadImage={uploadImage}
-              loading={isLoading(DocumentType.PAN)}
-              documentType={DocumentType.PAN}
-              deleteFileHandler={deleteFileHandler}
-              disabled={isEditMode}
-            />
-          </div>
-
-          <div className="relative bg-secondaryBg rounded-md px-5 pt-4 pb-8 flex flex-col gap-y-5">
-            <label className="relative text-[1.2rem]">Ration card</label>
-            <DragDropFile
-              document={referralDocuments.find(
-                (document) => document.documentType === DocumentType.RATION_CARD
-              )}
-              uploadImage={uploadImage}
-              loading={isLoading(DocumentType.RATION_CARD)}
-              documentType={DocumentType.RATION_CARD}
-              deleteFileHandler={deleteFileHandler}
-              disabled={isEditMode}
-            />
-          </div>
-        </div>
-
-        <div className="relative col-span-1 text-center flex items-center justify-between mt-12 ">
-          <button
-            onClick={onBack}
-            className="relative bg-orange-500 text-center px-6 py-2  rounded-md hover:bg-orange-600 mr-2"
-          >
-            Back
-          </button>
-          {!isEditMode && (
+          <div className="relative col-span-1 text-center flex items-center justify-between mt-12 ">
             <button
-              onClick={onSubmit}
-              className="relative bg-orange-500 text-center  px-6 py-2 rounded-md hover:bg-orange-600"
+              onClick={onBack}
+              className="relative bg-orange-500 text-center px-6 py-2  rounded-md hover:bg-orange-600 mr-2"
             >
-              submit
+              Back
             </button>
-          )}
+            {!isEditMode && (
+              <button
+                onClick={onSubmit}
+                className="relative bg-orange-500 text-center  px-6 py-2 rounded-md hover:bg-orange-600"
+              >
+                submit
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="relative flex items-center justify-center mt-6">
+          No Document added!!
+        </div>
+      )}
     </div>
   );
 };

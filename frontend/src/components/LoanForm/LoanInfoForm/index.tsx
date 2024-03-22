@@ -46,7 +46,6 @@ const LoanInfoForm = ({
   watch,
   clearErrors,
   setValue,
-  seletedCustomerName,
   isEditMode,
 }: LoanInfoFormProps) => {
   const loanCategory = watch("loanCategory");
@@ -80,14 +79,37 @@ const LoanInfoForm = ({
                   value={field.value}
                   onChange={(newValue: any) => {
                     field.onChange(newValue);
-                    // setSeletedCustomerId(newValue?.value);
                   }}
-                  defaultInputValue={seletedCustomerName}
                   options={customerList}
                   isSearchable={true}
                   isClearable={true}
                   isDisabled={isEditMode}
                   className="relative font-medium outline-none rounded-md mt-[1.5rem]"
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      borderColor: "#f3f3f3",
+                      background: "transparent",
+                      color: "#fff",
+                      padding: "6px",
+                      outline: "none",
+                      borderRadius: "6px",
+                      cursor: state.isDisabled ? "not-allowed" : "default",
+                    }),
+                    option: (styles, state) => ({
+                      ...styles,
+                      backgroundColor: "#151c2c",
+                      color: "#FFF",
+                      borderColor: "#f3f3f3",
+                      borderWidth: "1px",
+                      cursor: state.isDisabled ? "not-allowed" : "default",
+                      fontWeight: "normal",
+                    }),
+                    singleValue: (styles, state) => ({
+                      ...styles,
+                      color: state.isDisabled ? "#a5a5a5" : "#fff",
+                    }),
+                  }}
                 />
               </>
             )}
@@ -186,7 +208,7 @@ const LoanInfoForm = ({
                 onValueChange={field.onChange}
                 value={field.value}
               >
-                <SelectTrigger className="form_input bg-transparent h-full">
+                <SelectTrigger className="form_input bg-transparent h-full disabled:border-white disabled:opacity-80">
                   <SelectValue placeholder="Loan category" />
                 </SelectTrigger>
                 <SelectContent className="relative bg-primaryBg text-white cursor-pointer">
