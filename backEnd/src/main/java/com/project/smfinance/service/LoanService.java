@@ -6,6 +6,8 @@ import static com.project.smfinance.codes.ErrorCodes.LOAN_ALREADY_PRE_CLOSED;
 import static com.project.smfinance.codes.ErrorCodes.LOAN_NOT_FOUND;
 import static com.project.smfinance.codes.SuccessCodes.EMI_UPDATED;
 import static com.project.smfinance.codes.SuccessCodes.LOAN_CREATED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_DATA_FETCHED;
+import static com.project.smfinance.codes.SuccessCodes.LOAN_LIST_FETCHED;
 import static com.project.smfinance.codes.SuccessCodes.LOAN_UPDATED;
 
 import com.project.smfinance.entity.Customer;
@@ -27,11 +29,11 @@ import com.project.smfinance.repository.LoanRepository;
 import com.project.smfinance.repository.ReferralDocumentRepository;
 import com.project.smfinance.repository.ReferralRepository;
 import com.project.smfinance.repository.TranscationRepository;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -39,7 +41,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,8 +59,22 @@ public class LoanService {
   private final TranscationRepository transcationRepository;
 
   private static final int DAILY_EMI_LIMIT = 100;
-
   private static final int WEEKLY_EMI_LIMIT = 15;
+
+  public ApiResponse<List<LoanResponse>> getAllLoans(String customerName) {
+    Specification<Loan> specification = filterByCustomerName(customerName);
+    List<Loan> loans = loanRepository.findAll(specification);
+
+    List<LoanResponse> loanList = LoanResponse.from(loans);
+    return new ApiResponse<>(LOAN_LIST_FETCHED, AbstractResponse.StatusType.SUCCESS, loanList);
+  }
+
+  public ApiResponse<LoanResponse> getLoanDetails(Long loanId) throws BaseException {
+    Loan loan = getLoanById(loanId);
+
+    LoanResponse loanResponse = LoanResponse.from(loan);
+    return new ApiResponse<>(LOAN_DATA_FETCHED, AbstractResponse.StatusType.SUCCESS, loanResponse);
+  }
 
   @Transactional
   public ApiResponse<LoanResponse> createLoanAndGenerateEMIs(LoanRequest loanRequest)
@@ -64,8 +82,8 @@ public class LoanService {
     Referral saveReferral = saveReferralInformation(loanRequest.getReferral());
 
     List<ReferralDocument> referralDocuments =
-        saveReferralDocuments(loanRequest.getReferral().getReferralDocuments(), saveReferral);
-    saveReferral.setReferralDocuments(referralDocuments);
+        saveReferralDocuments(loanRequest.getReferral().getDocuments(), saveReferral);
+    saveReferral.setDocuments(referralDocuments);
 
     Customer customer = customerService.getCustomerById(loanRequest.getCustomerId());
     Loan loan = LoanRequest.from(loanRequest, customer, saveReferral);
@@ -126,7 +144,7 @@ public class LoanService {
         }
 
         // Delete all other pending EMIs
-        emiRepository.delete(emi);
+        emiRepository.deleteEmi(emi.getId());
       }
 
       // Update the total amount paid in the loan entity
@@ -146,6 +164,7 @@ public class LoanService {
 
     loan.setLoanStatus(Loan.LoanStatus.PRE_CLOSED);
     loan.setCloseData(LocalDate.now());
+    loan.setPreClosed(true);
     calculateTotalAmountPaid(loan);
     loanRepository.save(loan);
     return new ApiResponse<>(LOAN_UPDATED, AbstractResponse.StatusType.SUCCESS);
@@ -233,7 +252,7 @@ public class LoanService {
   }
 
   private List<ReferralDocument> saveReferralDocuments(
-      List<ReferralDocumentRequest> referralDocuments, Referral referral) {
+      List<ReferralDocumentRequest> referralDocuments, Referral referral) throws BaseException {
     List<ReferralDocument> referralDocumentsList = new ArrayList<>();
     for (ReferralDocumentRequest referralDocumentRequest : referralDocuments) {
       ReferralDocument referralDocument =
@@ -271,7 +290,7 @@ public class LoanService {
   }
 
   private void saveTransaction(Emi emi) {
-    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDateTime.now());
+    Transaction transaction = new Transaction(emi, emi.getTotalAmount(), LocalDate.now());
     transcationRepository.save(transaction);
   }
 
@@ -280,5 +299,18 @@ public class LoanService {
     BigDecimal totalAmountPaid =
         allEMIs.stream().map(Emi::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     loan.setTotalAmountPaid(totalAmountPaid);
+  }
+
+  private Specification<Loan> filterByCustomerName(String customerName) {
+    return (root, query, criteriaBuilder) -> {
+      List<Predicate> predicates = new ArrayList<>();
+      if (StringUtils.isNotBlank(customerName)) {
+        predicates.add(
+            criteriaBuilder.like(
+                criteriaBuilder.lower(root.get("customer").get("name")),
+                "%" + customerName.toLowerCase() + "%"));
+      }
+      return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    };
   }
 }

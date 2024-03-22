@@ -35,6 +35,24 @@ public class SuccessCodes extends StatusCodes {
   public static final StatusCodes LOAN_UPDATED =
       new SuccessCodes(200, HttpStatus.OK, "LOAN_UPDATED");
 
+  public static final StatusCodes LOAN_LIST_FETCHED =
+      new SuccessCodes(200, HttpStatus.OK, "LOAN_LIST_FETCHED");
+
+  public static final StatusCodes LOAN_DATA_FETCHED =
+      new SuccessCodes(200, HttpStatus.OK, "LOAN_DATA_FETCHED");
+
+  public static final StatusCodes FILE_UPLOAD_SUCCESS =
+      new SuccessCodes(200, HttpStatus.OK, "FILE_UPLOAD_SUCCESS");
+
+  public static final StatusCodes FILE_DELETE_SUCCESS =
+      new SuccessCodes(200, HttpStatus.OK, "FILE_DELETE_SUCCESS");
+
+  public static final StatusCodes TRANSACTION_LIST_FETCHED =
+      new SuccessCodes(200, HttpStatus.OK, "TRANSACTION_LIST_FETCHED");
+
+  public static final StatusCodes ENTITIES_ITEM_COUNT_FETCHED =
+      new SuccessCodes(200, HttpStatus.OK, "ENTITIES_ITEM_COUNT_FETCHED");
+
   public SuccessCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

@@ -1,144 +1,157 @@
-"use client";
+import { CustomerRequest } from "@/types/customer";
+import {
+  FieldErrors,
+  UseFormRegister,
+} from "react-hook-form";
 
-import CustomerInfoForm from "./CustomerInfo";
-import DocumentUploadForm from "./DocumentUpload";
-import { Box, Button, StepConnector, Typography, styled } from "@mui/material";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import { IoMdSettings } from "react-icons/io";
-import { IoDocumentAttachSharp } from "react-icons/io5";
-import { stepConnectorClasses } from "@mui/material/StepConnector";
-import { StepIconProps } from "@mui/material/StepIcon";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+type CustomerFormProps = {
+  onNext: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  register: UseFormRegister<CustomerRequest>;
+  errors: FieldErrors<CustomerRequest>;
+};
 
-const steps = ["Customer Information", "Document Upload"];
+const EMAIL_REGREX =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const CustomerForm = () => {
-  const router = useRouter();
-  const [activeStep, setActiveStep] = useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleSubmit = () => {
-    console.log("Customer form submitted");
-    router.push("/dashboard/customers")
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
-    [`&.${stepConnectorClasses.alternativeLabel}`]: {
-      top: 22,
-    },
-    [`&.${stepConnectorClasses.active}`]: {
-      [`& .${stepConnectorClasses.line}`]: {
-        backgroundImage:
-          "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
-      },
-    },
-    [`&.${stepConnectorClasses.completed}`]: {
-      [`& .${stepConnectorClasses.line}`]: {
-        backgroundImage:
-          "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
-      },
-    },
-    [`& .${stepConnectorClasses.line}`]: {
-      height: 3,
-      border: 0,
-      backgroundColor:
-        theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
-      borderRadius: 1,
-    },
-  }));
-
-  const ColorlibStepIconRoot = styled("div")<{
-    ownerState: { completed?: boolean; active?: boolean };
-  }>(({ theme, ownerState }) => ({
-    backgroundColor:
-      theme.palette.mode === "dark" ? theme.palette.grey[700] : "#ccc",
-    zIndex: 1,
-    color: "#fff",
-    width: 50,
-    height: 50,
-    display: "flex",
-    borderRadius: "50%",
-    justifyContent: "center",
-    alignItems: "center",
-    ...(ownerState.active && {
-      backgroundImage:
-        "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
-      boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
-    }),
-    ...(ownerState.completed && {
-      backgroundImage:
-        "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
-    }),
-  }));
-
-  function ColorlibStepIcon(props: StepIconProps) {
-    const { active, completed, className } = props;
-
-    const icons: { [index: string]: React.ReactElement } = {
-      1: <IoMdSettings />,
-      2: <IoDocumentAttachSharp />,
-    };
-
-    return (
-      <ColorlibStepIconRoot
-        ownerState={{ completed, active }}
-        className={className}
-      >
-        {icons[String(props.icon)]}
-      </ColorlibStepIconRoot>
-    );
-  }
-
-  const getStepContent = (step: number) => {
-    switch (step) {
-      case 0:
-        return <CustomerInfoForm onNext={handleNext} />;
-      case 1:
-        return (
-          <DocumentUploadForm onBack={handleBack} onSubmit={handleSubmit} />
-        );
-      default:
-        console.log("Unknown step");
-        return <CustomerInfoForm onNext={handleNext} />; // Error handling
-    }
-  };
-
+const CustomerForm = ({ onNext, errors, register }: CustomerFormProps) => {
   return (
-    <>
-      <div className="w-full hidden md:block">
-        <Stepper
-          className="relative text-white w-full"
-          alternativeLabel
-          activeStep={activeStep}
-          connector={<ColorlibConnector />}
-        >
-          {steps.map((label) => (
-            <Step className="relative text-white" key={label}>
-              <StepLabel
-                className="relative text-white"
-                StepIconComponent={ColorlibStepIcon}
-              >
-                <span className="relative text-white">{label}</span>
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </div>
+    <div className="mt-10">
+      <p className="relative text-2xl font-medium my-5 sm:hidden">
+        Add Customer
+      </p>
+      <form className="relative grid grid-cols-1 sm:grid-cols-2  gap-x-8 gap-y-3">
+        <div className="form_container">
+          <label className="form_label" htmlFor="name">
+            Name*
+          </label>
+          <input
+            className="form_input"
+            type="text"
+            id="name"
+            placeholder="Name"
+            {...register("name", {
+              required: "Name is required",
+            })}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.name &&
+              (errors?.name?.message || "Please enter valid input data")}
+          </span>
+        </div>
+        <div className="form_container">
+          <label className="form_label" htmlFor="email">
+            Email
+          </label>
+          <input
+            className="form_input"
+            type="email"
+            id="email"
+            placeholder="Email"
+            {...register("email", {
+              pattern: {
+                value: EMAIL_REGREX,
+                message: "Please enter valid email address!!",
+              },
+            })}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.email &&
+              (errors?.email?.message || "Please enter valid input data")}
+          </span>
+        </div>
+        <div className="form_container">
+          <label className="form_label" htmlFor="phone">
+            Phone number*
+          </label>
+          <input
+            className="form_input"
+            type="text"
+            id="phone"
+            placeholder="Phone Number"
+            {...register("phoneNumber", {
+              required: "Phone Number is required",
+              pattern: {
+                value: /^\+?\d[\d -]{8,12}\d$/,
+                message: "Please enter a valid phone number!!!",
+              },
+            })}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.phoneNumber &&
+              (errors?.phoneNumber?.message || "Please enter valid input data")}
+          </span>
+        </div>
+        <div className="form_container">
+          <label className="form_label" htmlFor="alternate_phone">
+            Alternate phone number
+          </label>
+          <input
+            className="form_input"
+            type="text"
+            id="alternate_phone"
+            placeholder="Alternate phone Number"
+            {...register("altPhoneNumber", {
+              pattern: {
+                value: /^\+?\d[\d -]{8,12}\d$/,
+                message: "Please enter a valid alternate phone number!!",
+              },
+            })}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.altPhoneNumber &&
+              (errors?.altPhoneNumber?.message ||
+                "Please enter valid input data")}
+          </span>
+        </div>
 
-      <div className="relative max-w-full md:max-w-[90%] mx-auto">
-        {getStepContent(activeStep)}
-      </div>
-    </>
+        <div className="form_container">
+          <label className="form_label" htmlFor="occupation">
+            Occupation*
+          </label>
+          <input
+            className="form_input"
+            type="text"
+            id="occupation"
+            placeholder="Occupation"
+            {...register("occupation", {
+              required: "Occupation is required",
+            })}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.occupation &&
+              (errors?.occupation?.message || "Please enter valid input data")}
+          </span>
+        </div>
+        <div />
+        <div className="form_container col-span-1 sm:col-span-2 items-start">
+          <label className="form_label" htmlFor="address">
+            Address*
+          </label>
+          <textarea
+            rows={6}
+            className="relative bg-transparent border rounded-md p-3 w-full md:w-[49%] border-lightWhite focus:border-white active:border-white"
+            id="address"
+            placeholder="Address"
+            {...register("address", {
+              required: "Address is required",
+            })}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.address &&
+              (errors?.address?.message || "Please enter valid input data")}
+          </span>
+        </div>
+
+        <div className="relative col-span-1 sm:col-span-2  mt-4 flex items-end">
+          <button
+            onClick={onNext}
+            className="relative bg-orange-500 text-center ml-auto px-6 py-2 rounded-md hover:bg-orange-600"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -1,6 +1,7 @@
 package com.project.smfinance.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -18,18 +19,21 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Referral extends BaseEntity {
 
-  private String referralFirstName;
+  @Column(nullable = false)
+  private String firstName;
 
-  private String referralLastName;
+  @Column(nullable = false)
+  private String lastName;
 
-  private String referralEmail;
+  private String email;
 
-  private String referralPhoneNumber;
+  @Column(nullable = false)
+  private String phoneNumber;
 
   @OneToMany(
       mappedBy = "referral",
       cascade = CascadeType.ALL,
       orphanRemoval = true,
       fetch = FetchType.EAGER)
-  private List<ReferralDocument> referralDocuments = new ArrayList<>();
+  private List<ReferralDocument> documents = new ArrayList<>();
 }

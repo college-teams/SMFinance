@@ -36,7 +36,7 @@ public class AdminService {
     Optional<Admin> searchByEmail = adminRepository.findByEmail("smfinance@gmail.com");
     if (searchByEmail.isEmpty()) {
       Admin admin = new Admin();
-      admin.setUsername("Rahul");
+      admin.setName("Rahul");
       admin.setEmail("smfinance@gmail.com");
       admin.setPassword(passwordEncoder.encode("Crnational6@"));
       adminRepository.save(admin);

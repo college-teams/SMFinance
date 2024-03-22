@@ -7,11 +7,19 @@ import com.project.smfinance.models.loan.LoanResponse;
 import com.project.smfinance.models.response.ApiResponse;
 import com.project.smfinance.service.LoanService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/loan")
@@ -19,6 +27,18 @@ import org.springframework.web.bind.annotation.*;
 public class LoanController {
 
   private final LoanService loanService;
+
+  @GetMapping("/")
+  public ResponseEntity<ApiResponse<List<LoanResponse>>> getLoanList(
+      @RequestParam(name = "customerName", defaultValue = "") String customerName) {
+    return new ResponseEntity<>(loanService.getAllLoans(customerName), HttpStatus.OK);
+  }
+
+  @GetMapping("/{loanId}")
+  public ResponseEntity<ApiResponse<LoanResponse>> getLoanDetails(@PathVariable long loanId)
+      throws BaseException {
+    return new ResponseEntity<>(loanService.getLoanDetails(loanId), HttpStatus.OK);
+  }
 
   @PostMapping("/")
   public ResponseEntity<ApiResponse<LoanResponse>> createLoan(

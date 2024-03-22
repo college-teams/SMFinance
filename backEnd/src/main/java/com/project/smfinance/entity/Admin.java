@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class Admin extends BaseEntity implements UserDetails {
 
   @Column(nullable = false)
-  private String username;
+  private String name;
 
   @Column(nullable = false)
   private String email;

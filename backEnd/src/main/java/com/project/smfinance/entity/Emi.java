@@ -1,5 +1,7 @@
 package com.project.smfinance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,18 +22,24 @@ import lombok.Setter;
 public class Emi extends BaseEntity {
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "loanId")
   private Loan loan;
 
+  @Column(nullable = false)
   private BigDecimal emiAmount;
 
+  @Column(nullable = false)
   private LocalDate paymentDueDate;
 
+  @Column(nullable = false)
   private BigDecimal penaltyAmount;
 
+  @Column(nullable = false)
   private BigDecimal totalAmount;
 
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private PaymentStatus paymentStatus;
 
   public enum PaymentStatus {

@@ -2,9 +2,14 @@ package com.project.smfinance.models.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.smfinance.entity.Customer;
+import com.project.smfinance.entity.CustomerDocument;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -15,15 +20,13 @@ import lombok.*;
 public class CustomerResponse {
 
   private Long id;
-  private String customerName;
-  private String customerPhoneNumber;
-  private String customerAltNumber;
-  private String customerAddress;
-  private String aadhaarNumber;
-  private String panNumber;
-  private String rationNumber;
-  private String customerEmail;
-  private String customerOccupation;
+  private String name;
+  private String phoneNumber;
+  private String altPhoneNumber;
+  private String address;
+  private String email;
+  private String occupation;
+  private List<CustomerDocument> documents;
 
   public static List<CustomerResponse> from(List<Customer> customers) {
     return customers.stream().map(CustomerResponse::from).collect(Collectors.toList());
@@ -32,14 +35,13 @@ public class CustomerResponse {
   public static CustomerResponse from(Customer customer) {
     return CustomerResponse.builder()
         .id(customer.getId() > 0 ? customer.getId() : null)
-        .customerName(customer.getCustomerName())
-        .customerPhoneNumber(customer.getCustomerPhoneNumber())
-        .customerAddress(customer.getCustomerAddress())
-        .aadhaarNumber(customer.getAadhaarNumber())
-        .panNumber(customer.getPanNumber())
-        .rationNumber(customer.getRationNumber())
-        .customerEmail(customer.getCustomerEmail())
-        .customerOccupation(customer.getCustomerOccupation())
+        .name(customer.getName())
+        .phoneNumber(customer.getPhoneNumber())
+        .altPhoneNumber(customer.getAltPhoneNumber())
+        .address(customer.getAddress())
+        .email(customer.getEmail())
+        .occupation(customer.getOccupation())
+        .documents(customer.getDocuments())
         .build();
   }
 }
