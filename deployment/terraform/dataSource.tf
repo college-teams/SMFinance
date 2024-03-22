@@ -25,5 +25,5 @@ data "aws_ami" "amzlinux" {
     values = ["test"]
   }
 
-  owners = ["689413200757"]
+  owners = ["533267078004"]
 }

@@ -10,13 +10,13 @@ terraform {
 }
 
 provider "aws" {
-  profile = "default"
+  profile = "smf"
   region  = var.aws_region
 }
 
 terraform {
   backend "s3" {
-    bucket = "smfinance-state-file"
+    bucket = "smfinance-state"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo bash -c "cat > /etc/abicoirr-api/environment.properties <<EOF
+sudo bash -c "cat > /etc/smfinance-api/environment.properties <<EOF
     ENVIRONMENT=prod
 EOF"
 
@@ -10,6 +10,6 @@ EOF"
 #     exit 1
 # fi
 
-# sudo bash -c "cat > /etc/abicoirr-api/environment.properties <<EOF
+# sudo bash -c "cat > /etc/smfinance-api/environment.properties <<EOF
 #     ENVIRONMENT=$DEPLOYMENT_ENV_NAME
 # EOF"

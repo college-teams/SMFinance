@@ -23,7 +23,7 @@ sudo chmod 755 -R /etc/nginx/sites-available/
 sudo touch  /etc/nginx/sites-available/html
 
 # Create or edit the Nginx server block configuration
-sudo cp $INSTALL_DIR/abicoirr-ui.service /etc/nginx/sites-available/html
+sudo cp $INSTALL_DIR/smfinance-ui.service /etc/nginx/sites-available/html
 
 # Test the Nginx configuration
 sudo nginx -t
@@ -31,15 +31,15 @@ sudo nginx -t
 # Create a symbolic link to enable the HTML configuration
 sudo ln -s /etc/nginx/sites-available/html /etc/nginx/sites-enabled/
 
-sudo mkdir -p /etc/abicoirr-ui
-sudo chown ${USER}:${USER} /etc/abicoirr-ui/index.html
-sudo chown ${USER}:${USER} /etc/abicoirr-ui/
+sudo mkdir -p /etc/smfinance-ui
+sudo chown ${USER}:${USER} /etc/smfinance-ui/index.html
+sudo chown ${USER}:${USER} /etc/smfinance-ui/
 
-sudo bash -c 'cat > /etc/abicoirr-ui/index.html <<EOF
+sudo bash -c 'cat > /etc/smfinance-ui/index.html <<EOF
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Abicoirr</title>
+        <title>SMfinance</title>
     </head>
     <body>
         <h1>Site Under Maintenance</h1>

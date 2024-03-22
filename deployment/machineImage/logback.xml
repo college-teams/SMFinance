@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
-    <property name="FILE_PATH" value="/etc/abicoirr-api/logs/app.log" />
+    <property name="FILE_PATH" value="/etc/smfinance-api/logs/app.log" />
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -49,7 +49,7 @@
 <!-- 
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
-    <property name="FILE_PATH" value="/etc/abicoirr-api/logs/app.log" />
+    <property name="FILE_PATH" value="/etc/smfinance-api/logs/app.log" />
 
   <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

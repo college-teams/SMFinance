@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "file_bucket" {
-  bucket        = "smfinance-state-file"
+  bucket        = "smfinance-state"
   force_destroy = true
 
   tags = {

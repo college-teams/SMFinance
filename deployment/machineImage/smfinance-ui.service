@@ -4,7 +4,7 @@ server {
 
     server_name your_domain_or_server_ip; # Replace with your actual domain or IP
 
-    root /etc/abicoirr-ui;
+    root /etc/smfinance-ui;
     index index.html;
 
     location / {

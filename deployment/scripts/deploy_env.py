@@ -6,6 +6,7 @@ import subprocess
 import shlex
 import boto3
 import paramiko
+PROFILE_NAME = 'smf'  # Replace 'smf' with your actual profile name
 
 
 def upload_jar_to_remote(host, username, public_key_path, local_jar_path, remote_dir):
@@ -30,14 +31,14 @@ def upload_jar_to_remote(host, username, public_key_path, local_jar_path, remote
 
         local_setup = os.path.join(parent_directory, "deployment", "machineImage", "environment.properties")
 
-        ssh_client.exec_command(f"sudo chown ${username}:${username} /etc/abicoirr-api/")
-        ssh_client.exec_command("rm -rf /etc/abicoirr-api/*.jar")
-        ssh_client.exec_command("rm -rf /etc/abicoirr-api/environment.properties")
+        ssh_client.exec_command(f"sudo chown ${username}:${username} /etc/smfinance-api/")
+        ssh_client.exec_command("rm -rf /etc/smfinance-api/*.jar")
+        ssh_client.exec_command("rm -rf /etc/smfinance-api/environment.properties")
 
         sftp.put(local_setup, f"{remote_dir}/environment.properties")
 
-        sftp.put(local_jar_path, f"{remote_dir}/abicoirr-0.0.1-SNAPSHOT.jar")
-        ssh_client.exec_command("sudo systemctl restart abicoirr-api.service")
+        sftp.put(local_jar_path, f"{remote_dir}/smfinance-0.0.1-SNAPSHOT.jar")
+        ssh_client.exec_command("sudo systemctl restart smfinance-api.service")
 
         sftp.close()
         ssh_client.close()
@@ -65,7 +66,7 @@ def upload_frontEndFiles_to_remote(host, username, public_key_path, local_dir, r
 
         ssh_client.exec_command(f"sudo chown ${username}:${username} {remote_dir}")
 
-        ssh_client.exec_command("rm -rf /etc/abicoirr-ui/*")
+        ssh_client.exec_command("rm -rf /etc/smfinance-ui/*")
 
         for root, dirs, files in os.walk(local_dir):
             for file in files:
@@ -91,7 +92,8 @@ def upload_frontEndFiles_to_remote(host, username, public_key_path, local_dir, r
 
 
 def get_asg_instances(asg_name, region):
-    client = boto3.client('autoscaling', region_name=region)
+    session = boto3.Session(profile_name=PROFILE_NAME)
+    client = session.client('autoscaling', region_name=region)
     response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_name])
 
     instances = []
@@ -103,7 +105,8 @@ def get_asg_instances(asg_name, region):
 
 
 def get_instance_hostnames(instance_ids, region):
-    ec2_client = boto3.client('ec2', region_name=region)
+    session = boto3.Session(profile_name=PROFILE_NAME)
+    ec2_client = session.client('ec2', region_name=region)
     response = ec2_client.describe_instances(InstanceIds=instance_ids)
 
     hostnames = []
@@ -178,20 +181,24 @@ def main():
         print("Fetch instance host names")
 
         region = 'us-east-1'
+        
+        # Create a session with your AWS profile
+        session = boto3.Session(profile_name=PROFILE_NAME)
+        
         instance_ids = get_asg_instances("Instance_asg", region)
         hostnames = get_instance_hostnames(instance_ids, region)
         print(hostnames)
 
         username = 'ec2-user'
         public_key_path = '~/.ssh/id_rsa.pub'
-        local_jar_path = os.path.join(backend_path, "target", "abicoirr-0.0.1-SNAPSHOT.jar")
-        remote_dir = '/etc/abicoirr-api'
+        local_jar_path = os.path.join(backend_path, "target", "smfinance-0.0.1-SNAPSHOT.jar")
+        remote_dir = '/etc/smfinance-api'
 
         for host in hostnames:
             upload_jar_to_remote(host, username, public_key_path, local_jar_path, remote_dir)
 
         local_frontend_dist = os.path.join(frontend_path, "dist")
-        remote_frontend_dir = '/etc/abicoirr-ui/'
+        remote_frontend_dir = '/etc/smfinance-ui/'
 
         for host in hostnames:
             upload_frontEndFiles_to_remote(host, username, public_key_path, local_frontend_dist, remote_frontend_dir)

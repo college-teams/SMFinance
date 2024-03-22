@@ -2,10 +2,12 @@ import boto3
 
 REGION = 'us-east-1'
 ASG_NAME = "Instance_asg"
+PROFILE_NAME = 'smf'  # Replace 'smf' with your actual profile name
 
 
 def get_instance_hostnames(instance_ids):
-    ec2_client = boto3.client('ec2', region_name=REGION)
+    session = boto3.Session(profile_name=PROFILE_NAME)
+    ec2_client = session.client('ec2', region_name=REGION)
     response = ec2_client.describe_instances(InstanceIds=instance_ids)
 
     hostnames = []
@@ -17,7 +19,8 @@ def get_instance_hostnames(instance_ids):
 
 
 def get_asg_instances():
-    client = boto3.client('autoscaling', region_name=REGION)
+    session = boto3.Session(profile_name=PROFILE_NAME)
+    client = session.client('autoscaling', region_name=REGION)
     response = client.describe_auto_scaling_groups(AutoScalingGroupNames=[ASG_NAME])
 
     instances = []

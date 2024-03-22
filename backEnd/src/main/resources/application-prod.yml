@@ -1,13 +1,14 @@
 spring:
   jpa:
     hibernate:
+      ddl-auto: update
       properties:
         hibernate:
           dialect: org.hibernate.dialect.MySQL5Dialect
           format_sql: true
     show-sql: true
   datasource:
-    url: jdbc:mysql://test-db.ctkugamfpuak.us-east-1.rds.amazonaws.com:3306/abicoirr?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://test-db.ctu64kc4oecx.us-east-1.rds.amazonaws.com:3306/smfinance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: WmDlcwrbp4iAJ3Fh
     password: q$tlLjhGRSb*
 logging:

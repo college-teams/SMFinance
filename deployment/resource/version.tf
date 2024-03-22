@@ -10,6 +10,6 @@ terraform {
 }
 
 provider "aws" {
-  profile = "default"
+  profile = "smf"
   region  = var.aws_region
 }
