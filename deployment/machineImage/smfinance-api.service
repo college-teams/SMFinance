@@ -1,0 +1,16 @@
+[Unit]
+Description=Backend Smfinance Application
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ec2-user
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/java -Dlogging.config=/etc/smfinance-api/logback.xml -jar /etc/smfinance-api/smfinance-0.0.1-SNAPSHOT.jar
+EnvironmentFile=/etc/smfinance-api/environment.properties
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
