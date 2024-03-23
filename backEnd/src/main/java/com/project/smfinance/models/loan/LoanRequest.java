@@ -26,7 +26,7 @@ public class LoanRequest {
 
   @NotNull private BigDecimal interestAmount;
 
-  private int customerPreference;
+  private Integer customerPreference;
 
   private LocalDate startDate = LocalDate.now();
 
@@ -44,6 +44,7 @@ public class LoanRequest {
     loan.setInterestAmount(loanRequest.getInterestAmount());
     loan.setLoanStatus(Loan.LoanStatus.ACTIVE);
     loan.setPreClosed(false);
+    loan.setCustomerPreference(loanRequest.getCustomerPreference());
     loan.setReferral(referral);
     return loan;
   }

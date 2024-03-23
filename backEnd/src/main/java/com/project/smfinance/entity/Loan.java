@@ -49,6 +49,8 @@ public class Loan extends BaseEntity {
 
   private boolean preClosed;
 
+  private Integer customerPreference;
+
   @OneToOne
   @JoinColumn(name = "referral_id")
   private Referral referral;
