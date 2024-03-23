@@ -41,6 +41,8 @@ public class LoanResponse {
 
   private boolean preClosed;
 
+  private Integer customerPreference;
+
   private Referral referral;
 
   private List<Emi> emis;
@@ -62,6 +64,7 @@ public class LoanResponse {
         .loanStatus(loan.getLoanStatus())
         .totalAmountPaid(loan.getTotalAmountPaid())
         .preClosed(loan.isPreClosed())
+        .customerPreference(loan.getCustomerPreference())
         .referral(loan.getReferral())
         .emis(loan.getEmis())
         .build();
