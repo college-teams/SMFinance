@@ -410,12 +410,17 @@ const SaveLoan = () => {
 
   return (
     <div className="mt-10">
-      {loading && (
-        <div className="absolute left-[45%] mt-[12rem] z-[1000]">
-          <Backdrop />
-          <Loader />
-        </div>
-      )}
+       {loading &&
+        !(
+          isLoading(DocumentType.AADHAR) ||
+          isLoading(DocumentType.PAN) ||
+          isLoading(DocumentType.RATION_CARD)
+        ) && (
+          <div className="absolute left-[45%] mt-[12rem] z-[1000]">
+            <Backdrop />
+            <Loader />
+          </div>
+        )}
       <>
         <div className="w-full hidden md:block">
           <Stepper

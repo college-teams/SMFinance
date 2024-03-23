@@ -42,6 +42,9 @@ const ReferralForm = ({
 
   return (
     <div className="relative mt-10">
+      <p className="relative text-2xl font-medium my-5 md:hidden">
+        Referral information
+      </p>
       <form className="relative grid grid-cols-1 sm:grid-cols-2  gap-x-8 gap-y-3">
         <div className="form_container">
           <label className="form_label" htmlFor="firstName">
@@ -187,29 +190,29 @@ const ReferralForm = ({
               </div>
             )}
           </div>
-
-          <div className="relative col-span-1 text-center flex items-center justify-between mt-12 ">
-            <button
-              onClick={onBack}
-              className="relative bg-orange-500 text-center px-6 py-2  rounded-md hover:bg-orange-600 mr-2"
-            >
-              Back
-            </button>
-            {!isEditMode && (
-              <button
-                onClick={onSubmit}
-                className="relative bg-orange-500 text-center  px-6 py-2 rounded-md hover:bg-orange-600"
-              >
-                submit
-              </button>
-            )}
-          </div>
         </div>
       ) : (
         <div className="relative flex items-center justify-center mt-6">
           No Document added!!
         </div>
       )}
+
+      <div className="relative col-span-1 text-center flex items-center justify-between mt-12 ">
+        <button
+          onClick={onBack}
+          className="relative bg-orange-500 text-center px-6 py-2  rounded-md hover:bg-orange-600 mr-2"
+        >
+          Back
+        </button>
+        {!isEditMode && (
+          <button
+            onClick={onSubmit}
+            className="relative bg-orange-500 text-center  px-6 py-2 rounded-md hover:bg-orange-600"
+          >
+            submit
+          </button>
+        )}
+      </div>
     </div>
   );
 };

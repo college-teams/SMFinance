@@ -46,6 +46,7 @@ const SaveCustomer = () => {
     formState: { errors },
   } = useForm<CustomerRequest | CustomerResponse>({ mode: "onChange" });
 
+  const isEditMode = customerId != null;
   const [activeStep, setActiveStep] = useState(0);
   const [customerDocuments, setCustomerDocuments] = useState<
     CustomerDocumentRequest[]
@@ -232,6 +233,7 @@ const SaveCustomer = () => {
             onNext={handleNext}
             register={register}
             errors={errors}
+            isEditMode={isEditMode}
           />
         );
       case 1:
@@ -252,6 +254,7 @@ const SaveCustomer = () => {
             onNext={handleNext}
             register={register}
             errors={errors}
+            isEditMode={isEditMode}
           />
         ); // Error handling
     }

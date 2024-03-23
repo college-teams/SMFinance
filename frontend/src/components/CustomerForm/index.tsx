@@ -1,23 +1,26 @@
 import { CustomerRequest } from "@/types/customer";
-import {
-  FieldErrors,
-  UseFormRegister,
-} from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 type CustomerFormProps = {
   onNext: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   register: UseFormRegister<CustomerRequest>;
   errors: FieldErrors<CustomerRequest>;
+  isEditMode: boolean;
 };
 
 const EMAIL_REGREX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const CustomerForm = ({ onNext, errors, register }: CustomerFormProps) => {
+const CustomerForm = ({
+  onNext,
+  errors,
+  register,
+  isEditMode,
+}: CustomerFormProps) => {
   return (
     <div className="mt-10">
       <p className="relative text-2xl font-medium my-5 sm:hidden">
-        Add Customer
+        {isEditMode ? "Edit" : "Add"} Customer
       </p>
       <form className="relative grid grid-cols-1 sm:grid-cols-2  gap-x-8 gap-y-3">
         <div className="form_container">

@@ -39,25 +39,25 @@ const DashboardHome = () => {
       title: "Total Customers",
       redirect_link: "/dashboard/customers",
       showStats: false,
-      value: `${entityItemsCount?.totalCustomers}`,
+      value: `${entityItemsCount?.totalCustomers || 0}`,
     },
     {
       title: "Total loans",
       redirect_link: "/dashboard/loans",
       showStats: true,
-      value: `${entityItemsCount?.totalLoans}`,
+      value: `${entityItemsCount?.totalLoans || 0}`,
     },
     {
       title: "Today Due pending",
       redirect_link: "/dashboard/loans",
       showStats: true,
-      value: `₹${entityItemsCount?.totalDuePending}`,
+      value: `₹${entityItemsCount?.totalDuePending || 0}`,
     },
     {
       title: "Today collections",
       redirect_link: "/dashboard/transactions",
       showStats: true,
-      value: `₹${entityItemsCount?.todayCollections}`,
+      value: `₹${entityItemsCount?.todayCollections || 0}`,
     },
   ];
 

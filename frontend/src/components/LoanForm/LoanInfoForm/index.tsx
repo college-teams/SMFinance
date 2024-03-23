@@ -60,7 +60,7 @@ const LoanInfoForm = ({
   return (
     <div className="mt-10">
       <p className="relative text-2xl font-medium my-5 sm:hidden">
-        Create Loan
+        {isEditMode ? "View" : "Add"} Loan
       </p>
       <form className="relative grid grid-cols-1 sm:grid-cols-2  gap-x-8 gap-y-3">
         <div className="relative">
