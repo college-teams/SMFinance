@@ -116,6 +116,39 @@ def get_instance_hostnames(instance_ids, region):
 
     return hostnames
 
+def get_ec2_instances_by_tag(tag_key, tag_value, region):
+    session = boto3.Session(profile_name=PROFILE_NAME)
+    ec2_client = session.client('ec2', region_name=region)
+    response = ec2_client.describe_instances(
+        Filters=[
+             {
+                'Name': f'tag:{tag_key}',
+                'Values': [tag_value]
+            }
+        ]
+    )
+
+    instances = []
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            instances.append(instance['InstanceId'])
+            
+    return instances
+
+def get_instance_public_ips(instance_ids, region):
+    session = boto3.Session(profile_name=PROFILE_NAME)
+    ec2_client = session.client('ec2', region_name=region)
+    response = ec2_client.describe_instances(InstanceIds=instance_ids)
+
+    public_ips = []
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            public_ip = instance.get('PublicIpAddress', '')
+            if public_ip:
+                public_ips.append(public_ip)
+            
+    return public_ips
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -130,7 +163,8 @@ def parse_args():
 
 def build_be(backendPath):
     print(f"Building backend from this path {backendPath}")
-    maven_command = "mvn clean install -DENVIRONMENT=prod"
+    maven_command = "mvn clean install"
+    # maven_command = "mvn clean install -DENVIRONMENT=prod"
     run_custom_command(backendPath, maven_command)
 
 
@@ -181,29 +215,27 @@ def main():
         print("Fetch instance host names")
 
         region = 'us-east-1'
-        
-        # Create a session with your AWS profile
-        session = boto3.Session(profile_name=PROFILE_NAME)
-        
-        instance_ids = get_asg_instances("Instance_asg", region)
-        hostnames = get_instance_hostnames(instance_ids, region)
-        print(hostnames)
+         # instance_ids = get_asg_instances("Instance_asg", region)
+        # hostnames = get_instance_hostnames(instance_ids, region)
+        instance_ids = get_ec2_instances_by_tag('Name', 'Test Ec2 machine', region)
+        public_ips = get_instance_public_ips(instance_ids, region)
+        print("public IP's" ,public_ips)
 
         username = 'ec2-user'
         public_key_path = '~/.ssh/id_rsa.pub'
         local_jar_path = os.path.join(backend_path, "target", "smfinance-0.0.1-SNAPSHOT.jar")
         remote_dir = '/etc/smfinance-api'
 
-        for host in hostnames:
-            upload_jar_to_remote(host, username, public_key_path, local_jar_path, remote_dir)
+        for ip_address in public_ips:
+            upload_jar_to_remote(ip_address, username, public_key_path, local_jar_path, remote_dir)
 
         local_frontend_dist = os.path.join(frontend_path, "dist")
         remote_frontend_dir = '/etc/smfinance-ui/'
 
-        for host in hostnames:
-            upload_frontEndFiles_to_remote(host, username, public_key_path, local_frontend_dist, remote_frontend_dir)
+        for ip_address in public_ips:
+            upload_frontEndFiles_to_remote(ip_address, username, public_key_path, local_frontend_dist, remote_frontend_dir)
 
-        message = f"All the files uploaded successfully to {', '.join(hostnames)}"
+        message = f"All the files uploaded successfully to {', '.join(public_ips)}"
         print(message)
     except Exception as e:
         print(f"An error occurred: {e}")
