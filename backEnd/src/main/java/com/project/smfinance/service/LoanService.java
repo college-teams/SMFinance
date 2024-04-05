@@ -106,6 +106,7 @@ public class LoanService {
     }
 
     emi.setPaymentStatus(emiUpdateRequest.getStatus());
+    emi.setPaymentType(emiUpdateRequest.getPaymentType());
 
     saveTransaction(emi);
 

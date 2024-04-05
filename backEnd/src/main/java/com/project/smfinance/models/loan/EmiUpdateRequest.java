@@ -15,4 +15,6 @@ public class EmiUpdateRequest {
   @NotNull private long customerId;
 
   @NotNull private Emi.PaymentStatus status;
+
+  @NotNull private Emi.PaymentType paymentType;
 }

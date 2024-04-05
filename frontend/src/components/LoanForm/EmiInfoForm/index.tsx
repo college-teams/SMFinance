@@ -1,17 +1,19 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmiResponse, LoanResponse, LoanStatus } from "@/types/loan";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Table from "@/components/Table";
 import { Column } from "react-table";
 import { ConfirmationModal } from "@/components/ConfirmModal";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
 import { format } from "date-fns";
+import Modal from "@/components/Modal";
+import { CloseIcon, DetailsContainer, Wrapper } from "./styled";
 
 type EmiInfoFormProps = {
   onNext: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   onBack: () => void;
   emis: EmiResponse[];
-  updateEMI: (emiId: number) => Promise<void>;
+  updateEMI: (emiId: number, paymentType: string) => Promise<void>;
   handleLoanPreClose: () => Promise<void>;
   loanDetails: LoanResponse | undefined;
 };
@@ -25,6 +27,9 @@ const EmiInfoForm = ({
   loanDetails,
 }: EmiInfoFormProps) => {
   const [props, activateConfirmModal] = useConfirmModal();
+  const [paymentTypeModalOpen, setPaymentTypeModalOpen] = useState(false);
+  const [selectedEmiId, setSelectedEmiId] = useState<number>(-1);
+  const [selectedEmiDueDate, setSelectedEmiDueDate] = useState("");
 
   // Filter unpaid EMIs
   const unpaidEmis = useMemo(
@@ -48,17 +53,31 @@ const EmiInfoForm = ({
     [paidEmis]
   );
 
-  const updateEmiStatus = async (emiId: number, dueData: string) => {
-    const formattedDate = format(new Date(dueData), "MMMM dd, yyyy");
+  const handlePaymentConfirmation = async (type: string) => {
+    setPaymentTypeModalOpen(false);
 
+    const formattedDate = format(new Date(selectedEmiDueDate), "MMMM dd, yyyy");
     if (
       !(await activateConfirmModal(
         `Are you sure you want to mark the EMI for ${formattedDate}, as paid?`
       ))
     ) {
+      cleanUpState();
       return;
     }
-    updateEMI(emiId);
+
+    await updateEMI(selectedEmiId, type);
+
+    cleanUpState();
+  };
+
+  const updateEmiStatusConfirmation = async (
+    emiId: number,
+    dueDate: string
+  ) => {
+    setPaymentTypeModalOpen(true);
+    setSelectedEmiId(emiId);
+    setSelectedEmiDueDate(dueDate);
   };
 
   const columns = useMemo<Column<EmiResponse>[]>(
@@ -70,6 +89,10 @@ const EmiInfoForm = ({
       {
         Header: "Payment Due Date",
         accessor: "paymentDueDate",
+      },
+      {
+        Header: "Payment type",
+        accessor: "paymentType",
       },
       {
         Header: "Penalty Amount",
@@ -100,7 +123,7 @@ const EmiInfoForm = ({
             <button
               className="bg-green-500 text-white px-3 py-1 rounded text-md"
               onClick={() =>
-                updateEmiStatus(emiId, row.original.paymentDueDate)
+                updateEmiStatusConfirmation(emiId, row.original.paymentDueDate)
               }
             >
               Paid
@@ -111,6 +134,11 @@ const EmiInfoForm = ({
     ],
     []
   );
+
+  const cleanUpState = (): void => {
+    setSelectedEmiDueDate("");
+    setSelectedEmiId(0);
+  };
 
   const preCloseLoan = async () => {
     if (
@@ -124,10 +152,40 @@ const EmiInfoForm = ({
   };
 
   const initialState = { hiddenColumns: ["id"] };
+  const initialPaidEmiState = { hiddenColumns: ["paymentType"] };
 
   return (
     <>
       <ConfirmationModal {...props} />
+
+      <Modal
+        open={paymentTypeModalOpen}
+        content={
+          <Wrapper>
+            <DetailsContainer className="border">
+              <CloseIcon onClick={() => setPaymentTypeModalOpen(false)} />
+              <h2 className="mb-3 font-medium capitalize text-[1.4rem]">
+                Payment Type Confirmation
+              </h2>
+              <p className="mb-6 text-sm">Please confirm your payment type:</p>
+              <div className="flex justify-between items-center">
+                <button
+                  className="bg-blue-400 hover:bg-blue-600 transition-all text-white px-3 py-1 rounded text-md"
+                  onClick={() => handlePaymentConfirmation("CASH")}
+                >
+                  Cash
+                </button>
+                <button
+                  className="bg-blue-400 hover:bg-blue-600 transition-all text-white px-3 py-1 rounded text-md"
+                  onClick={() => handlePaymentConfirmation("ONLINE")}
+                >
+                  Online
+                </button>
+              </div>
+            </DetailsContainer>
+          </Wrapper>
+        }
+      />
 
       <div className="relative mt-14 w-full sm:w-[90%] mx-auto">
         <div className="relative flex justify-between flex-wrap items-center">
@@ -182,7 +240,7 @@ const EmiInfoForm = ({
                 columns={columns}
                 loading={false} // Set loading to true/false as needed
                 showPagination={true}
-                initialState={{ hiddenColumns: [] }}
+                initialState={initialPaidEmiState}
               />
             </TabsContent>
             <TabsContent value="paid">

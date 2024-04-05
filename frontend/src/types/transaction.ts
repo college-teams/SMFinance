@@ -17,5 +17,6 @@ export interface TransactionResponse {
     penaltyAmount: number
     totalAmount: number
     paymentStatus: string
+    paymentType: string;
   }
   

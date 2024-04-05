@@ -52,6 +52,7 @@ export interface ReferralDocumentResponse extends ReferralDocumentRequest {
 export interface UpdateEMIStatus {
   customerId: number;
   status: string;
+  paymentType:string
 }
 
 export interface EmiResponse {
@@ -61,6 +62,7 @@ export interface EmiResponse {
   penaltyAmount: number;
   totalAmount: number;
   paymentStatus: string;
+  paymentType: string;
 }
 
 

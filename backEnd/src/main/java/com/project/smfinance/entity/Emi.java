@@ -42,8 +42,16 @@ public class Emi extends BaseEntity {
   @Column(nullable = false)
   private PaymentStatus paymentStatus;
 
+  @Enumerated(EnumType.STRING)
+  private PaymentType paymentType;
+
   public enum PaymentStatus {
     UN_PAID,
     PAID
+  }
+
+  public enum PaymentType {
+    ONLINE,
+    CASH
   }
 }

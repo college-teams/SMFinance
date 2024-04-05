@@ -365,11 +365,12 @@ const SaveLoan = () => {
     }
   };
 
-  const updateEMI = async (emiId: number) => {
+  const updateEMI = async (emiId: number,paymentType:string) => {
     if (loanDetails) {
       const data: UpdateEMIStatus = {
         customerId: loanDetails.customer.id,
         status: "PAID",
+        paymentType
       };
       startLoading("/updateEmiStatus");
       const res = await updateEmiStatus(api, Number(loanId), emiId, data);

@@ -22,6 +22,7 @@ public class TransactionResponse {
   private Long id;
 
   private Emi emi;
+
   private Customer customer;
 
   private BigDecimal amountPaid;

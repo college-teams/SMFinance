@@ -42,6 +42,10 @@ const Transactions = () => {
       },
       { Header: "Amount Paid", accessor: "amountPaid" },
       {
+        Header: "Payment type",
+        accessor: (row: TransactionResponse) => row.emi.paymentType
+      },
+      {
         Header: "Payment Date",
         accessor: "paymentDate",
         Cell: ({ value }): string => format(new Date(value), "yyyy-mm-dd"),

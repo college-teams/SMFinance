@@ -33,12 +33,12 @@ public class AdminService {
 
   @PostConstruct
   public void adminSetup() {
-    Optional<Admin> searchByEmail = adminRepository.findByEmail("smfinance@gmail.com");
+    Optional<Admin> searchByEmail = adminRepository.findByEmail("Kongukumar2265@gmail.com");
     if (searchByEmail.isEmpty()) {
       Admin admin = new Admin();
-      admin.setName("Rahul");
-      admin.setEmail("smfinance@gmail.com");
-      admin.setPassword(passwordEncoder.encode("Crnational6@"));
+      admin.setName("Kumar");
+      admin.setEmail("kongukumar2265@gmail.com");
+      admin.setPassword(passwordEncoder.encode("Kumar@0222"));
       adminRepository.save(admin);
     }
   }
