@@ -137,7 +137,10 @@ public class CustomerService {
     existingCustomer.setPhoneNumber(updateCustomerRequest.getPhoneNumber());
     existingCustomer.setAddress(updateCustomerRequest.getAddress());
     existingCustomer.setOccupation(updateCustomerRequest.getOccupation());
-    existingCustomer.setEmail(updateCustomerRequest.getEmail());
+    existingCustomer.setEmail(
+        StringUtils.isBlank(updateCustomerRequest.getEmail())
+            ? null
+            : updateCustomerRequest.getEmail());
     existingCustomer.setAltPhoneNumber(updateCustomerRequest.getAltPhoneNumber());
   }
 

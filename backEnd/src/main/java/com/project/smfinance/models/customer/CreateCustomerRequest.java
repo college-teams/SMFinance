@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Setter
@@ -29,7 +30,10 @@ public class CreateCustomerRequest {
     customer.setPhoneNumber(createCustomerRequest.getPhoneNumber());
     customer.setAddress(createCustomerRequest.getAddress());
     customer.setAltPhoneNumber(createCustomerRequest.getAltPhoneNumber());
-    customer.setEmail(createCustomerRequest.getEmail());
+    customer.setEmail(
+        StringUtils.isBlank(createCustomerRequest.getEmail())
+            ? null
+            : createCustomerRequest.getEmail());
     customer.setOccupation(createCustomerRequest.getOccupation());
 
     return customer;
