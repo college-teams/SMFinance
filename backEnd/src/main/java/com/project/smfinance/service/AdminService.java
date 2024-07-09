@@ -3,6 +3,7 @@ package com.project.smfinance.service;
 import static com.project.smfinance.codes.ErrorCodes.ADMIN_NOT_EXISTS;
 import static com.project.smfinance.codes.SuccessCodes.ADMIN_LOGIN_SUCCESS;
 import static com.project.smfinance.codes.SuccessCodes.CURRENT_ADMIN_DETAILS_FETCHED;
+import static com.project.smfinance.codes.SuccessCodes.ENTITIES_ITEMS_DELETED_SUCCESS;
 
 import com.project.smfinance.config.JwtService;
 import com.project.smfinance.entity.Admin;
@@ -13,7 +14,11 @@ import com.project.smfinance.models.admin.AdminLoginResponse;
 import com.project.smfinance.models.response.AbstractResponse;
 import com.project.smfinance.models.response.ApiResponse;
 import com.project.smfinance.repository.AdminRepository;
+import com.project.smfinance.repository.CustomerRepository;
+import com.project.smfinance.repository.LoanRepository;
+import com.project.smfinance.repository.TranscationRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +32,10 @@ import org.springframework.stereotype.Service;
 public class AdminService {
 
   private final AdminRepository adminRepository;
+  private final CustomerRepository customerRepository;
+  private final LoanRepository loanRepository;
+  private final TranscationRepository transcationRepository;
+
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
@@ -66,6 +75,14 @@ public class AdminService {
         ADMIN_LOGIN_SUCCESS,
         AbstractResponse.StatusType.SUCCESS,
         AdminLoginResponse.from(jwtToken));
+  }
+
+  @Transactional
+  public ApiResponse<?> deleteAllEntityData() {
+    customerRepository.deleteAll();
+    transcationRepository.deleteAll();
+    loanRepository.deleteAll();
+    return new ApiResponse<>(ENTITIES_ITEMS_DELETED_SUCCESS, AbstractResponse.StatusType.SUCCESS);
   }
 
   private Admin getCurrentAdmin() {

@@ -53,6 +53,9 @@ public class SuccessCodes extends StatusCodes {
   public static final StatusCodes ENTITIES_ITEM_COUNT_FETCHED =
       new SuccessCodes(200, HttpStatus.OK, "ENTITIES_ITEM_COUNT_FETCHED");
 
+  public static final StatusCodes ENTITIES_ITEMS_DELETED_SUCCESS =
+      new SuccessCodes(200, HttpStatus.OK, "ENTITIES_ITEMS_DELETED_SUCCESS");
+
   public SuccessCodes(int statusCode, HttpStatus httpStatusCode, String internalKey) {
     setAll(statusCode, httpStatusCode, internalKey, RESOURCE_BUNDLE_NAME);
   }

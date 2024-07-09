@@ -185,7 +185,7 @@ export const preCloseLoan: PreCloseLoan = async (api, id) => {
     `/loan/${id}/pre-close`,
     "preCloseLoan",
     "Error occurred while pre closing the loan",
-    "PUT"
+    "POST"
   );
 };
 

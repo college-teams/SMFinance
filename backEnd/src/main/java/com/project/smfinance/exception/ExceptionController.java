@@ -1,6 +1,5 @@
 package com.project.smfinance.exception;
 
-import static com.project.smfinance.codes.ErrorCodes.*;
 import static com.project.smfinance.codes.ErrorCodes.CONSTRAINT_VIOLATIONS;
 import static com.project.smfinance.codes.ErrorCodes.FORBIDDEN;
 import static com.project.smfinance.codes.ErrorCodes.UNAUTHORIZED;

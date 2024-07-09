@@ -7,6 +7,7 @@ import com.project.smfinance.entity.ReferralDocument;
 import com.project.smfinance.repository.CustomerDocumentRepository;
 import com.project.smfinance.repository.EmiRepository;
 import com.project.smfinance.repository.ReferralDocumentRepository;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -55,6 +56,7 @@ public class SchedulerService {
 
   /** Schedular for loan penalty calculation This schedular will run every 4 hour once */
   @Scheduled(cron = "0 0 */4 * * *") // Run every 4 hours
+  @Transactional
   public void processOverdueEMIs() {
     log.info("Scheduler started for penalty calculation...");
     LocalDate previousDay = LocalDate.now().minusDays(1); // Get previous day

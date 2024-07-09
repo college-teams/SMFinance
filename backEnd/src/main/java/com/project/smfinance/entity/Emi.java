@@ -43,7 +43,10 @@ public class Emi extends BaseEntity {
   private PaymentStatus paymentStatus;
 
   @Enumerated(EnumType.STRING)
-  private PaymentType paymentType;
+  private PaymentType paymentType =
+      PaymentType
+          .ONLINE; // TODO: By default we are setting it as ONLINE if need update it based on user
+  // request
 
   public enum PaymentStatus {
     UN_PAID,

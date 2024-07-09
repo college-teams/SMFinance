@@ -29,4 +29,9 @@ public class AdminController {
       @Valid @RequestBody AdminLoginRequest request) throws BaseException {
     return new ResponseEntity<>(adminService.authenticate(request), HttpStatus.OK);
   }
+
+  @DeleteMapping("/delete-all")
+  public ResponseEntity<ApiResponse<?>> deleteAllEntityData() throws BaseException {
+    return new ResponseEntity<>(adminService.deleteAllEntityData(), HttpStatus.OK);
+  }
 }
