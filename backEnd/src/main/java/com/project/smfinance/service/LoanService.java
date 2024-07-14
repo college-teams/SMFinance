@@ -59,7 +59,7 @@ public class LoanService {
   private final TranscationRepository transcationRepository;
 
   private static final int DAILY_EMI_LIMIT = 100;
-  private static final int WEEKLY_EMI_LIMIT = 15;
+  private static final int WEEKLY_EMI_LIMIT = 10;
 
   public ApiResponse<List<LoanResponse>> getAllLoans(String customerName) {
     Specification<Loan> specification = filterByCustomerName(customerName);
@@ -203,21 +203,23 @@ public class LoanService {
     BigDecimal remainingAmount =
         totalLoanAmount.subtract(emiAmount.multiply(BigDecimal.valueOf(numberOfEMIs)));
 
-    LocalDate currentDate = loanRequest.getStartDate();
+    //    EMI starts from next cycle date
+    LocalDate emiDate = loanRequest.getStartDate().plus(1, temporalUnit);
 
     for (int i = 1; i <= numberOfEMIs; i++) {
       if (i == numberOfEMIs) {
         emiAmount = emiAmount.add(remainingAmount);
       }
 
-      Emi emi = createEmi(loan, emiAmount, currentDate);
+      Emi emi = createEmi(loan, emiAmount, emiDate);
       EMIs.add(emi);
 
-      currentDate = currentDate.plus(1, temporalUnit);
+      emiDate = emiDate.plus(1, temporalUnit);
     }
 
-    //    updating maturity data
-    loan.setMaturityDate(currentDate.minus(1, temporalUnit));
+    // Updating maturity date (subtracting by 1 to avoid setting maturity date to the next cycle
+    // date)
+    loan.setMaturityDate(emiDate.minus(1, temporalUnit));
     loanRepository.save(loan);
   }
 
