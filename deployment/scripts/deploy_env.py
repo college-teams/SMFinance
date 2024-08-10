@@ -212,14 +212,14 @@ def main():
         frontend_path = get_frontend_path(root_dir)
         build_fe(frontend_path)
 
-        print("Fetch instance host names")
+        print("Fetching instance host names")
 
         region = 'us-east-1'
          # instance_ids = get_asg_instances("Instance_asg", region)
         # hostnames = get_instance_hostnames(instance_ids, region)
         instance_ids = get_ec2_instances_by_tag('Name', 'Test Ec2 machine', region)
         public_ips = get_instance_public_ips(instance_ids, region)
-        print("public IP's" ,public_ips)
+        print("Fetched public IP's ==>" ,public_ips)
 
         username = 'ec2-user'
         public_key_path = '~/.ssh/id_rsa.pub'
