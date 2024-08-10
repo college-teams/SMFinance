@@ -4,6 +4,7 @@ export interface LoanRequest {
   customerId: number;
   loanAmount: number;
   penaltyAmount: number;
+  startDate: string;
   interestAmount: number;
   customerPreference: number;
   loanCategory: string;
@@ -28,7 +29,6 @@ export interface ReferralDocumentRequest {
 export interface LoanResponse extends LoanRequest {
   id: number;
   customer: CustomerResponse;
-  startDate: string;
   maturityDate: string;
   loanStatus: string;
   preClosed: boolean;
@@ -52,7 +52,7 @@ export interface ReferralDocumentResponse extends ReferralDocumentRequest {
 export interface UpdateEMIStatus {
   customerId: number;
   status: string;
-  paymentType:string
+  paymentType: string;
 }
 
 export interface EmiResponse {
@@ -64,7 +64,6 @@ export interface EmiResponse {
   paymentStatus: string;
   paymentType: string;
 }
-
 
 export enum LoanStatus {
   ACTIVE = "ACTIVE",

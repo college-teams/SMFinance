@@ -32,6 +32,9 @@ public class Emi extends BaseEntity {
   @Column(nullable = false)
   private LocalDate paymentDueDate;
 
+  @Column(nullable = true)
+  private LocalDate paymentPaidDate;
+
   @Column(nullable = false)
   private BigDecimal penaltyAmount;
 
@@ -47,6 +50,7 @@ public class Emi extends BaseEntity {
       PaymentType
           .ONLINE; // TODO: By default we are setting it as ONLINE if need update it based on user
   // request
+  // (the default value is used for pre-close loan)
 
   public enum PaymentStatus {
     UN_PAID,

@@ -107,6 +107,7 @@ public class LoanService {
 
     emi.setPaymentStatus(emiUpdateRequest.getStatus());
     emi.setPaymentType(emiUpdateRequest.getPaymentType());
+    emi.setPaymentPaidDate(emiUpdateRequest.getPaymentPaidDate());
 
     saveTransaction(emi);
 
@@ -155,7 +156,7 @@ public class LoanService {
       firstUnpaidEmi.setTotalAmount(totalAmountPaid);
       firstUnpaidEmi.setPaymentStatus(Emi.PaymentStatus.PAID);
       firstUnpaidEmi.setEmiAmount(totalAmountPaid.subtract(firstUnpaidEmi.getPenaltyAmount()));
-
+      firstUnpaidEmi.setPaymentPaidDate(LocalDate.now()); // TODO: if want get this from user
       // Update the transaction details
       saveTransaction(firstUnpaidEmi);
 
@@ -207,6 +208,7 @@ public class LoanService {
     LocalDate emiDate = loanRequest.getStartDate().plus(1, temporalUnit);
 
     for (int i = 1; i <= numberOfEMIs; i++) {
+      // Last EMI Date.
       if (i == numberOfEMIs) {
         emiAmount = emiAmount.add(remainingAmount);
       }
@@ -225,15 +227,13 @@ public class LoanService {
 
   private void generateSingleEMI(LoanRequest loanRequest, Loan loan, List<Emi> EMIs) {
     BigDecimal loanAmount = loanRequest.getLoanAmount();
-    Emi emi =
-        createEmi(
-            loan,
-            loanAmount,
-            loanRequest.getStartDate().plusDays(loanRequest.getCustomerPreference()));
+    LocalDate maturityDate =
+        loanRequest.getStartDate().plusDays(loanRequest.getCustomerPreference());
+    Emi emi = createEmi(loan, loanAmount, maturityDate);
     EMIs.add(emi);
 
     //    updating maturity data
-    loan.setMaturityDate(loanRequest.getStartDate().plusDays(loanRequest.getCustomerPreference()));
+    loan.setMaturityDate(maturityDate);
     loanRepository.save(loan);
   }
 

@@ -263,6 +263,28 @@ const LoanInfoForm = ({
           </div>
         )}
 
+        <div className="form_container">
+          <label className="form_label" htmlFor="startDate">
+            Loan Start Date*
+          </label>
+          <input
+            className="form_input"
+            type="date"
+            id="startDate"
+            placeholder="Loan Start Date"
+            {...register("startDate", {
+              required: "Loan start date is required",
+              valueAsDate: true,
+            })}
+            disabled={isEditMode}
+            defaultValue={new Date().toISOString().split("T")[0]}
+          />
+          <span className="relative text-red-600 font-medium mt-2">
+            {errors?.startDate &&
+              (errors?.startDate?.message || "Please enter valid input data")}
+          </span>
+        </div>
+
         <div className="relative col-span-1 sm:col-span-2  mt-4 flex items-end">
           <button
             onClick={onNext}

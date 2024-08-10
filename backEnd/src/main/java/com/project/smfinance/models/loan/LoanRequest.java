@@ -28,7 +28,7 @@ public class LoanRequest {
 
   private Integer customerPreference;
 
-  private LocalDate startDate = LocalDate.now();
+  private LocalDate startDate;
 
   @NotNull private Loan.LoanCategory loanCategory;
 

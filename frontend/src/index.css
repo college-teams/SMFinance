@@ -90,10 +90,6 @@
 }
 
 html {
-  font-family: "Montserrat", sans-serif;
-}
-
-html {
   font-size: 12px;
   font-family: "Montserrat", sans-serif;
 }
@@ -211,4 +207,18 @@ thead {
   right: 0px;
   bottom: 0px;
   left: 0px;
+}
+
+input[type="date"] {
+  position: relative;
+  overflow: hidden;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #0000;
+  position: absolute;
+  transform: scale(12);
 }

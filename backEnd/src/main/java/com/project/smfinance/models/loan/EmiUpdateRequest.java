@@ -2,6 +2,7 @@ package com.project.smfinance.models.loan;
 
 import com.project.smfinance.entity.Emi;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,6 @@ public class EmiUpdateRequest {
   @NotNull private Emi.PaymentStatus status;
 
   @NotNull private Emi.PaymentType paymentType;
+
+  @NotNull private LocalDate paymentPaidDate;
 }
