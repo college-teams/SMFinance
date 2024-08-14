@@ -2,8 +2,8 @@ import {
   MdDashboard,
   MdShoppingBag,
   MdAttachMoney,
-  MdWork,
-  MdAnalytics,
+  // MdWork,
+  // MdAnalytics,
   MdPeople,
 } from "react-icons/md";
 
@@ -32,16 +32,16 @@ const sideBarItems = [
     path: "/dashboard/transactions",
     icon: <MdAttachMoney />,
   },
-  {
-    title: "Revenue",
-    path: "/dashboard/revenue",
-    icon: <MdWork />,
-  },
-  {
-    title: "Reports",
-    path: "/dashboard/reports",
-    icon: <MdAnalytics />,
-  },
+  // {
+  //   title: "Revenue",
+  //   path: "/dashboard/revenue",
+  //   icon: <MdWork />,
+  // },
+  // {
+  //   title: "Reports",
+  //   path: "/dashboard/reports",
+  //   icon: <MdAnalytics />,
+  // },
 ];
 
 const Sidebar = () => {
